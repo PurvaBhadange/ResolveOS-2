@@ -1,17 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #fffefb;
-  --foreground: #201515;
-  --canvas-soft: #f8f4f0;
-  --primary: #ff4f00;
-  --ink: #201515;
-  --body: #605d52;
-  --mute: #c5c0b1;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 body {
@@ -19,146 +14,45 @@ body {
   color: var(--foreground);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Zapier Design System Primitives */
-
-.zapier-card {
-  background-color: #f8f4f0;
-  color: #201515;
-  border: 1px solid #e8e2d8;
-  border-radius: 12px;
+/* Custom Scrollbar for Code/JSON Viewers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.zapier-card-white {
-  background-color: #fffefb;
-  color: #201515;
-  border: 1px solid #e8e2d8;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(32, 21, 21, 0.04);
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
 }
 
-.zapier-card-dark {
-  background-color: #201515;
-  color: #fffefb;
-  border-radius: 12px;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
-/* Buttons */
-.zapier-btn-primary {
-  background-color: #ff4f00;
-  color: #fffefb;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.15s ease-in-out;
-  padding: 10px 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.zapier-btn-primary:hover {
-  background-color: #e04500;
-  transform: translateY(-1px);
-}
-.zapier-btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-.zapier-btn-secondary {
-  background-color: #201515;
-  color: #fffefb;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.15s ease-in-out;
-  padding: 10px 20px;
-}
-.zapier-btn-secondary:hover {
-  background-color: #2f2a26;
-  transform: translateY(-1px);
+/* Skeleton loader for data states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
-.zapier-btn-outline {
-  background-color: #fffefb;
-  color: #201515;
-  border: 1px solid #201515;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.15s ease-in-out;
-  padding: 10px 20px;
-}
-.zapier-btn-outline:hover {
-  background-color: #f8f4f0;
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
 }
 
-/* Text Input */
-.zapier-input {
-  background-color: #fffefb;
-  color: #201515;
-  border: 1px solid #c5c0b1;
-  border-radius: 6px;
-  padding: 10px 14px;
-  width: 100%;
-  font-family: inherit;
-}
-.zapier-input:focus {
-  outline: none;
-  border-color: #ff4f00;
-  box-shadow: 0 0 0 2px rgba(255, 79, 0, 0.15);
-}
-
-/* Eyebrow Uppercase */
-.zapier-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.4px;
-  color: #605d52;
-}
-
-/* Status badges */
-.badge-resolved {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
-}
-.badge-pending {
-  background-color: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
-}
-.badge-escalated {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-}
-
-/* Timeline vertical line */
-.timeline-step {
-  position: relative;
-  padding-left: 2rem;
-}
-
-.timeline-step::before {
-  content: '';
-  position: absolute;
-  left: 0.5rem;
-  top: 1.5rem;
-  bottom: -1rem;
-  width: 2px;
-  background-color: #c5c0b1;
-}
-
-.timeline-step:last-child::before {
-  display: none;
-}
-
-/* Smooth page animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in {
-  animation: fadeIn 0.25s ease-out;
+/* Restrained transitions */
+button, a, input, select, textarea {
+  transition: all 0.12s ease-in-out;
 }

@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  Package,
+  AlertTriangle,
   RefreshCw,
   Truck,
-  AlertTriangle,
+  Package,
   ArrowRight,
-  Sparkles,
-  Zap,
-  Loader2,
-  ShieldCheck,
-  FileText,
-  Database,
   CheckCircle2,
   Clock,
-  ExternalLink,
-  ChevronRight,
+  ShieldCheck,
+  Loader2,
+  Database,
   Info
 } from 'lucide-react';
 import { api } from '../lib/api';
@@ -23,18 +18,24 @@ import { AgentLoopVisualizer } from './AgentLoopVisualizer';
 interface HelpCenterProps {
   onCaseCreated: (caseId: number) => void;
   setActiveTab: (tab: string) => void;
+  prefillOrderNumber?: string;
 }
 
-export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, setActiveTab }) => {
+export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
+  onCaseCreated,
+  setActiveTab,
+  prefillOrderNumber = 'ORD-2026-8801',
+}) => {
+  const [orderNumber, setOrderNumber] = useState<string>(prefillOrderNumber);
   const [selectedCategory, setSelectedCategory] = useState<string>('damaged');
-  const [orderNumber, setOrderNumber] = useState<string>('ORD-2026-8801');
   const [issueTitle, setIssueTitle] = useState<string>('Headphones arrived damaged - Request replacement');
   const [issueDescription, setIssueDescription] = useState<string>(
     'My AuraSound headphones arrived yesterday with a cracked left ear cup and sound distortion. I want a replacement.'
   );
+
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [agentRunning, setAgentRunning] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   // Active scenario preset tracker
   const [activePreset, setActivePreset] = useState<string>('stockout');
@@ -43,7 +44,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   const [activeStepIndex, setActiveStepIndex] = useState<number>(-1);
   const [isLoopComplete, setIsLoopComplete] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>(
-    'Scenario 1 loaded: Stockout Adaptation (ORD-2026-8801). Click "Submit & Run Resolution" to start.'
+    'Ready. Select a test scenario below or submit a custom resolution request.'
   );
 
   // Order preview state
@@ -52,7 +53,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     total_amount: '199.99',
     order_status: 'delivered',
     item_title: 'AuraSound Headphones - Matte Black',
-    carrier: 'Blue Dart',
+    carrier: 'Blue Dart Express',
     tracking: 'BLUEDART-8801-IN',
   });
 
@@ -73,9 +74,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       title: 'Stockout Adaptation',
       order: 'ORD-2026-8801',
       amount: '₹199.99',
-      badge: 'Stockout Replanning',
-      badgeColor: 'bg-tealbrand-50 text-tealbrand-700 border-tealbrand-200',
-      desc: 'Headphones delivered damaged. Warehouse is out of stock, so ResolveOS automatically adapts from replacement to instant full refund via UPI / original payment method.',
+      badge: 'Auto-Replanning',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      desc: 'Headphones delivered damaged. Warehouse stock is 0, so system automatically adapts replacement request to an instant UPI refund.',
       category: 'damaged',
       issueTitle: 'Headphones arrived damaged - Request replacement',
       issueDesc: 'My AuraSound headphones arrived yesterday with a cracked left ear cup and sound distortion. I want a replacement.',
@@ -84,7 +85,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         total_amount: '199.99',
         order_status: 'delivered',
         item_title: 'AuraSound Headphones - Matte Black',
-        carrier: 'Blue Dart',
+        carrier: 'Blue Dart Express',
         tracking: 'BLUEDART-8801-IN',
       }
     },
@@ -94,9 +95,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       title: 'High-Value Approval',
       order: 'ORD-2026-8802',
       amount: '₹499.98',
-      badge: 'Human-in-the-Loop',
+      badge: 'Human Review Gate',
       badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
-      desc: 'Defective Smartwatch Bundle exceeding ₹15,000 safety threshold. Automatically halts auto-execution and routes to Operations Approval Queue.',
+      desc: 'Smartwatch Bundle exceeds safety limit (₹15,000). System halts execution and routes ticket to Operations Approval Queue.',
       category: 'damaged',
       issueTitle: 'Damaged Smartwatch Bundle - Request refund (₹499.98)',
       issueDesc: 'Apex Smartwatch arrived defective with touchscreen unresponsiveness. Requesting full refund of ₹499.98.',
@@ -105,7 +106,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         total_amount: '499.98',
         order_status: 'delivered',
         item_title: 'Apex Fit Pro Smartwatch (Obsidian Black)',
-        carrier: 'Blue Dart',
+        carrier: 'Delhivery Surface',
         tracking: 'DELHIVERY-8802-IN',
       }
     },
@@ -115,9 +116,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       title: 'Expired Return Window',
       order: 'ORD-2026-8803',
       amount: '₹89.99',
-      badge: 'Policy Enforcement',
-      badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
-      desc: 'Pulse Earbuds delivered 40 days ago. Policy Rules Engine detects return requested past 15-day limit and enforces policy rules.',
+      badge: 'Policy Guardrail',
+      badgeColor: 'bg-slate-100 text-slate-700 border-slate-200',
+      desc: 'Earbuds delivered 40 days ago. Policy engine enforces 15-day return cutoff and safely routes case to tier-2 support team.',
       category: 'returns',
       issueTitle: 'Return wireless earbuds - Delivered 40 days ago',
       issueDesc: 'Requesting return and refund for Pulse Earbuds delivered 40 days ago.',
@@ -126,7 +127,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         total_amount: '89.99',
         order_status: 'delivered',
         item_title: 'Pulse True Wireless Earbuds (White)',
-        carrier: 'Delhivery',
+        carrier: 'Ekart Logistics',
         tracking: 'EKART-8803-IN',
       }
     },
@@ -136,9 +137,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       title: 'Pre-Shipment Cancel',
       order: 'ORD-2026-8804',
       amount: '₹129.99',
-      badge: 'Instant Resolution',
-      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-      desc: 'Mechanical keyboard order in "processing" state. ResolveOS verifies order is not yet packed and immediately voids shipment and issues refund.',
+      badge: 'Instant Execution',
+      badgeColor: 'bg-slate-100 text-slate-700 border-slate-200',
+      desc: 'Unfulfilled keyboard order in processing state. System verifies order is not yet packed and immediately voids shipment and issues refund.',
       category: 'orders',
       issueTitle: 'Cancel order before shipment - ErgoMech Keyboard',
       issueDesc: 'Please cancel order ORD-2026-8804 before shipment and issue refund.',
@@ -153,69 +154,66 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     }
   ];
 
-  const applyPreset = (presetId: string) => {
-    const p = presets.find((x) => x.id === presetId);
-    if (!p) return;
-
+  const handleSelectPreset = (p: (typeof presets)[0]) => {
     setActivePreset(p.id);
     setOrderNumber(p.order);
+    setSelectedCategory(p.category);
     setIssueTitle(p.issueTitle);
     setIssueDescription(p.issueDesc);
-    setSelectedCategory(p.category);
     setOrderPreview(p.preview);
     setActiveStepIndex(-1);
     setIsLoopComplete(false);
-    setStatusMessage(`Scenario ${p.num} loaded: ${p.title} (${p.order}). Click "Submit & Run Resolution" to start.`);
+    setStatusMessage(`Loaded Scenario ${p.num}: ${p.title} (${p.order}). Click "Submit Resolution Request" to execute.`);
   };
 
   const categories = [
     { id: 'damaged', title: 'Damaged / Defective', icon: AlertTriangle },
-    { id: 'returns', title: 'Returns & Refunds', icon: RefreshCw },
+    { id: 'returns', title: 'Return & Refund', icon: RefreshCw },
     { id: 'shipping', title: 'Shipping & Delivery', icon: Truck },
-    { id: 'orders', title: 'Order Cancel / Mod', icon: Package },
+    { id: 'orders', title: 'Cancel Order', icon: Package },
   ];
 
   const handleSubmitIssue = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setIsProcessing(true);
     setError(null);
     setIsLoopComplete(false);
-    setAgentRunning(true);
     setActiveStepIndex(0);
     setStatusMessage(stepDescriptions[0]);
 
-    // Animate progress smoothly while waiting for backend response
-    let currentIdx = 0;
+    // Cycle through visual stepper smoothly
+    let step = 0;
     const stepInterval = setInterval(() => {
-      if (currentIdx < 4) {
-        currentIdx += 1;
-        setActiveStepIndex(currentIdx);
-        setStatusMessage(stepDescriptions[currentIdx]);
+      step++;
+      if (step < 4) {
+        setActiveStepIndex(step);
+        setStatusMessage(stepDescriptions[step]);
+      } else {
+        clearInterval(stepInterval);
       }
-    }, 450);
+    }, 380);
 
     try {
-      // 1. Fetch Order details first to get numeric order_id
+      // 1. Fetch Order details to get numeric order_id
       const order = await api.getOrderByNumber(orderNumber.trim());
       if (!order || !order.id) {
         throw new Error(`Order "${orderNumber}" not found. Please verify the order number.`);
       }
 
-      // Update order preview with actual live DB data
       setOrderPreview({
         order_number: order.order_number,
         total_amount: order.total_amount,
         order_status: order.order_status,
         item_title: order.items?.[0]?.variant?.title || 'Order Item',
-        carrier: order.shipment?.carrier || 'Pending',
+        carrier: order.shipment?.carrier || 'Blue Dart Express',
         tracking: order.shipment?.tracking_number || 'N/A',
       });
 
-      // Advance to decide / guard step
       setActiveStepIndex(3);
       setStatusMessage(stepDescriptions[3]);
 
-      // 2. Create support case using real customer_id & order_id from DB
+      // 2. Create support case
       const newCase = await api.createCase({
         customer_id: order.customer_id,
         order_id: order.id,
@@ -230,104 +228,98 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       setActiveStepIndex(4);
       setStatusMessage(stepDescriptions[4]);
 
-      // Run workflow on case
+      // Execute resolution workflow
       await api.runAgentOnCase(newCase.id);
 
       // Step 6: Verify
       setActiveStepIndex(5);
       setStatusMessage(stepDescriptions[5]);
-      await new Promise((r) => setTimeout(r, 450));
+      await new Promise((r) => setTimeout(r, 400));
 
       // Step 7: Adapt
       setActiveStepIndex(6);
       setStatusMessage(stepDescriptions[6]);
-      await new Promise((r) => setTimeout(r, 450));
+      await new Promise((r) => setTimeout(r, 400));
 
-      // All nodes completed
+      // Complete
       setActiveStepIndex(7);
       setIsLoopComplete(true);
-      setStatusMessage('Case successfully resolved & verified against database! Redirecting to Case Tracker...');
-      await new Promise((r) => setTimeout(r, 750));
+      setStatusMessage('Resolution completed and verified against database. Redirecting to Case Tracker...');
+      await new Promise((r) => setTimeout(r, 650));
 
-      // Navigate to Case Tracker
       onCaseCreated(newCase.id);
       setActiveTab('cases');
     } catch (err: any) {
       clearInterval(stepInterval);
       setActiveStepIndex(-1);
-      setError(err.message || 'Failed to submit support issue. Make sure the backend is running.');
+      setError(err.message || 'Failed to submit resolution request. Please verify the backend connection.');
     } finally {
       clearInterval(stepInterval);
       setLoading(false);
-      setAgentRunning(false);
+      setIsProcessing(false);
     }
   };
 
-  const isProcessing = loading || agentRunning;
-
   return (
-    <div className="space-y-8 pb-16">
-      {/* 1. HERO & 1-CLICK DEMO SCENARIOS BAR */}
-      <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tealbrand-50 text-tealbrand-700 text-xs font-semibold border border-tealbrand-200">
-            <ShieldCheck className="w-3.5 h-3.5 text-tealbrand-600" /> 🇮🇳 India&apos;s Enterprise Resolution &amp; Fulfillment Engine
+    <div className="space-y-6 pb-12">
+      {/* 1. Page Header & Scenario Selector */}
+      <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 sm:p-6 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
+              Customer Resolution Center
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Verify order parameters, policy return constraints, and multi-warehouse inventory to execute verifiable resolutions.
+            </p>
           </div>
-          <div className="flex items-center gap-3 text-xs text-slate-500 font-mono">
-            <span className="flex items-center gap-1.5"><Database className="w-3.5 h-3.5 text-tealbrand-600" /> Neon DB Connected</span>
-            <span>&bull;</span>
-            <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-amber-500" /> Rules &amp; Workflow Engine</span>
-          </div>
-        </div>
-
-        <div className="max-w-3xl space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            Customer Resolution &amp; Support Console
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            ResolveOS independently verifies order history, warehouse stock levels, and policy return windows to execute idempotent business resolutions with zero manual delay.
-          </p>
-        </div>
-
-        {/* 1-Click Interactive Demo Scenarios Selector */}
-        <div className="pt-2 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-amber-500" /> 1-Click Demo Scenarios (Select to Test):
+          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+            <span className="inline-flex items-center gap-1 font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Database Live
             </span>
-            <span className="text-[11px] text-slate-500">Click any preset to pre-fill sample order details</span>
+            <span className="text-slate-300">•</span>
+            <span className="font-mono text-slate-600">INR (₹) Standard</span>
+          </div>
+        </div>
+
+        {/* Test Scenario Selector Strip */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-medium text-slate-700">
+              Preset Test Scenarios:
+            </span>
+            <span className="text-slate-400 text-[11px]">Select to test automated policy handling</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
             {presets.map((p) => {
               const isSelected = activePreset === p.id;
               return (
                 <button
                   key={p.id}
                   type="button"
-                  onClick={() => applyPreset(p.id)}
-                  className={`text-left p-3.5 rounded-xl border transition-all duration-150 relative ${
+                  onClick={() => handleSelectPreset(p)}
+                  className={`text-left p-3 rounded-md border transition-all ${
                     isSelected
-                      ? 'bg-tealbrand-50/60 border-tealbrand-600 text-slate-900 shadow-sm ring-1 ring-tealbrand-600/30'
-                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100 hover:border-slate-300 text-slate-700'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-subtle'
+                      : 'bg-slate-50/70 hover:bg-slate-100/70 text-slate-800 border-slate-200/80'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-1 mb-1.5">
-                    <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                      <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${
-                        isSelected ? 'bg-tealbrand-600 text-white' : 'bg-slate-200 text-slate-700'
-                      }`}>
-                        {p.num}
-                      </span>
-                      {p.title}
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="text-[11px] font-semibold tracking-tight truncate">
+                      {p.num}. {p.title}
                     </span>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${p.badgeColor}`}>
+                    <span className={`text-[10px] font-medium px-1.5 py-0.2 rounded border ${
+                      isSelected
+                        ? 'bg-slate-800 text-slate-200 border-slate-700'
+                        : p.badgeColor
+                    }`}>
                       {p.badge}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                    <span>{p.order}</span>
-                    <span className="font-bold text-slate-900">{p.amount}</span>
+                  <div className="flex items-center justify-between text-[11px] mt-1.5 opacity-90">
+                    <span className="font-mono">{p.order}</span>
+                    <span className="font-semibold">{p.amount}</span>
                   </div>
                 </button>
               );
@@ -336,117 +328,97 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         </div>
       </div>
 
-      {/* 2. DYNAMIC AGENT DECISION LOOP VISUALIZER (Directly Visible In-Viewport) */}
-      <AgentLoopVisualizer
-        currentStepIndex={activeStepIndex}
-        isRunning={isProcessing}
-        isComplete={isLoopComplete}
-        statusMessage={statusMessage}
-      />
-
-      {/* 3. HIGH-UTILITY TWO-COLUMN ACTION WORKSTATION */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* LEFT: Issue Submission Console (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900">Issue Resolution Request</h2>
-              <p className="text-xs text-slate-500">Configure parameters or use the selected demo preset above.</p>
-            </div>
-            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-tealbrand-50 text-tealbrand-700 border border-tealbrand-200">
-              Active: {presets.find((x) => x.id === activePreset)?.title || 'Custom'}
-            </span>
+      {/* 2. Main Two-Column Console (Form + Order Details) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* LEFT: Ticket Submission Form (7 cols) */}
+        <div className="lg:col-span-7 bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 sm:p-6 space-y-5">
+          <div className="border-b border-slate-100 pb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Submit Issue for Resolution
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Enter customer problem details. System evaluates policy rules and executes database transactions.
+            </p>
           </div>
 
           {error && (
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
+            <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <span className="font-semibold block">Submission Error</span>
+                <span>{error}</span>
+              </div>
             </div>
           )}
 
-          <form onSubmit={handleSubmitIssue} className="space-y-5">
-            {/* Category Selector Pills */}
+          <form onSubmit={handleSubmitIssue} className="space-y-4">
+            {/* Order Number Field */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                Problem Category
+              <label className="block text-xs font-medium text-slate-700 mb-1">
+                Order Identifier
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  value={orderNumber}
+                  onChange={(e) => setOrderNumber(e.target.value)}
+                  placeholder="e.g. ORD-2026-8801"
+                  className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-slate-900 text-slate-900 text-sm font-mono"
+                />
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1">
+                Linked to order records, shipping manifests, and payment receipts.
+              </p>
+            </div>
+
+            {/* Category Selector */}
+            <div>
+              <label className="block text-xs font-medium text-slate-700 mb-1.5">
+                Issue Classification
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {categories.map((cat) => {
-                  const Icon = cat.icon;
-                  const isSelected = selectedCategory === cat.id;
+                {categories.map((c) => {
+                  const Icon = c.icon;
+                  const isSelected = selectedCategory === c.id;
                   return (
                     <button
-                      key={cat.id}
+                      key={c.id}
                       type="button"
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-semibold transition-all ${
+                      onClick={() => setSelectedCategory(c.id)}
+                      className={`flex items-center gap-1.5 p-2 rounded-md border text-xs font-medium transition-all ${
                         isSelected
-                          ? 'bg-tealbrand-600 text-white border-tealbrand-600 shadow-sm'
-                          : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                          ? 'bg-slate-900 text-white border-slate-900 shadow-subtle'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                       }`}
                     >
-                      <Icon className="w-3.5 h-3.5 shrink-0" />
-                      <span className="truncate">{cat.title}</span>
+                      <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                      <span className="truncate">{c.title}</span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Order Number & Quick Chips */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Target Order Number
-                </label>
-                <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                  <span>Quick Test:</span>
-                  {['ORD-2026-8801', 'ORD-2026-8802', 'ORD-2026-8803', 'ORD-2026-8804'].map((ord) => (
-                    <button
-                      key={ord}
-                      type="button"
-                      onClick={() => setOrderNumber(ord)}
-                      className={`font-mono px-1.5 py-0.5 rounded border text-[10px] transition-colors ${
-                        orderNumber === ord
-                          ? 'bg-tealbrand-600 text-white border-tealbrand-600 font-bold'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200'
-                      }`}
-                    >
-                      {ord.split('-')[2]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <input
-                type="text"
-                required
-                value={orderNumber}
-                onChange={(e) => setOrderNumber(e.target.value)}
-                placeholder="e.g. ORD-2026-8801"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 font-mono text-sm font-semibold bg-white"
-              />
-            </div>
-
             {/* Issue Title */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                Issue Summary / Goal
+              <label className="block text-xs font-medium text-slate-700 mb-1">
+                Subject
               </label>
               <input
                 type="text"
                 required
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
-                placeholder="Brief summary of customer issue"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-sm font-medium bg-white"
+                placeholder="Brief summary of issue"
+                className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-slate-900 text-slate-900 text-sm font-medium"
               />
             </div>
 
             {/* Issue Description */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                Detailed Customer Problem Statement
+              <label className="block text-xs font-medium text-slate-700 mb-1">
+                Customer Statement
               </label>
               <textarea
                 required
@@ -454,30 +426,31 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
                 value={issueDescription}
                 onChange={(e) => setIssueDescription(e.target.value)}
                 placeholder="Describe issue details..."
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-sm font-medium resize-none bg-white"
+                className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-slate-900 text-slate-900 text-sm font-normal resize-none"
               />
             </div>
 
-            {/* Action Bar */}
+            {/* Form Actions */}
             <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100">
-              <div className="text-xs text-slate-500 flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5 text-tealbrand-600" />
-                <span>Triggers automated resolution workflow upon submit</span>
+              <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-slate-400" />
+                <span>Executes transactional resolution with database verification</span>
               </div>
 
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-bold text-sm transition-all shadow-sm active:scale-95 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition-colors shadow-subtle disabled:opacity-50"
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    Processing Resolution...
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
+                    <span>Processing Resolution...</span>
                   </>
                 ) : (
                   <>
-                    Submit &amp; Run Resolution <ArrowRight className="w-4 h-4" />
+                    <span>Submit Resolution Request</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
               </button>
@@ -486,87 +459,75 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         </div>
 
         {/* RIGHT: Live Order Context & Policy Guardrails (5 cols) */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Active Order Context Card */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2">
-                <Package className="w-4 h-4 text-tealbrand-600" />
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Verified Order Record</h3>
-              </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 capitalize">
+        <div className="lg:col-span-5 space-y-4">
+          {/* Order Record Card */}
+          <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <span className="text-xs font-semibold text-slate-900">Verified Order Record</span>
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border capitalize ${
+                orderPreview?.order_status === 'delivered'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
+              }`}>
                 {orderPreview?.order_status || 'Delivered'}
               </span>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="space-y-2 text-xs">
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Order Number</span>
-                <span className="font-mono font-bold text-slate-900">{orderPreview?.order_number || orderNumber}</span>
+                <span className="text-slate-500">Order Number</span>
+                <span className="font-mono font-medium text-slate-900">{orderPreview?.order_number || orderNumber}</span>
               </div>
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Order Total</span>
-                <span className="font-extrabold text-slate-900 text-sm">₹{orderPreview?.total_amount}</span>
+                <span className="text-slate-500">Order Total</span>
+                <span className="font-semibold text-slate-900">₹{orderPreview?.total_amount}</span>
               </div>
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500 font-medium">Purchased Item</span>
-                <span className="font-semibold text-slate-800 text-right max-w-[200px] truncate">{orderPreview?.item_title}</span>
+                <span className="text-slate-500">Item</span>
+                <span className="font-medium text-slate-800 text-right max-w-[180px] truncate">{orderPreview?.item_title}</span>
               </div>
               <div className="flex items-center justify-between py-1">
-                <span className="text-slate-500 font-medium">Carrier &amp; Tracking</span>
-                <span className="font-mono text-slate-700">{orderPreview?.carrier} ({orderPreview?.tracking})</span>
+                <span className="text-slate-500">Carrier / Tracking</span>
+                <span className="font-mono text-slate-700 text-[11px]">{orderPreview?.carrier} ({orderPreview?.tracking})</span>
               </div>
             </div>
           </div>
 
-          {/* Business Policy & Safety Guardrails Card */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-tealbrand-600" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Active Policy Guardrails</h3>
-              </div>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-tealbrand-50 text-tealbrand-700 border border-tealbrand-200">
-                v2.0 Active
+          {/* Active Policy Rules */}
+          <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <span className="text-xs font-semibold text-slate-900">Active Policy Guardrails</span>
+              <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                v2.0
               </span>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-                <RefreshCw className="w-4 h-4 text-tealbrand-600 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-slate-900 block text-[11px]">Stockout Adaptation Rule</span>
-                  <span className="text-[11px] text-slate-600 leading-tight block mt-0.5">
-                    If replacement item is out of stock across WH-EAST &amp; WH-WEST, system automatically adapts to full refund via UPI / original payment method.
-                  </span>
-                </div>
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70">
+                <span className="font-medium text-slate-900 block text-xs">Stockout Fallback Rule</span>
+                <span className="text-[11px] text-slate-600 leading-normal block mt-0.5">
+                  If replacement item is out of stock across WH-EAST &amp; WH-WEST, system automatically adapts to full refund via UPI.
+                </span>
               </div>
 
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-                <Clock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-slate-900 block text-[11px]">₹15,000 Operations Approval Gate</span>
-                  <span className="text-[11px] text-slate-600 leading-tight block mt-0.5">
-                    Any single resolution exceeding ₹15,000 requires human supervisor approval before database execution.
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-slate-900 block text-[11px]">Idempotency &amp; State Verification</span>
-                  <span className="text-[11px] text-slate-600 leading-tight block mt-0.5">
-                    Duplicate actions are prevented via unique idempotency keys. Final state is audited by independent DB re-query.
-                  </span>
-                </div>
+              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70">
+                <span className="font-medium text-slate-900 block text-xs">₹15,000 Operations Approval Gate</span>
+                <span className="text-[11px] text-slate-600 leading-normal block mt-0.5">
+                  Transactions exceeding ₹15,000 require manual supervisor sign-off before database execution.
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* 3. Workflow Visualizer */}
+      <AgentLoopVisualizer
+        currentStepIndex={activeStepIndex}
+        isRunning={isProcessing}
+        isComplete={isLoopComplete}
+        statusMessage={statusMessage}
+      />
     </div>
   );
 };
-
-

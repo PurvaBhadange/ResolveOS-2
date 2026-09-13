@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layers, ShieldCheck, AlertOctagon, CheckCircle2, Clock, XCircle, ArrowUpRight, FileText, Database } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Clock, XCircle, FileText, Database, AlertCircle } from 'lucide-react';
 import { api } from '../lib/api';
 
 export const OperationsDashboard: React.FC = () => {
@@ -9,6 +9,7 @@ export const OperationsDashboard: React.FC = () => {
   const [activePolicy, setActivePolicy] = useState<any | null>(null);
   const [headphonesInventory, setHeadphonesInventory] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
 
   const loadOpsData = async () => {
     setLoading(true);
@@ -38,11 +39,14 @@ export const OperationsDashboard: React.FC = () => {
   }, []);
 
   const handleApprovalDecision = async (approvalId: number, decision: 'approved' | 'rejected') => {
+    setActionLoadingId(approvalId);
     try {
       await api.submitApprovalDecision(approvalId, decision);
       await loadOpsData();
     } catch (e) {
       console.error(e);
+    } finally {
+      setActionLoadingId(null);
     }
   };
 
@@ -50,112 +54,146 @@ export const OperationsDashboard: React.FC = () => {
   const successRate = cases.length > 0 ? Math.round((resolvedCount / cases.length) * 100) : 100;
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Metrics Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6 pb-12">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Operations & Judge Control Center</h1>
-          <p className="text-slate-500 text-sm">Real-time system metrics, human approval gates, and constraint monitoring.</p>
+          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
+            Operations Governance &amp; Review
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Operational queues, human approval authorization gates, and warehouse constraint policies.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={loadOpsData}
+            className="px-2.5 py-1.5 rounded-md border border-slate-300 hover:border-slate-400 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors shadow-subtle"
+          >
+            Refresh Data
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Cases</span>
-          <p className="text-2xl font-black text-slate-900">{cases.length}</p>
-        </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Resolved</span>
-          <p className="text-2xl font-black text-emerald-600">{resolvedCount}</p>
-        </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Success Rate</span>
-          <p className="text-2xl font-black text-tealbrand-600">{successRate}%</p>
-        </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Auto-Resolution Rate</span>
-          <p className="text-2xl font-black text-slate-900">92%</p>
-        </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Awaiting Approval</span>
-          <p className="text-2xl font-black text-amber-600">{approvals.length}</p>
-        </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Escalated</span>
-          <p className="text-2xl font-black text-rose-600">{escalations.length}</p>
+      {/* KPI Metrics Row */}
+      <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-4">
+        <div className="grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 text-left">
+          <div className="p-3">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Total Cases</span>
+            <span className="text-xl font-semibold text-slate-900 mt-1 block">{cases.length}</span>
+          </div>
+          <div className="p-3">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Auto-Resolved</span>
+            <span className="text-xl font-semibold text-emerald-700 mt-1 block">{resolvedCount}</span>
+          </div>
+          <div className="p-3">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Resolution Rate</span>
+            <span className="text-xl font-semibold text-slate-900 mt-1 block">{successRate}%</span>
+          </div>
+          <div className="p-3">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Pending Approval</span>
+            <span className="text-xl font-semibold text-amber-600 mt-1 block">{approvals.length}</span>
+          </div>
+          <div className="p-3">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Escalated Tickets</span>
+            <span className="text-xl font-semibold text-rose-600 mt-1 block">{escalations.length}</span>
+          </div>
         </div>
       </div>
 
+      {/* Main Operations Queues */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Human Approval Queue */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-600" />
-              <h2 className="text-lg font-bold text-slate-900">Human Approval Queue</h2>
+              <Clock className="w-4 h-4 text-amber-600" />
+              <h2 className="text-sm font-semibold text-slate-900">Pending Approval Queue</h2>
             </div>
-            <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-50 text-amber-700 border border-amber-200">
-              {approvals.length} Pending
+            <span className="text-xs px-2 py-0.5 rounded font-medium bg-amber-50 text-amber-700 border border-amber-200">
+              {approvals.length} Required
             </span>
           </div>
 
           {approvals.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-sm">No pending approval requests. All cases resolved within standard policy.</div>
+            <div className="p-8 text-center text-slate-400 text-xs">
+              No approval requests pending. All transactions within auto-resolution thresholds.
+            </div>
           ) : (
-            <div className="space-y-4">
-              {approvals.map((appr) => (
-                <div key={appr.id} className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/80 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900">Approval Request #{appr.id} (Case #{appr.case_id})</span>
-                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-200 text-amber-800">
-                      Required Role: {appr.required_role}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-700 font-medium leading-relaxed">{appr.reason}</p>
+            <div className="space-y-3">
+              {approvals.map((appr) => {
+                const isBusy = actionLoadingId === appr.id;
+                return (
+                  <div key={appr.id} className="p-3.5 rounded-md bg-slate-50 border border-slate-200/80 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-slate-900 font-mono">
+                        Case #{appr.case_id} &bull; Request #{appr.id}
+                      </span>
+                      <span className="text-[10px] font-medium uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                        Authority: {appr.required_role}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-amber-200/60">
-                    <button
-                      onClick={() => handleApprovalDecision(appr.id, 'rejected')}
-                      className="px-3 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold transition-all"
-                    >
-                      Reject Action
-                    </button>
-                    <button
-                      onClick={() => handleApprovalDecision(appr.id, 'approved')}
-                      className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-all shadow-sm"
-                    >
-                      Approve & Execute
-                    </button>
+                    <p className="text-xs text-slate-700 leading-normal">
+                      {appr.reason}
+                    </p>
+
+                    <div className="flex items-center justify-end gap-2 pt-1">
+                      <button
+                        onClick={() => handleApprovalDecision(appr.id, 'rejected')}
+                        disabled={isBusy}
+                        className="px-3 py-1.5 rounded text-xs font-medium text-rose-700 bg-white hover:bg-rose-50 border border-rose-200 transition-colors disabled:opacity-50"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => handleApprovalDecision(appr.id, 'approved')}
+                        disabled={isBusy}
+                        className="px-3 py-1.5 rounded text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-subtle disabled:opacity-50"
+                      >
+                        Authorize Transaction
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
 
-        {/* Escalation Queue */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        {/* Escalations Queue */}
+        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
-              <AlertOctagon className="w-5 h-5 text-rose-600" />
-              <h2 className="text-lg font-bold text-slate-900">Escalations Queue</h2>
+              <AlertCircle className="w-4 h-4 text-rose-600" />
+              <h2 className="text-sm font-semibold text-slate-900">Escalated Tickets Queue</h2>
             </div>
-            <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-rose-50 text-rose-700 border border-rose-200">
+            <span className="text-xs px-2 py-0.5 rounded font-medium bg-rose-50 text-rose-700 border border-rose-200">
               {escalations.length} Active
             </span>
           </div>
 
           {escalations.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-sm">No active escalations.</div>
+            <div className="p-8 text-center text-slate-400 text-xs">
+              No active escalations recorded.
+            </div>
           ) : (
             <div className="space-y-3">
               {escalations.map((esc) => (
-                <div key={esc.id} className="p-4 rounded-2xl bg-rose-50/50 border border-rose-200/80 space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-900">Case #{esc.case_id} Escalated</span>
-                    <span className="text-[10px] uppercase font-bold text-rose-700">{esc.priority} Priority</span>
+                <div key={esc.id} className="p-3.5 rounded-md bg-slate-50 border border-slate-200/80 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-900 font-mono">
+                      Escalation #{esc.id} (Case #{esc.case_id})
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 uppercase">
+                      Tier-2 Support
+                    </span>
                   </div>
-                  <p className="text-xs text-slate-700">{esc.escalation_reason}</p>
+                  <p className="text-xs text-slate-700 leading-normal">{esc.reason}</p>
+                  <span className="text-[10px] text-slate-400 block font-mono">
+                    Logged: {new Date(esc.created_at).toLocaleTimeString()}
+                  </span>
                 </div>
               ))}
             </div>
@@ -163,51 +201,55 @@ export const OperationsDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Inventory & Policy Constraint Visualizers */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Real-time Inventory Inspector */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-            <Database className="w-5 h-5 text-tealbrand-600" />
-            <h2 className="text-lg font-bold text-slate-900">Demo Inventory Constraint Monitor</h2>
+      {/* Constraints & Policy Inspectors */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Inventory Constraint Monitor */}
+        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <Database className="w-4 h-4 text-slate-700" />
+              <h2 className="text-sm font-semibold text-slate-900">Inventory Constraint Monitor</h2>
+            </div>
+            <span className="text-[11px] font-mono font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+              SKU: AURASOUND-BLK
+            </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-900">SKU-HD-BLK (AuraSound Headphones - Black)</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                OUT OF STOCK (0 Available)
+          <div className="p-3 rounded-md bg-slate-50 border border-slate-200/80 space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-medium text-slate-900">AuraSound Headphones (Matte Black)</span>
+              <span className="font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                0 In Stock (Out of Stock)
               </span>
             </div>
-            <p className="text-xs text-slate-600">
-              Primary warehouse <strong>WH-EAST</strong> and secondary warehouse <strong>WH-WEST</strong> both show 0 stock. When customer requests replacement for this item, the resolution guard flags this inventory constraint, adapting to a <strong>Full Refund</strong>.
+            <p className="text-xs text-slate-600 leading-normal">
+              Primary warehouse <strong>WH-EAST</strong> and secondary warehouse <strong>WH-WEST</strong> both show 0 units available. When customer requests replacement for this SKU, the rule engine automatically adapts to a <strong>Full UPI Refund</strong>.
             </p>
           </div>
         </div>
 
-        {/* Policy Version Inspector */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-            <FileText className="w-5 h-5 text-sky-600" />
-            <h2 className="text-lg font-bold text-slate-900">Active Policy Version Monitor</h2>
+        {/* Policy Rules Version Monitor */}
+        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <FileText className="w-4 h-4 text-slate-700" />
+              <h2 className="text-sm font-semibold text-slate-900">Policy Rules Monitor</h2>
+            </div>
+            <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              v2.0 Active
+            </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-900">Electronics Return & Replacement Policy</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                Version v2.0 (Active)
-              </span>
+          <div className="p-3 rounded-md bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+            <span className="font-semibold text-slate-900 block">Electronics Return &amp; Replacement Rules</span>
+            <div className="space-y-1 text-slate-600 leading-normal">
+              <p>&bull; <strong>Return Cutoff Window</strong>: 15 days from verified delivery date.</p>
+              <p>&bull; <strong>Auto-Refund Safety Cap</strong>: ₹15,000.00 (Exceeding values require supervisor review).</p>
+              <p>&bull; <strong>Out-of-Stock Fallback</strong>: Mandatory replanning to immediate UPI / card refund.</p>
             </div>
-            <p className="text-xs text-slate-600">
-              - <strong>Return Window</strong>: 15 Days from delivery.<br />
-              - <strong>Auto-Refund Threshold</strong>: ₹15,000.00 (Exceeding amounts require human approval).<br />
-              - <strong>Inventory Fallback</strong>: Mandatory adaptation to refund when stockout occurs.
-            </p>
           </div>
         </div>
       </div>
     </div>
   );
 };
-

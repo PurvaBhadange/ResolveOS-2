@@ -7,28 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Zapier-Inspired Warm Coffee & Saturated Orange Palette
-        primary: {
-          DEFAULT: '#ff4f00',
-          hover: '#e04500',
-          light: '#fff2ec',
-        },
-        'on-primary': '#fffefb',
-        ink: {
-          DEFAULT: '#201515',
-          soft: '#2f2a26',
-          mid: '#36342e',
-        },
-        body: {
-          DEFAULT: '#605d52',
-          mid: '#939084',
-        },
-        mute: '#c5c0b1',
-        canvas: {
-          DEFAULT: '#fffefb',
-          soft: '#f8f4f0',
-        },
-        // Legacy tealbrand for backward compat
+        // Crisp brand teal for subtle accents and active states
         tealbrand: {
           50: '#f0fdfa',
           100: '#ccfbf1',
@@ -44,12 +23,20 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       borderRadius: {
-        'sm': '6px',
-        'md': '12px',
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '6px',
+        'lg': '8px',
+        'xl': '12px',
+        '2xl': '14px',
         'pill': '9999px',
+      },
+      boxShadow: {
+        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+        'panel': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
       },
     },
   },

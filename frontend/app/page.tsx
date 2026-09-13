@@ -22,20 +22,24 @@ export default function Home() {
   const isStaff = ['operations', 'admin', 'support_agent'].includes(userRole);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         {activeTab === 'help' && (
           <CustomerHelpCenter
             onCaseCreated={(caseId) => setSelectedCaseId(caseId)}
             setActiveTab={setActiveTab}
+            prefillOrderNumber={selectedOrderNumber}
           />
         )}
 
         {activeTab === 'orders' && (
           <OrdersView
-            onSelectOrder={(orderNum) => setSelectedOrderNumber(orderNum)}
+            onSelectOrder={(orderNum) => {
+              setSelectedOrderNumber(orderNum);
+              setActiveTab('help');
+            }}
             setActiveTab={setActiveTab}
           />
         )}
@@ -52,19 +56,19 @@ export default function Home() {
           isStaff ? (
             <OperationsDashboard />
           ) : (
-            <div className="p-12 bg-white rounded-3xl text-center border border-slate-200 shadow-sm max-w-xl mx-auto space-y-4 my-12">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-                <Lock className="w-6 h-6" />
+            <div className="p-8 sm:p-12 bg-white rounded-lg text-center border border-slate-200/90 shadow-subtle max-w-md mx-auto space-y-3 my-12">
+              <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200">
+                <Lock className="w-5 h-5" />
               </div>
-              <h2 className="text-xl font-bold text-slate-900">Staff Authentication Required</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                The Operations Dashboard &amp; Approval Console is restricted to internal Operations Leads and Admin Supervisors.
+              <h2 className="text-base font-semibold text-slate-900">Staff Authorization Required</h2>
+              <p className="text-xs text-slate-500 leading-normal">
+                The Operations Governance Console is restricted to Operations Leads and System Administrators.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition-colors shadow-subtle"
               >
-                Sign In as Operations Lead
+                Sign In with Authorized Account
               </button>
             </div>
           )
@@ -74,17 +78,17 @@ export default function Home() {
           isStaff ? (
             <AgentTraceInspector selectedCaseId={selectedCaseId} />
           ) : (
-            <div className="p-12 bg-white rounded-3xl text-center border border-slate-200 shadow-sm max-w-xl mx-auto space-y-4 my-12">
-              <div className="w-12 h-12 rounded-2xl bg-tealbrand-50 text-tealbrand-600 flex items-center justify-center mx-auto">
-                <ShieldAlert className="w-6 h-6" />
+            <div className="p-8 sm:p-12 bg-white rounded-lg text-center border border-slate-200/90 shadow-subtle max-w-md mx-auto space-y-3 my-12">
+              <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center mx-auto border border-slate-200">
+                <ShieldAlert className="w-5 h-5" />
               </div>
-              <h2 className="text-xl font-bold text-slate-900">Execution Trace Restricted</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                The Execution Trace Log contains internal workflow payloads and enterprise policy audit records. Staff sign-in is required.
+              <h2 className="text-base font-semibold text-slate-900">Restricted Diagnostic View</h2>
+              <p className="text-xs text-slate-500 leading-normal">
+                Execution trace event payloads and diagnostic state logs require authenticated staff privileges.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition-colors shadow-subtle"
               >
                 Staff Sign In
               </button>
@@ -95,9 +99,9 @@ export default function Home() {
 
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
 
-      <footer className="bg-white border-t border-slate-200 py-6 mt-12">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-medium">
-          ResolveOS Enterprise Resolution Platform &mdash; High-Reliability Fulfillment &amp; Customer Support Infrastructure
+      <footer className="bg-white border-t border-slate-200/80 py-4 mt-12">
+        <div className="max-w-7xl mx-auto px-4 text-center text-[11px] text-slate-500 font-medium">
+          ResolveOS &bull; Enterprise Order Fulfillment &amp; Customer Resolution Platform
         </div>
       </footer>
     </div>

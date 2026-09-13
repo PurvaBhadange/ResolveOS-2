@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, ShoppingBag, LifeBuoy, Activity, Layers, Cpu, LogOut, User, Lock } from 'lucide-react';
+import { ShieldCheck, ShoppingBag, LifeBuoy, Activity, Layers, Cpu, LogOut, User } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { SignInModal } from './SignInModal';
 
@@ -16,11 +16,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const userRole = (session?.user as any)?.role || (session ? 'operations' : 'customer');
 
   const allNavItems = [
-    { id: 'help', label: 'Help Center', icon: LifeBuoy, roles: ['customer', 'operations', 'admin', 'support_agent'] },
-    { id: 'orders', label: 'My Orders', icon: ShoppingBag, roles: ['customer', 'admin'] },
+    { id: 'help', label: 'Resolution Center', icon: LifeBuoy, roles: ['customer', 'operations', 'admin', 'support_agent'] },
+    { id: 'orders', label: 'Orders', icon: ShoppingBag, roles: ['customer', 'admin'] },
     { id: 'cases', label: 'Case Tracker', icon: Activity, roles: ['customer', 'operations', 'admin', 'support_agent'] },
-    { id: 'ops', label: 'Operations Dashboard', icon: Layers, badge: 'Judge Console', roles: ['operations', 'admin'] },
-    { id: 'trace', label: 'Execution Trace Inspector', icon: Cpu, badge: 'Live Audit', roles: ['operations', 'admin', 'support_agent'] },
+    { id: 'ops', label: 'Operations', icon: Layers, roles: ['operations', 'admin'] },
+    { id: 'trace', label: 'Audit Trace', icon: Cpu, roles: ['operations', 'admin', 'support_agent'] },
   ];
 
   // Filter tabs based on active user role
@@ -28,23 +28,29 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-subtle">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('help')}>
-              <div className="w-10 h-10 rounded-xl bg-tealbrand-600 border border-tealbrand-700 flex items-center justify-center text-white shadow-sm">
-                <ShieldCheck className="w-6 h-6" />
+          <div className="flex items-center justify-between h-14">
+            {/* Brand Logo & Portal Badge */}
+            <div
+              className="flex items-center gap-2.5 cursor-pointer select-none"
+              onClick={() => setActiveTab('help')}
+            >
+              <div className="w-8 h-8 rounded-md bg-slate-900 flex items-center justify-center text-white shadow-subtle">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
               </div>
-              <div>
-                <span className="text-xl font-bold tracking-tight text-slate-900">Resolve<span className="text-tealbrand-600">OS</span></span>
-                <span className="hidden sm:inline-block ml-2 px-2 py-0.5 text-[11px] font-bold bg-tealbrand-50 text-tealbrand-700 rounded-full border border-tealbrand-200 uppercase tracking-wider">
-                  {userRole === 'customer' ? 'Customer Portal' : `${userRole} Access`}
+              <div className="flex items-center gap-2">
+                <span className="text-base font-semibold tracking-tight text-slate-900">
+                  Resolve<span className="text-emerald-700">OS</span>
+                </span>
+                <span className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-medium text-slate-600 bg-slate-100 rounded border border-slate-200">
+                  {userRole === 'customer' ? 'Customer Portal' : `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Workspace`}
                 </span>
               </div>
             </div>
 
-
-            <nav className="flex items-center gap-1 sm:gap-2">
+            {/* Navigation Tabs */}
+            <nav className="flex items-center gap-1 sm:gap-1.5">
               {visibleNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -52,27 +58,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       isActive
-                        ? 'bg-tealbrand-50 text-tealbrand-800 font-semibold border border-tealbrand-200 shadow-sm'
+                        ? 'bg-slate-100 text-slate-900 font-semibold shadow-subtle'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden md:inline">{item.label}</span>
-                    {item.badge && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold ${
-                        isActive ? 'bg-tealbrand-600 text-white' : 'bg-slate-100 text-slate-600'
-                      }`}>
-                        {item.badge}
-                      </span>
-                    )}
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-slate-900' : 'text-slate-400'}`} />
+                    <span>{item.label}</span>
                   </button>
                 );
               })}
 
-              {/* Role-Based Sign In & Session Badge */}
-              <div className="ml-2 border-l border-slate-200 pl-2">
+              {/* Role-Based Session & Sign In */}
+              <div className="ml-2 pl-2 border-l border-slate-200">
                 {session ? (
                   <div className="flex items-center gap-2">
                     {session.user?.image ? (
@@ -80,31 +79,35 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                         src={session.user.image}
                         alt={session.user.name || 'User'}
                         referrerPolicy="no-referrer"
-                        className="w-8 h-8 rounded-full border border-slate-200 object-cover shadow-sm"
+                        className="w-7 h-7 rounded-full border border-slate-200 object-cover shadow-subtle"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-tealbrand-100 text-tealbrand-800 font-bold text-xs flex items-center justify-center border border-tealbrand-200">
+                      <div className="w-7 h-7 rounded-full bg-slate-900 text-white font-medium text-[11px] flex items-center justify-center">
                         {(session.user?.name || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="hidden sm:flex flex-col text-right">
-                      <span className="text-xs font-bold text-slate-900 leading-none">{session.user?.name || 'Logged User'}</span>
-                      <span className="text-[10px] text-tealbrand-600 font-semibold uppercase">{session.user?.email || 'Customer'}</span>
+                      <span className="text-xs font-medium text-slate-900 leading-none">
+                        {session.user?.name || 'Authorized User'}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium">
+                        {session.user?.email || 'Active'}
+                      </span>
                     </div>
                     <button
                       onClick={() => signOut()}
                       title="Sign Out"
-                      className="p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                      className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
                     >
-                      <LogOut className="w-4 h-4" />
+                      <LogOut className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => setIsSignInOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-tealbrand-50 hover:bg-tealbrand-100 text-tealbrand-700 border border-tealbrand-200 text-xs font-semibold transition-all shadow-sm"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-slate-300 hover:border-slate-400 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 shadow-subtle transition-all"
                   >
-                    <User className="w-3.5 h-3.5" />
+                    <User className="w-3.5 h-3.5 text-slate-500" />
                     <span>Staff Sign In</span>
                   </button>
                 )}
