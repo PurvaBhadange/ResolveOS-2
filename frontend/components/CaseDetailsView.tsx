@@ -76,16 +76,16 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                 onClick={() => onSelectCase(c.id)}
                 className={`p-3.5 rounded-xl cursor-pointer transition-all border ${
                   activeCase?.id === c.id
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                    : 'bg-white hover:bg-slate-50 border-slate-100 text-slate-900'
+                    ? 'bg-tealbrand-50 text-tealbrand-900 border-tealbrand-300 shadow-sm'
+                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-900'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="font-bold tracking-tight">{c.case_number}</span>
-                  <span className={`px-2 py-0.5 rounded-md font-semibold text-[10px] uppercase ${
-                    c.case_status === 'resolved' ? 'bg-emerald-500 text-white' :
-                    c.case_status === 'escalated' ? 'bg-rose-500 text-white' :
-                    c.case_status === 'awaiting_approval' ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-200'
+                  <span className={`px-2 py-0.5 rounded-md font-semibold text-[10px] uppercase border ${
+                    c.case_status === 'resolved' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                    c.case_status === 'escalated' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                    c.case_status === 'awaiting_approval' ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}>
                     {c.case_status}
                   </span>
@@ -140,7 +140,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                           ev.event_type === 'OUTCOME' ? 'bg-emerald-600 text-white' :
                           ev.event_type === 'ADAPTATION' ? 'bg-indigo-600 text-white' :
                           ev.event_type === 'ACTION' ? 'bg-tealbrand-600 text-white' :
-                          ev.event_type === 'VERIFICATION' ? 'bg-sky-600 text-white' : 'bg-slate-900 text-white'
+                          ev.event_type === 'VERIFICATION' ? 'bg-sky-600 text-white' : 'bg-slate-600 text-white'
                         }`}>
                           {idx + 1}
                         </div>
@@ -153,7 +153,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                             </span>
                           </div>
 
-                          <pre className="bg-slate-950 text-emerald-300 p-4 rounded-xl border border-slate-800 text-xs font-mono overflow-x-auto leading-relaxed">
+                          <pre className="bg-white text-slate-800 p-4 rounded-xl border border-slate-200 text-xs font-mono overflow-x-auto leading-relaxed select-text">
                             {JSON.stringify(ev.detail_json, null, 2)}
                           </pre>
                         </div>

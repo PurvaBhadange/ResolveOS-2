@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShoppingBag, Truck, CheckCircle2, Clock, AlertCircle, ArrowRight } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -75,7 +75,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
                 <div className="flex items-center gap-3 text-sm text-slate-600">
                   <Truck className="w-4 h-4 text-slate-400" />
                   <span>Carrier: <strong>Blue Dart / Delhivery / Ekart</strong></span>
-                  <span>â€¢</span>
+                  <span>&bull;</span>
                   <span>Payment: <strong>{order.payment_status}</strong></span>
                 </div>
 

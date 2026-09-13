@@ -66,26 +66,26 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       </div>
 
       {/* Visual LangGraph State Machine Horizontal Pipeline */}
-      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl overflow-x-auto">
+      <div className="bg-white text-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm overflow-x-auto">
         <div className="flex items-center justify-between min-w-[700px] gap-2">
           {graphSteps.map((step, idx) => {
             const hasEvent = events.some((e) => e.event_type === step.key);
             return (
               <React.Fragment key={step.key}>
-                <div className={`flex flex-col items-center text-center p-3 rounded-2xl transition-all ${
-                  hasEvent ? 'bg-slate-800 border border-tealbrand-500/50 text-white' : 'opacity-40 text-slate-400'
+                <div className={`flex flex-col items-center text-center p-3 rounded-xl transition-all ${
+                  hasEvent ? 'bg-tealbrand-50/60 border border-tealbrand-200 text-slate-900' : 'opacity-50 text-slate-400'
                 }`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs mb-2 ${
-                    hasEvent ? 'bg-tealbrand-500 text-white' : 'bg-slate-700 text-slate-400'
+                    hasEvent ? 'bg-tealbrand-600 text-white' : 'bg-slate-200 text-slate-500'
                   }`}>
                     {idx + 1}
                   </div>
-                  <span className="text-xs font-bold text-tealbrand-400 tracking-tight">{step.label}</span>
-                  <span className="text-[10px] text-slate-300 mt-0.5 max-w-[90px] leading-tight">{step.desc}</span>
+                  <span className="text-xs font-bold text-tealbrand-700 tracking-tight">{step.label}</span>
+                  <span className="text-[10px] text-slate-600 mt-0.5 max-w-[90px] leading-tight">{step.desc}</span>
                 </div>
 
                 {idx < graphSteps.length - 1 && (
-                  <ArrowRight className="w-4 h-4 text-slate-600 shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-slate-300 shrink-0" />
                 )}
               </React.Fragment>
             );
@@ -107,8 +107,8 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
                 onClick={() => setSelectedEventId(ev.id)}
                 className={`p-3.5 rounded-xl cursor-pointer transition-all border ${
                   selectedEventId === ev.id
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                    : 'bg-white hover:bg-slate-50 border-slate-100 text-slate-900'
+                    ? 'bg-tealbrand-50 text-tealbrand-900 border-tealbrand-300 shadow-sm'
+                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-900'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1">
@@ -122,7 +122,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         </div>
 
         {/* Payload Detail */}
-        <div className="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
           {selectedEvent ? (
             <>
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -135,7 +135,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
 
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Structured Event Payload</h4>
-                <pre className="bg-slate-950 text-emerald-300 p-5 rounded-2xl text-xs font-mono overflow-x-auto leading-relaxed border border-slate-800 shadow-inner select-text">
+                <pre className="bg-slate-50 text-slate-800 p-5 rounded-xl text-xs font-mono overflow-x-auto leading-relaxed border border-slate-200 shadow-inner select-text">
                   {JSON.stringify(selectedEvent.detail_json, null, 2)}
                 </pre>
               </div>

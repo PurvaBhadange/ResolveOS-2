@@ -29,20 +29,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   return (
     <>
       {/* Top Hackathon Banner */}
-      <div className="bg-slate-950 text-slate-300 text-xs font-semibold py-1.5 px-4 border-b border-slate-800">
+      <div className="bg-slate-50 text-slate-600 text-xs font-medium py-1.5 px-4 border-b border-slate-200">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-md bg-tealbrand-900/60 text-tealbrand-300 font-bold border border-tealbrand-700/50 text-[10px] uppercase tracking-wider">
+            <span className="px-2 py-0.5 rounded-md bg-tealbrand-50 text-tealbrand-700 font-bold border border-tealbrand-200 text-[10px] uppercase tracking-wider">
               Agentic AI Hackathon
             </span>
-            <span className="text-slate-300 hidden sm:inline">Track 3: Smart Automation &middot; IIT Bhubaneswar (Tech Zephyr 4.0)</span>
+            <span className="text-slate-600 hidden sm:inline">Track 3: Smart Automation &middot; IIT Bhubaneswar (Tech Zephyr 4.0)</span>
           </div>
-          <div className="flex items-center gap-3 text-[11px] text-slate-300">
-            <span className="inline-flex items-center gap-1.5 text-emerald-400">
+          <div className="flex items-center gap-3 text-[11px] text-slate-500">
+            <span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-500" /> Live API Online
             </span>
-            <span className="hidden md:inline text-slate-600">•</span>
-            <span className="hidden md:inline text-tealbrand-300 font-mono">FastAPI + LangGraph Engine</span>
+            <span className="hidden md:inline text-slate-300">•</span>
+            <span className="hidden md:inline text-slate-600 font-mono">FastAPI + LangGraph Engine</span>
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('help')}>
-              <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-tealbrand-400 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-tealbrand-600 border border-tealbrand-700 flex items-center justify-center text-white shadow-sm">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
@@ -73,15 +73,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                     onClick={() => setActiveTab(item.id)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                       isActive
-                        ? 'bg-slate-900 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'bg-tealbrand-50 text-tealbrand-800 font-semibold border border-tealbrand-200 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
                     <span className="hidden md:inline">{item.label}</span>
                     {item.badge && (
                       <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold ${
-                        isActive ? 'bg-tealbrand-500 text-white' : 'bg-slate-200 text-slate-700'
+                        isActive ? 'bg-tealbrand-600 text-white' : 'bg-slate-100 text-slate-600'
                       }`}>
                         {item.badge}
                       </span>

@@ -84,7 +84,7 @@ export default function Home() {
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-sm"
               >
                 Staff Sign In
               </button>
