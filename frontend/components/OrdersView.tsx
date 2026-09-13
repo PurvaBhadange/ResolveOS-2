@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { ShoppingBag, Truck, CheckCircle2, Clock, AlertCircle, ArrowRight } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -54,7 +54,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
                 </div>
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total</span>
-                  <p className="text-slate-900 text-lg font-extrabold">${order.total_amount}</p>
+                  <p className="text-slate-900 text-lg font-extrabold">₹{order.total_amount}</p>
                 </div>
                 <div>
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold capitalize ${
@@ -74,8 +74,8 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-3 text-sm text-slate-600">
                   <Truck className="w-4 h-4 text-slate-400" />
-                  <span>Carrier: <strong>FedEx / UPS</strong></span>
-                  <span>•</span>
+                  <span>Carrier: <strong>Blue Dart / Delhivery / Ekart</strong></span>
+                  <span>â€¢</span>
                   <span>Payment: <strong>{order.payment_status}</strong></span>
                 </div>
 
@@ -93,3 +93,4 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
     </div>
   );
 };
+

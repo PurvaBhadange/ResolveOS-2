@@ -52,15 +52,15 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     total_amount: '199.99',
     order_status: 'delivered',
     item_title: 'AuraSound Headphones - Matte Black',
-    carrier: 'FedEx',
-    tracking: 'TRK-8801-US',
+    carrier: 'Blue Dart',
+    tracking: 'BLUEDART-8801-IN',
   });
 
   const stepDescriptions = [
     'Node 1/7 [UNDERSTAND]: Extracting customer intent & analyzing order records...',
     'Node 2/7 [EVIDENCE]: Querying warehouse stock levels & RAG return policies...',
     'Node 3/7 [DECIDE]: Evaluating plan candidates & ranking confidence scores...',
-    'Node 4/7 [GUARD]: Checking $200 threshold, fraud risk & policy return windows...',
+    'Node 4/7 [GUARD]: Checking $200₹200 threshold, fraud risk & policy return windows...',
     'Node 5/7 [ACT]: Executing transactional state change with idempotency key...',
     'Node 6/7 [VERIFY]: Re-querying PostgreSQL database to independently audit outcome...',
     'Node 7/7 [ADAPT]: Validating autonomous adaptation & closing support ticket...',
@@ -72,10 +72,10 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       num: '1',
       title: 'Stockout Adaptation',
       order: 'ORD-2026-8801',
-      amount: '$199.99',
+      amount: '₹199.99',
       badge: 'Stockout Replanning',
       badgeColor: 'bg-tealbrand-500/20 text-tealbrand-300 border-tealbrand-500/30',
-      desc: 'Headphones delivered damaged. Warehouse is out of stock, so ResolveAI autonomously adapts from replacement to instant full refund.',
+      desc: 'Headphones delivered damaged. Warehouse is out of stock, so ResolveAI autonomously adapts from replacement to instant full refund via UPI / original payment method.',
       category: 'damaged',
       issueTitle: 'Headphones arrived damaged - Request replacement',
       issueDesc: 'My AuraSound headphones arrived yesterday with a cracked left ear cup and sound distortion. I want a replacement.',
@@ -84,29 +84,29 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         total_amount: '199.99',
         order_status: 'delivered',
         item_title: 'AuraSound Headphones - Matte Black',
-        carrier: 'FedEx',
-        tracking: 'TRK-8801-US',
+        carrier: 'Blue Dart',
+        tracking: 'BLUEDART-8801-IN',
       }
     },
     {
       id: 'high_value',
       num: '2',
-      title: 'High-Value $200+ Approval',
+      title: 'High-Value ₹200+ Approval',
       order: 'ORD-2026-8802',
-      amount: '$499.98',
+      amount: '₹499.98',
       badge: 'Human-in-the-Loop',
       badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-      desc: 'Defective Smartwatch Bundle exceeding $200 safety threshold. Automatically halts autonomous execution and routes to Operations Approval Queue.',
+      desc: 'Defective Smartwatch Bundle exceeding ₹200 safety₹200 threshold. Automatically halts autonomous execution and routes to Operations Approval Queue.',
       category: 'damaged',
-      issueTitle: 'Damaged Smartwatch Bundle - Request refund ($499.98)',
-      issueDesc: 'Apex Smartwatch arrived defective with touchscreen unresponsiveness. Requesting full refund of $499.98.',
+      issueTitle: 'Damaged Smartwatch Bundle - Request refund (₹499.98)',
+      issueDesc: 'Apex Smartwatch arrived defective with touchscreen unresponsiveness. Requesting full refund of ₹499.98.',
       preview: {
         order_number: 'ORD-2026-8802',
         total_amount: '499.98',
         order_status: 'delivered',
         item_title: 'Apex Fit Pro Smartwatch (Obsidian Black)',
-        carrier: 'FedEx',
-        tracking: 'TRK-8802-US',
+        carrier: 'Blue Dart',
+        tracking: 'DELHIVERY-8802-IN',
       }
     },
     {
@@ -114,7 +114,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       num: '3',
       title: 'Expired Return Window',
       order: 'ORD-2026-8803',
-      amount: '$89.99',
+      amount: '₹89.99',
       badge: 'Policy Enforcement',
       badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
       desc: 'Pulse Earbuds delivered 40 days ago. RAG Policy Engine detects return requested past 15-day limit and enforces policy rules.',
@@ -126,8 +126,8 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         total_amount: '89.99',
         order_status: 'delivered',
         item_title: 'Pulse True Wireless Earbuds (White)',
-        carrier: 'USPS',
-        tracking: 'TRK-8803-US',
+        carrier: 'Delhivery',
+        tracking: 'EKART-8803-IN',
       }
     },
     {
@@ -135,7 +135,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       num: '4',
       title: 'Pre-Shipment Cancel',
       order: 'ORD-2026-8804',
-      amount: '$129.99',
+      amount: '₹129.99',
       badge: 'Instant Resolution',
       badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
       desc: 'Mechanical keyboard order in "processing" state. ResolveAI verifies order is not yet packed and immediately voids shipment and issues refund.',
@@ -274,7 +274,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         <div className="relative z-10 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tealbrand-500/20 text-tealbrand-300 text-xs font-semibold border border-tealbrand-500/30">
-              <Sparkles className="w-3.5 h-3.5" /> Autonomous Enterprise Resolution Engine
+              <Sparkles className="w-3.5 h-3.5" /> 🇮🇳 India's 🇮🇳 India's Autonomous Enterprise Resolution Engine
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
               <span className="flex items-center gap-1.5"><Database className="w-3.5 h-3.5 text-tealbrand-400" /> Neon DB Connected</span>
@@ -508,7 +508,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
               </div>
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
                 <span className="text-slate-400 font-medium">Order Total</span>
-                <span className="font-extrabold text-slate-900 text-sm">${orderPreview?.total_amount}</span>
+                <span className="font-extrabold text-slate-900 text-sm">₹{orderPreview?.total_amount}</span>
               </div>
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
                 <span className="text-slate-400 font-medium">Purchased Item</span>
@@ -539,7 +539,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
                 <div>
                   <span className="font-bold text-slate-200 block text-[11px]">Stockout Adaptation Rule</span>
                   <span className="text-[11px] text-slate-400 leading-tight block mt-0.5">
-                    If replacement item is out of stock across WH-EAST &amp; WH-WEST, system autonomously adapts to full refund.
+                    If replacement item is out of stock across WH-EAST &amp; WH-WEST, system autonomously adapts to full refund via UPI / original payment method.
                   </span>
                 </div>
               </div>
@@ -547,9 +547,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
               <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-slate-200 block text-[11px]">$200 Operations Approval Gate</span>
+                  <span className="font-bold text-slate-200 block text-[11px]">$200₹200 Operations Approval Gate</span>
                   <span className="text-[11px] text-slate-400 leading-tight block mt-0.5">
-                    Any single resolution exceeding $200 requires human supervisor approval before database execution.
+                    Any single resolution exceeding ₹200 requires human supervisor approval before database execution.
                   </span>
                 </div>
               </div>
@@ -570,3 +570,5 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     </div>
   );
 };
+
+

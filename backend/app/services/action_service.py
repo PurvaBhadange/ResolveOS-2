@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from datetime import datetime
 from decimal import Decimal
 from typing import Dict, Any, Optional
@@ -94,7 +94,7 @@ class ActionService:
             "action_type": ActionType.REFUND.value,
             "execution_status": ActionStatus.VERIFIED.value,
             "idempotency_key": idempotency_key,
-            "message": f"Successfully processed refund of ${amount} for Order {order.order_number}",
+            "message": f"Successfully processed refund of ₹{amount} for Order {order.order_number}",
             "data": {
                 "refund_number": refund_num,
                 "amount": float(amount),
@@ -260,3 +260,4 @@ class ActionService:
             "data": {"order_number": order.order_number},
             "executed_at": datetime.utcnow().isoformat()
         }
+

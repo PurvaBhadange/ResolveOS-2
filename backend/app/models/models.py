@@ -1,4 +1,4 @@
-import enum
+﻿import enum
 from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import (
@@ -228,7 +228,7 @@ class Order(Base):
     order_number = Column(String(64), unique=True, index=True, nullable=False)
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     total_amount = Column(Numeric(10, 2), nullable=False)
-    currency = Column(String(10), default="USD")
+    currency = Column(String(10), default="INR")
     order_status = Column(String(50), default=OrderStatus.PROCESSING.value, nullable=False)
     payment_status = Column(String(50), default=PaymentStatus.PAID.value, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -480,3 +480,4 @@ class Escalation(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     case = relationship("SupportCase", back_populates="escalations")
+

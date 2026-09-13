@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 from datetime import datetime, timedelta
 from decimal import Decimal
 from sqlalchemy.orm import Session
@@ -26,6 +26,16 @@ def get_password_hash(password: str) -> str:
 
 def seed_database(force: bool = False):
     logger.info("Starting database seed process...")
+    if force:
+        logger.info("Force clear existing data...")
+        try:
+            from sqlalchemy import text
+            with engine.connect() as conn:
+                conn.execute(text("DROP SCHEMA public CASCADE; CREATE SCHEMA public;"))
+                conn.commit()
+        except Exception:
+            Base.metadata.drop_all(bind=engine)
+
     Base.metadata.create_all(bind=engine)
     db: Session = SessionLocal()
 
@@ -34,11 +44,6 @@ def seed_database(force: bool = False):
         if not force and db.query(Customer).first():
             logger.info("Database already contains data. Skipping seed.")
             return
-
-        if force:
-            logger.info("Force clear existing data...")
-            Base.metadata.drop_all(bind=engine)
-            Base.metadata.create_all(bind=engine)
 
         # 1. Staff Users
         staff_users = [
@@ -66,9 +71,9 @@ def seed_database(force: bool = False):
 
         # 2. Warehouses
         warehouses = [
-            Warehouse(code="WH-EAST", name="East Coast Logistics Hub", location="Newark, NJ", is_active=True),
-            Warehouse(code="WH-WEST", name="West Coast Distribution Center", location="Reno, NV", is_active=True),
-            Warehouse(code="WH-CENTRAL", name="Midwest Fulfillment Hub", location="Chicago, IL", is_active=True),
+            Warehouse(code="WH-EAST", name="Mumbai Logistics Hub", location="Bhiwandi, Mumbai", is_active=True),
+            Warehouse(code="WH-WEST", name="Delhi NCR Fulfillment Center", location="Gurugram, Delhi NCR", is_active=True),
+            Warehouse(code="WH-CENTRAL", name="Bengaluru Distribution Hub", location="Whitefield, Bengaluru", is_active=True),
         ]
         db.add_all(warehouses)
         db.commit()
@@ -147,8 +152,8 @@ def seed_database(force: bool = False):
             addr = CustomerAddress(
                 customer_id=c.id,
                 address_line1=f"{100 + idx} Main Street",
-                city="Austin",
-                state="TX",
+                city="Mumbai",
+                state="MH",
                 postal_code=f"7870{idx % 10}",
                 country="US",
                 is_default=True
@@ -172,7 +177,7 @@ def seed_database(force: bool = False):
             order_number="ORD-2026-8801",
             customer_id=customers[0].id,
             total_amount=Decimal("199.99"),
-            currency="USD",
+            currency="INR",
             order_status=OrderStatus.DELIVERED.value,
             payment_status=PaymentStatus.PAID.value,
             created_at=now - timedelta(days=5),
@@ -182,8 +187,8 @@ def seed_database(force: bool = False):
         db.commit()
 
         oi1 = OrderItem(order_id=o1.id, variant_id=v1.id, quantity=1, unit_price=Decimal("199.99"), total_price=Decimal("199.99"), item_status="delivered")
-        sh1 = Shipment(order_id=o1.id, tracking_number="TRK-8801-US", carrier="FedEx", shipping_status=ShipmentStatus.DELIVERED.value, delivered_at=now - timedelta(days=2))
-        pm1 = Payment(order_id=o1.id, transaction_id="TXN-PAY-8801", payment_method="Credit Card (Visa ****4242)", amount=Decimal("199.99"), payment_status=PaymentStatus.PAID.value)
+        sh1 = Shipment(order_id=o1.id, tracking_number="BLUEDART-8801-IN", carrier="Blue Dart", shipping_status=ShipmentStatus.DELIVERED.value, delivered_at=now - timedelta(days=2))
+        pm1 = Payment(order_id=o1.id, transaction_id="TXN-PAY-8801", payment_method="UPI (PhonePe / GPay)", amount=Decimal("199.99"), payment_status=PaymentStatus.PAID.value)
         db.add_all([oi1, sh1, pm1])
 
         # DEMO ORDER 2: High Value Refund Requiring Approval ($499.98)
@@ -191,7 +196,7 @@ def seed_database(force: bool = False):
             order_number="ORD-2026-8802",
             customer_id=customers[1].id,
             total_amount=Decimal("499.98"),
-            currency="USD",
+            currency="INR",
             order_status=OrderStatus.DELIVERED.value,
             payment_status=PaymentStatus.PAID.value,
             created_at=now - timedelta(days=7),
@@ -200,8 +205,8 @@ def seed_database(force: bool = False):
         db.add(o2)
         db.commit()
         oi2 = OrderItem(order_id=o2.id, variant_id=v3.id, quantity=2, unit_price=Decimal("249.99"), total_price=Decimal("499.98"), item_status="delivered")
-        sh2 = Shipment(order_id=o2.id, tracking_number="TRK-8802-US", carrier="UPS", shipping_status=ShipmentStatus.DELIVERED.value, delivered_at=now - timedelta(days=3))
-        pm2 = Payment(order_id=o2.id, transaction_id="TXN-PAY-8802", payment_method="Amex ****1005", amount=Decimal("499.98"), payment_status=PaymentStatus.PAID.value)
+        sh2 = Shipment(order_id=o2.id, tracking_number="DELHIVERY-8802-IN", carrier="Delhivery", shipping_status=ShipmentStatus.DELIVERED.value, delivered_at=now - timedelta(days=3))
+        pm2 = Payment(order_id=o2.id, transaction_id="TXN-PAY-8802", payment_method="HDFC Bank Netbanking", amount=Decimal("499.98"), payment_status=PaymentStatus.PAID.value)
         db.add_all([oi2, sh2, pm2])
 
         # DEMO ORDER 3: Expired Return Window (Order created 45 days ago)
@@ -209,7 +214,7 @@ def seed_database(force: bool = False):
             order_number="ORD-2026-8803",
             customer_id=customers[2].id,
             total_amount=Decimal("89.99"),
-            currency="USD",
+            currency="INR",
             order_status=OrderStatus.DELIVERED.value,
             payment_status=PaymentStatus.PAID.value,
             created_at=now - timedelta(days=45),
@@ -218,8 +223,8 @@ def seed_database(force: bool = False):
         db.add(o3)
         db.commit()
         oi3 = OrderItem(order_id=o3.id, variant_id=v4.id, quantity=1, unit_price=Decimal("89.99"), total_price=Decimal("89.99"), item_status="delivered")
-        sh3 = Shipment(order_id=o3.id, tracking_number="TRK-8803-US", carrier="USPS", shipping_status=ShipmentStatus.DELIVERED.value, delivered_at=now - timedelta(days=40))
-        pm3 = Payment(order_id=o3.id, transaction_id="TXN-PAY-8803", payment_method="Mastercard ****8811", amount=Decimal("89.99"), payment_status=PaymentStatus.PAID.value)
+        sh3 = Shipment(order_id=o3.id, tracking_number="EKART-8803-IN", carrier="Ekart Logistics", shipping_status=ShipmentStatus.DELIVERED.value, delivered_at=now - timedelta(days=40))
+        pm3 = Payment(order_id=o3.id, transaction_id="TXN-PAY-8803", payment_method="Paytm UPI", amount=Decimal("89.99"), payment_status=PaymentStatus.PAID.value)
         db.add_all([oi3, sh3, pm3])
 
         # DEMO ORDER 4: Processing Order (Can be cancelled before shipment)
@@ -227,7 +232,7 @@ def seed_database(force: bool = False):
             order_number="ORD-2026-8804",
             customer_id=customers[3].id,
             total_amount=Decimal("129.99"),
-            currency="USD",
+            currency="INR",
             order_status=OrderStatus.PROCESSING.value,
             payment_status=PaymentStatus.PAID.value,
             created_at=now - timedelta(hours=4),
@@ -236,7 +241,7 @@ def seed_database(force: bool = False):
         db.add(o4)
         db.commit()
         oi4 = OrderItem(order_id=o4.id, variant_id=v5.id, quantity=1, unit_price=Decimal("129.99"), total_price=Decimal("129.99"), item_status="processing")
-        pm4 = Payment(order_id=o4.id, transaction_id="TXN-PAY-8804", payment_method="PayPal", amount=Decimal("129.99"), payment_status=PaymentStatus.PAID.value)
+        pm4 = Payment(order_id=o4.id, transaction_id="TXN-PAY-8804", payment_method="Cash on Delivery (COD)", amount=Decimal("129.99"), payment_status=PaymentStatus.PAID.value)
         db.add_all([oi4, pm4])
 
         # Additional 26 orders for rich dataset
@@ -250,7 +255,7 @@ def seed_database(force: bool = False):
                 order_number=f"ORD-2026-88{i:02d}",
                 customer_id=cust.id,
                 total_amount=tot,
-                currency="USD",
+                currency="INR",
                 order_status=OrderStatus.DELIVERED.value if i % 3 != 0 else OrderStatus.SHIPPED.value,
                 payment_status=PaymentStatus.PAID.value,
                 created_at=now - timedelta(days=i),
@@ -259,7 +264,7 @@ def seed_database(force: bool = False):
             db.add(o)
             db.commit()
             item = OrderItem(order_id=o.id, variant_id=var.id, quantity=qty, unit_price=var.price, total_price=tot, item_status="fulfilled")
-            sh = Shipment(order_id=o.id, tracking_number=f"TRK-88{i:02d}-US", carrier="FedEx" if i % 2 == 0 else "UPS", shipping_status=ShipmentStatus.DELIVERED.value if i % 3 != 0 else ShipmentStatus.IN_TRANSIT.value)
+            sh = Shipment(order_id=o.id, tracking_number=f"TRK-88{i:02d}-US", carrier="Blue Dart" if i % 2 == 0 else "UPS", shipping_status=ShipmentStatus.DELIVERED.value if i % 3 != 0 else ShipmentStatus.IN_TRANSIT.value)
             pm = Payment(order_id=o.id, transaction_id=f"TXN-PAY-88{i:02d}", payment_method="Credit Card", amount=tot, payment_status=PaymentStatus.PAID.value)
             db.add_all([item, sh, pm])
 
@@ -282,7 +287,7 @@ def seed_database(force: bool = False):
 - **Return Window**: Customers may request a return or replacement within 30 days of delivery.
 - **Damaged Items**: If an item arrives damaged or defective, customer is eligible for immediate replacement or full refund.
 - **Inventory Replanning**: If replacement item is out of stock in all warehouses, customer must be offered full refund or store credit.
-- **High-Value Threshold**: Refunds exceeding $200.00 require human operations approval before execution.
+- **High-Value Threshold**: Refunds exceeding ₹200.00 require human operations approval before execution.
 """,
             is_active=False
         )
@@ -297,7 +302,7 @@ def seed_database(force: bool = False):
             policy_text="""# Electronics Return & Replacement Policy v2.0
 - **Return Window**: All electronic items must be returned within 15 days of delivery.
 - **Damaged Items**: Items delivered damaged are eligible for replacement. If identical replacement variant is out of stock across all warehouses, the system must automatically adapt to issue a full refund.
-- **Human Approval Gate**: Any refund or replacement exceeding $200.00 total value must be routed to human operations approval queue.
+- **Human Approval Gate**: Any refund or replacement exceeding ₹200.00 total value must be routed to human operations approval queue.
 - **Verification Requirement**: All executed actions must undergo independent state verification against enterprise database records before case closure.
 """,
             is_active=True
@@ -309,7 +314,7 @@ def seed_database(force: bool = False):
         # Chunks for RAG
         c1 = PolicyChunk(policy_version_id=pv2.id, chunk_index=0, content="Electronics Return Policy v2.0: Return window is 15 days from delivery for all electronic products.")
         c2 = PolicyChunk(policy_version_id=pv2.id, chunk_index=1, content="Damaged Items & Stockouts: Damaged items get free replacement. If out of stock, system adapts plan to issue full refund.")
-        c3 = PolicyChunk(policy_version_id=pv2.id, chunk_index=2, content="Approval Rules: Refunds over $200 require human operations approval.")
+        c3 = PolicyChunk(policy_version_id=pv2.id, chunk_index=2, content="Approval Rules: Refunds over ₹200 require human operations approval.")
         db.add_all([c1, c2, c3])
         db.commit()
 
@@ -338,3 +343,6 @@ def seed_database(force: bool = False):
 
 if __name__ == "__main__":
     seed_database(force=True)
+
+
+

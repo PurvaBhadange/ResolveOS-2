@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
@@ -167,7 +167,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               >
                 <div>
                   <span className="text-xs font-bold text-slate-900 block">Operations Lead (Judge Role)</span>
-                  <span className="text-[11px] text-slate-500">Authorizes $200+ high-value refund approvals</span>
+                  <span className="text-[11px] text-slate-500">Authorizes ₹200+ high-value refund approvals</span>
                 </div>
                 <ArrowRight className="w-4 h-4 text-amber-700 group-hover:translate-x-0.5 transition-transform" />
               </button>
@@ -233,7 +233,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
                 required
                 value={regPassword}
                 onChange={(e) => setRegPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-xs font-medium"
               />
             </div>
@@ -252,3 +252,4 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
     </div>
   );
 };
+

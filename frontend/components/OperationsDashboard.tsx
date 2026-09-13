@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Layers, ShieldCheck, AlertOctagon, CheckCircle2, Clock, XCircle, ArrowUpRight, FileText, Database } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -201,7 +201,7 @@ export const OperationsDashboard: React.FC = () => {
             </div>
             <p className="text-xs text-slate-600">
               - <strong>Return Window</strong>: 15 Days from delivery.<br />
-              - <strong>Auto-Refund Threshold</strong>: $200.00 (Exceeding amounts require human approval).<br />
+              - <strong>Auto-Refund Threshold</strong>: ₹200.00 (Exceeding amounts require human approval).<br />
               - <strong>Inventory Fallback</strong>: Mandatory adaptation to refund when stockout occurs.
             </p>
           </div>
@@ -210,3 +210,4 @@ export const OperationsDashboard: React.FC = () => {
     </div>
   );
 };
+

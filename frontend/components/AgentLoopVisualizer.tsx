@@ -30,7 +30,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
     { id: 'understand', number: '1', title: 'UNDERSTAND', desc: 'Parse Goal & Order', activeDesc: 'Parsing customer intent & entity signals with Mistral LLM...' },
     { id: 'evidence', number: '2', title: 'EVIDENCE', desc: 'RAG Policy Search', activeDesc: 'Querying vector policy chunks & multi-warehouse stock levels...' },
     { id: 'decide', number: '3', title: 'DECIDE', desc: 'Synthesize Plan', activeDesc: 'Generating candidate plans & ranking confidence scores...' },
-    { id: 'guard', number: '4', title: 'GUARD / APPROVAL', desc: 'Check $200 & Window', activeDesc: 'Validating safety policies, 15-day return window & $200 gate...' },
+    { id: 'guard', number: '4', title: 'GUARD / APPROVAL', desc: 'Check $200 & Window', activeDesc: 'Validating safety policies, 15-day return window & $200₹200 gate...' },
     { id: 'act', number: '5', title: 'ACT', desc: 'Transactional Execution', activeDesc: 'Executing transactional resolution with idempotency key...' },
     { id: 'verify', number: '6', title: 'VERIFY', desc: 'Independent DB Audit', activeDesc: 'Performing independent PostgreSQL query to verify execution...' },
     { id: 'adapt', number: '7', title: 'ADAPT', desc: 'Stockout Replanning', activeDesc: 'Stockout detected: autonomously replanned to instant refund...' },
@@ -263,3 +263,4 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
     </div>
   );
 };
+

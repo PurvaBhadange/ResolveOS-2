@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from decimal import Decimal
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
@@ -222,7 +222,7 @@ def resolution_guard_node(state: AgentState) -> AgentState:
             amt = params.get("amount", 0.0)
             if amt > 200.0:
                 approval_req = True
-                guard_reasons.append(f"HIGH-VALUE THRESHOLD: Refund amount ${amt} exceeds auto-approval limit of $200.00.")
+                guard_reasons.append(f"HIGH-VALUE THRESHOLD: Refund amount ₹{amt} exceeds auto-approval limit of ₹200.00.")
 
         # 3. Cancellation State Guard
         if action_type == "cancel":
@@ -436,10 +436,10 @@ def adapt_or_replan_node(state: AgentState) -> AgentState:
             state["guard_passed"] = True
             state["guard_reasons"] = []
             
-            # Check if adapted refund exceeds approval threshold ($200)
+            # Check if adapted refund exceeds approval threshold (₹200)
             if state.get("order_total", 0.0) > 200.0:
                 state["approval_required"] = True
-                state["guard_reasons"] = ["HIGH-VALUE THRESHOLD: Adapted refund exceeds $200 limit"]
+                state["guard_reasons"] = ["HIGH-VALUE THRESHOLD: Adapted refund exceeds ₹200 limit"]
             else:
                 state["approval_required"] = False
         else:
@@ -515,3 +515,4 @@ def escalate_node(state: AgentState) -> AgentState:
         return state
     finally:
         db.close()
+

@@ -1,4 +1,4 @@
-from typing import Dict, Any
+﻿from typing import Dict, Any
 from sqlalchemy.orm import Session
 from app.models import Order, OrderStatus, PaymentStatus, Refund, ReplacementRequest
 
@@ -35,7 +35,7 @@ class VerificationService:
 
         return {
             "verified": True,
-            "message": f"Refund verified independently: ${refund.amount} refunded on Order {order.order_number}",
+            "message": f"Refund verified independently: ₹{refund.amount} refunded on Order {order.order_number}",
             "refund_number": refund.refund_number,
             "order_number": order.order_number
         }
@@ -76,3 +76,4 @@ class VerificationService:
             "message": f"Order {order.order_number} cancellation verified independently",
             "order_number": order.order_number
         }
+
