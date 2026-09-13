@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Package,
   RefreshCw,
@@ -267,14 +267,11 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   return (
     <div className="space-y-8 pb-16">
       {/* 1. HERO & 1-CLICK DEMO SCENARIOS BAR */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-tealbrand-950 text-white rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden border border-slate-800">
-        <div className="absolute right-0 top-0 w-96 h-96 bg-tealbrand-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 left-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 relative overflow-hidden border border-slate-800 shadow-sm">
         <div className="relative z-10 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tealbrand-500/20 text-tealbrand-300 text-xs font-semibold border border-tealbrand-500/30">
-              <Sparkles className="w-3.5 h-3.5" /> 🇮🇳 India's 🇮🇳 India's Autonomous Enterprise Resolution Engine
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-tealbrand-300 text-xs font-semibold border border-slate-700">
+              <ShieldCheck className="w-3.5 h-3.5 text-tealbrand-400" /> 🇮🇳 India&apos;s Autonomous Enterprise Resolution Engine
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
               <span className="flex items-center gap-1.5"><Database className="w-3.5 h-3.5 text-tealbrand-400" /> Neon DB Connected</span>
@@ -284,7 +281,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
           </div>
 
           <div className="max-w-3xl space-y-2">
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
               Autonomous Customer Resolution Console
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
@@ -309,9 +306,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
                     key={p.id}
                     type="button"
                     onClick={() => applyPreset(p.id)}
-                    className={`text-left p-3.5 rounded-2xl border transition-all duration-200 relative ${
+                    className={`text-left p-3.5 rounded-xl border transition-all duration-150 relative ${
                       isSelected
-                        ? 'bg-white/10 border-tealbrand-400 shadow-lg shadow-tealbrand-500/10 ring-2 ring-tealbrand-400/30 text-white'
+                        ? 'bg-slate-800 border-tealbrand-500 text-white shadow-sm ring-1 ring-tealbrand-500/50'
                         : 'bg-slate-800/60 border-slate-700/60 hover:bg-slate-800 hover:border-slate-600 text-slate-300'
                     }`}
                   >
@@ -547,9 +544,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
               <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-slate-200 block text-[11px]">$200₹200 Operations Approval Gate</span>
+                  <span className="font-bold text-slate-200 block text-[11px]">₹15,000 Operations Approval Gate</span>
                   <span className="text-[11px] text-slate-400 leading-tight block mt-0.5">
-                    Any single resolution exceeding ₹200 requires human supervisor approval before database execution.
+                    Any single resolution exceeding ₹15,000 requires human supervisor approval before database execution.
                   </span>
                 </div>
               </div>

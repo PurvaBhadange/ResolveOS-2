@@ -29,29 +29,29 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   return (
     <>
       {/* Top Hackathon Banner */}
-      <div className="bg-gradient-to-r from-slate-950 via-tealbrand-950 to-slate-950 text-white text-xs font-semibold py-1.5 px-4 border-b border-tealbrand-900/50 shadow-inner">
+      <div className="bg-slate-950 text-slate-300 text-xs font-semibold py-1.5 px-4 border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-md bg-tealbrand-500/20 text-tealbrand-300 font-bold border border-tealbrand-500/30 text-[10px] uppercase tracking-wider">
+            <span className="px-2 py-0.5 rounded-md bg-tealbrand-900/60 text-tealbrand-300 font-bold border border-tealbrand-700/50 text-[10px] uppercase tracking-wider">
               Agentic AI Hackathon
             </span>
             <span className="text-slate-300 hidden sm:inline">Track 3: Smart Automation &middot; IIT Bhubaneswar (Tech Zephyr 4.0)</span>
           </div>
           <div className="flex items-center gap-3 text-[11px] text-slate-300">
-            <span className="inline-flex items-center gap-1 text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> Live API Online
+            <span className="inline-flex items-center gap-1.5 text-emerald-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" /> Live API Online
             </span>
-            <span className="hidden md:inline text-slate-400">•</span>
+            <span className="hidden md:inline text-slate-600">•</span>
             <span className="hidden md:inline text-tealbrand-300 font-mono">FastAPI + LangGraph Engine</span>
           </div>
         </div>
       </div>
 
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('help')}>
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 to-tealbrand-700 flex items-center justify-center text-white shadow-md shadow-tealbrand-600/20">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-tealbrand-400 shadow-sm">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>

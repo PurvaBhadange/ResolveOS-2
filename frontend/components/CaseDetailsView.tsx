@@ -117,7 +117,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                 <button
                   onClick={() => handleRunAgent(activeCase.id)}
                   disabled={runningAgent}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-md shadow-tealbrand-600/20 disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-sm disabled:opacity-50"
                 >
                   <Play className="w-3.5 h-3.5" />
                   {runningAgent ? 'Running Agent...' : 'Trigger Agent Execution'}

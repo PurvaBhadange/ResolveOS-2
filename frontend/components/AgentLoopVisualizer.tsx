@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Cpu, ShieldCheck, CheckCircle2, ArrowRight, FileText, Check, Loader2, Play, Sparkles, RefreshCw } from 'lucide-react';
 
 export interface LoopStep {
@@ -99,33 +99,27 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
   }, [simulating, simStep, steps.length]);
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl text-white overflow-hidden relative mb-8 transition-all">
-      {/* Dynamic Glow effects */}
-      <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${
-        effectiveIsRunning ? 'bg-cyan-500/20' : effectiveIsComplete ? 'bg-emerald-500/15' : 'bg-tealbrand-500/10'
-      }`} />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm text-white overflow-hidden relative mb-8">
       {/* Header Badges & Actions */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800 relative z-10">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
             effectiveIsRunning
-              ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 ring-2 ring-cyan-500/30'
+              ? 'bg-slate-800 border border-tealbrand-500/50 text-tealbrand-300'
               : effectiveIsComplete
-              ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-              : 'bg-tealbrand-500/20 border border-tealbrand-500/30 text-tealbrand-400'
+              ? 'bg-slate-800 border border-emerald-500/50 text-emerald-300'
+              : 'bg-slate-800 border border-slate-700 text-slate-300'
           }`}>
             {effectiveIsRunning ? (
-              <Loader2 className="w-5 h-5 animate-spin text-cyan-400" />
+              <Loader2 className="w-5 h-5 animate-spin text-tealbrand-400" />
             ) : (
-              <Cpu className="w-5 h-5 animate-pulse" />
+              <Cpu className="w-5 h-5 text-slate-300" />
             )}
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-white tracking-wide">Autonomous Agent Decision Loop</span>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-tealbrand-500/20 text-tealbrand-300 rounded-full border border-tealbrand-500/30 uppercase">
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-tealbrand-300 rounded-md border border-slate-700 uppercase tracking-wider">
                 LangGraph State Machine
               </span>
             </div>
@@ -139,19 +133,19 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
             <button
               type="button"
               onClick={runSimulation}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-tealbrand-500 hover:bg-tealbrand-400 text-slate-950 transition-all shadow-md active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-tealbrand-600 hover:bg-tealbrand-500 text-white transition-all shadow-sm active:scale-95"
             >
               <Play className="w-3 h-3 fill-current" /> Replay Graph Loop
             </button>
           )}
 
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-emerald-400 border border-slate-700">
             <CheckCircle2 className="w-3.5 h-3.5" /> 6/6 Pytest Clean
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-tealbrand-400 border border-slate-700">
             <ShieldCheck className="w-3.5 h-3.5" /> Idempotency Guard Active
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
             <FileText className="w-3.5 h-3.5" /> Policy RAG v2.0
           </span>
         </div>
@@ -169,34 +163,34 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
               <React.Fragment key={step.id}>
                 <div className="flex-1 flex flex-col items-center text-center group">
                   <div
-                    className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs transition-all duration-300 shadow-lg relative ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs transition-all duration-200 relative ${
                       isFinished
-                        ? 'bg-gradient-to-br from-tealbrand-500 to-emerald-500 text-slate-950 ring-2 ring-emerald-400/40 shadow-emerald-500/20 scale-100'
+                        ? 'bg-emerald-600 text-white border border-emerald-500 shadow-sm'
                         : isActive
-                        ? 'bg-gradient-to-br from-cyan-500 to-tealbrand-500 text-slate-950 ring-4 ring-cyan-400/50 shadow-cyan-500/30 scale-110 animate-pulse'
-                        : 'bg-slate-800 text-slate-400 border border-slate-700/80'
+                        ? 'bg-tealbrand-600 text-white border-2 border-tealbrand-400 shadow-sm'
+                        : 'bg-slate-800 text-slate-400 border border-slate-700'
                     }`}
                   >
                     {isFinished ? (
-                      <Check className="w-4 h-4 text-slate-950 stroke-[3]" />
+                      <Check className="w-4 h-4 text-white stroke-[3]" />
                     ) : isActive ? (
-                      <Loader2 className="w-4 h-4 text-slate-950 animate-spin stroke-[2.5]" />
+                      <Loader2 className="w-4 h-4 text-white animate-spin stroke-[2.5]" />
                     ) : (
                       step.number
                     )}
 
-                    {/* Active Ping Glow indicator */}
+                    {/* Active indicator badge */}
                     {isActive && (
-                      <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-cyan-400 animate-ping" />
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-tealbrand-300 border-2 border-slate-900" />
                     )}
                   </div>
 
                   <span
                     className={`mt-2 text-[11px] font-bold tracking-wider uppercase transition-colors ${
                       isFinished
-                        ? 'text-emerald-300'
+                        ? 'text-emerald-400'
                         : isActive
-                        ? 'text-cyan-300 font-extrabold scale-105'
+                        ? 'text-tealbrand-300 font-extrabold'
                         : 'text-slate-400'
                     }`}
                   >
@@ -214,8 +208,8 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
                 {idx < steps.length - 1 && (
                   <div className="w-6 flex items-center justify-center">
                     <ArrowRight
-                      className={`w-4 h-4 transition-colors duration-300 ${
-                        isFinished ? 'text-emerald-400' : isActive ? 'text-cyan-400 animate-pulse' : 'text-slate-700'
+                      className={`w-4 h-4 transition-colors duration-200 ${
+                        isFinished ? 'text-emerald-500' : isActive ? 'text-tealbrand-400' : 'text-slate-700'
                       }`}
                     />
                   </div>
@@ -227,11 +221,11 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
       </div>
 
       {/* Live State Machine Status Ticker */}
-      <div className="mt-6 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs relative z-10">
+      <div className="mt-6 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs relative z-10">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${
             effectiveIsRunning
-              ? 'bg-cyan-400 animate-ping'
+              ? 'bg-tealbrand-400'
               : effectiveIsComplete
               ? 'bg-emerald-400'
               : 'bg-slate-500'
@@ -255,8 +249,8 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
         </div>
 
         <div className="flex items-center gap-3 text-[11px] text-slate-400 font-mono">
-          <span className="flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-tealbrand-400" /> State: {effectiveIsRunning ? 'RUNNING' : effectiveIsComplete ? 'RESOLVED' : 'IDLE'}
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-tealbrand-400" /> State: {effectiveIsRunning ? 'RUNNING' : effectiveIsComplete ? 'RESOLVED' : 'IDLE'}
           </span>
         </div>
       </div>
