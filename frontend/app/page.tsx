@@ -22,7 +22,7 @@ export default function Home() {
   const isStaff = ['operations', 'admin', 'support_agent'].includes(userRole);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-[#fffefb] text-[#201515]">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -52,17 +52,17 @@ export default function Home() {
           isStaff ? (
             <OperationsDashboard />
           ) : (
-            <div className="p-12 bg-white rounded-3xl text-center border border-slate-200 shadow-sm max-w-xl mx-auto space-y-4 my-12">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+            <div className="p-12 bg-[#f8f4f0] rounded-[12px] text-center border border-[#c5c0b1] shadow-sm max-w-xl mx-auto space-y-4 my-12">
+              <div className="w-12 h-12 rounded-[12px] bg-[#201515] text-[#fffefb] flex items-center justify-center mx-auto">
                 <Lock className="w-6 h-6" />
               </div>
-              <h2 className="text-xl font-bold text-slate-900">Staff Authentication Required</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">
+              <h2 className="text-xl font-bold text-[#201515]">Staff Authentication Required</h2>
+              <p className="text-[#605d52] text-sm leading-relaxed">
                 The Operations Dashboard & Approval Console is restricted to internal Operations Leads and Admin Supervisors.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md"
               >
                 Sign In as Operations Lead
               </button>
@@ -74,17 +74,17 @@ export default function Home() {
           isStaff ? (
             <AgentTraceInspector selectedCaseId={selectedCaseId} />
           ) : (
-            <div className="p-12 bg-white rounded-3xl text-center border border-slate-200 shadow-sm max-w-xl mx-auto space-y-4 my-12">
-              <div className="w-12 h-12 rounded-2xl bg-tealbrand-50 text-tealbrand-600 flex items-center justify-center mx-auto">
+            <div className="p-12 bg-[#f8f4f0] rounded-[12px] text-center border border-[#c5c0b1] shadow-sm max-w-xl mx-auto space-y-4 my-12">
+              <div className="w-12 h-12 rounded-[12px] bg-[#201515] text-[#fffefb] flex items-center justify-center mx-auto">
                 <ShieldAlert className="w-6 h-6" />
               </div>
-              <h2 className="text-xl font-bold text-slate-900">Agent Inspector Restricted</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">
+              <h2 className="text-xl font-bold text-[#201515]">Agent Inspector Restricted</h2>
+              <p className="text-[#605d52] text-sm leading-relaxed">
                 The Agent Trace Graph contains internal decision payloads and enterprise policy audit logs. Staff sign-in is required.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md"
               >
                 Staff Sign In
               </button>
@@ -95,9 +95,12 @@ export default function Home() {
 
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
 
-      <footer className="bg-white border-t border-slate-200 py-6 mt-12">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-medium">
-          ResolveOS Autonomous Agent Platform • Powered by LangGraph, Google Gemini, FastAPI & Neon PostgreSQL
+      {/* Zapier-Inspired Dark Coffee Ink Footer */}
+      <footer className="bg-[#201515] border-t border-[#36342e] py-8 mt-16 text-[#f8f4f0]">
+        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-[#c5c0b1] font-medium space-y-2">
+          <p className="text-[#fffefb] font-bold">ResolveOS Autonomous Customer Resolution Engine</p>
+          <p>Agentic AI Hackathon 2026 • Track 3: Smart Automation • IIT Bhubaneswar</p>
+          <p className="text-[11px] text-[#939084] pt-2">Powered by LangGraph, Google Gemini, FastAPI, Next.js & Neon PostgreSQL</p>
         </div>
       </footer>
     </div>

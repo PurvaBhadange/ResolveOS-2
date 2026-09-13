@@ -7,17 +7,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
+        zapier: {
+          primary: '#ff4f00',
+          'primary-hover': '#e04500',
+          'on-primary': '#fffefb',
+          ink: '#201515',
+          'ink-soft': '#2f2a26',
+          'ink-mid': '#36342e',
+          body: '#605d52',
+          'body-mid': '#939084',
+          mute: '#c5c0b1',
+          canvas: '#fffefb',
+          'canvas-soft': '#f8f4f0',
         },
         tealbrand: {
           50: '#f0fdfa',
@@ -32,6 +33,13 @@ module.exports = {
           900: '#134e4a',
         }
       },
+      borderRadius: {
+        zapier: '12px',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
+      }
     },
   },
   plugins: [],

@@ -1,13 +1,12 @@
 import React from 'react';
-import { Cpu, ShieldCheck, CheckCircle2, RefreshCcw, ArrowRight, FileText, Check, AlertCircle } from 'lucide-react';
+import { Cpu, ShieldCheck, CheckCircle2, FileText, Check, ArrowRight } from 'lucide-react';
 
 interface AgentLoopVisualizerProps {
-  currentStep?: string; // e.g. 'understand' | 'evidence' | 'decide' | 'guard' | 'act' | 'verify' | 'adapt' | 'resolved'
+  currentStep?: string;
   isComplete?: boolean;
 }
 
 export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
-  currentStep = 'resolved',
   isComplete = true
 }) => {
   const steps = [
@@ -21,37 +20,36 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
   ];
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl text-white overflow-hidden relative mb-8">
-      {/* Glow effect */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-tealbrand-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="bg-[#201515] border border-[#36342e] rounded-[12px] p-6 shadow-xl text-[#fffefb] overflow-hidden relative mb-8">
+      {/* Zapier Orange Ambient Glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#ff4f00]/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header Badges */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#36342e]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-tealbrand-500/20 border border-tealbrand-500/30 flex items-center justify-center text-tealbrand-400">
+          <div className="w-10 h-10 rounded-[12px] bg-[#ff4f00]/20 border border-[#ff4f00]/40 flex items-center justify-center text-[#ff4f00]">
             <Cpu className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-white tracking-wide">Autonomous Agent Decision Loop</span>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-tealbrand-500/20 text-tealbrand-300 rounded-full border border-tealbrand-500/30 uppercase">
-                LangGraph State Machine
+              <span className="text-base font-bold text-[#fffefb] tracking-tight">Autonomous Agent Decision Loop</span>
+              <span className="px-2.5 py-0.5 text-[10px] font-bold bg-[#ff4f00] text-[#fffefb] rounded-full uppercase tracking-wider">
+                LangGraph Engine
               </span>
             </div>
-            <p className="text-xs text-slate-400">Observe → Decide → Act → Evaluate → Adapt Execution Graph</p>
+            <p className="text-xs text-[#c5c0b1] mt-0.5">Observe → Decide → Act → Evaluate → Adapt Execution Graph</p>
           </div>
         </div>
 
         {/* Live Badges */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[12px] text-xs font-semibold bg-[#f8f4f0]/10 text-emerald-400 border border-emerald-500/30">
             <CheckCircle2 className="w-3.5 h-3.5" /> 6/6 Pytest Clean
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-            <ShieldCheck className="w-3.5 h-3.5" /> Idempotency Guard Active
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[12px] text-xs font-semibold bg-[#f8f4f0]/10 text-cyan-400 border border-cyan-500/30">
+            <ShieldCheck className="w-3.5 h-3.5" /> Idempotency Active
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[12px] text-xs font-semibold bg-[#f8f4f0]/10 text-[#ff4f00] border border-[#ff4f00]/30">
             <FileText className="w-3.5 h-3.5" /> Policy RAG v2.0
           </span>
         </div>
@@ -61,26 +59,26 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
       <div className="pt-6 overflow-x-auto">
         <div className="flex items-center justify-between min-w-[760px] gap-2">
           {steps.map((step, idx) => {
-            const isPast = isComplete || true;
+            const isPast = isComplete;
             return (
               <React.Fragment key={step.id}>
                 <div className="flex-1 flex flex-col items-center text-center group">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs transition-all shadow-lg ${
+                    className={`w-9 h-9 rounded-[12px] flex items-center justify-center font-bold text-xs transition-all shadow-md ${
                       isPast
-                        ? 'bg-gradient-to-br from-tealbrand-500 to-emerald-500 text-slate-950 ring-2 ring-emerald-400/40 shadow-emerald-500/20'
-                        : 'bg-slate-800 text-slate-400 border border-slate-700'
+                        ? 'bg-[#ff4f00] text-[#fffefb] shadow-[#ff4f00]/30'
+                        : 'bg-[#2f2a26] text-[#c5c0b1] border border-[#36342e]'
                     }`}
                   >
-                    {isPast ? <Check className="w-4 h-4 text-slate-950 stroke-[3]" /> : step.number}
+                    {isPast ? <Check className="w-4 h-4 text-[#fffefb] stroke-[3]" /> : step.number}
                   </div>
-                  <span className="mt-2 text-[11px] font-bold tracking-wider text-slate-200 uppercase">{step.title}</span>
-                  <span className="text-[10px] text-slate-400 font-medium mt-0.5 max-w-[90px] leading-tight">{step.desc}</span>
+                  <span className="mt-2 text.11px font-bold tracking-wider text-[#fffefb] uppercase">{step.title}</span>
+                  <span className="text-[10px] text-[#c5c0b1] font-medium mt-0.5 max-w-[90px] leading-tight">{step.desc}</span>
                 </div>
 
                 {idx < steps.length - 1 && (
-                  <div className="w-6 flex items-center justify-center text-slate-600">
-                    <ArrowRight className="w-4 h-4 text-slate-600" />
+                  <div className="w-5 flex items-center justify-center text-[#605d52]">
+                    <ArrowRight className="w-4 h-4 text-[#939084]" />
                   </div>
                 )}
               </React.Fragment>
