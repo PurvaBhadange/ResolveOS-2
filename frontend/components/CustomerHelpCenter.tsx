@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Search, Package, RefreshCw, Truck, AlertTriangle, ShieldCheck, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { Search, Package, RefreshCw, Truck, AlertTriangle, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
 import { api } from '../lib/api';
-import { AgentLoopVisualizer } from './AgentLoopVisualizer';
 
 interface HelpCenterProps {
   onCaseCreated: (caseId: number) => void;
@@ -76,73 +75,58 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   ];
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Zapier-Inspired Hero Section (Warm Cream Canvas + Deep Coffee Ink Accent + Zapier Orange CTA) */}
-      <div className="bg-[#f8f4f0] text-[#201515] rounded-[12px] p-8 sm:p-12 border border-[#c5c0b1] shadow-sm relative overflow-hidden">
-        <div className="max-w-3xl space-y-5 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#201515] text-[#fffefb] text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-[#ff4f00]" /> Autonomous Customer Resolution Engine
+    <div className="space-y-10 pb-16">
+      {/* Zapier-Inspired Hero Band */}
+      <div className="zapier-card-dark p-8 sm:p-14 relative overflow-hidden">
+        <div className="max-w-3xl space-y-6 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff4f00]/20 text-[#ff4f00] text-xs font-bold tracking-wider uppercase border border-[#ff4f00]/30">
+            <Sparkles className="w-3.5 h-3.5" /> Autonomous Instant Resolution
           </div>
-          
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#201515] leading-tight">
-            Instant, Verifiable Customer Issue Resolution
+          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-[#fffefb] leading-tight">
+            How can we resolve your issue today?
           </h1>
-
-          <p className="text-[#605d52] text-base sm:text-lg leading-relaxed">
-            ResolveOS independently verifies order records, policy return windows, and warehouse stock levels to execute transactional business resolutions instantly with zero manual delay.
+          <p className="text-[#c5c0b1] text-lg sm:text-xl leading-relaxed">
+            ResolveOS independently verifies system records, policy rules, and inventory levels to resolve customer issues instantly with zero manual delay.
           </p>
 
-          {/* Interactive Demo Scenario Quick Launcher */}
-          <div className="pt-3 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#201515] block">
-              1-Click Demo Scenarios to Test:
-            </span>
+          <div className="pt-4 space-y-3">
+            <span className="zapier-eyebrow text-[#c5c0b1] block">SELECT DEMO SCENARIO TO TEST:</span>
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={() => loadPreset('stockout')}
-                className="px-4 py-2.5 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md flex items-center gap-1.5"
+                className="zapier-btn-primary px-4 py-2.5 text-xs sm:text-sm"
               >
-                <span>1. Stockout Adaptation</span>
-                <span className="text-[10px] opacity-80">(ORD-2026-8801)</span>
+                1. Stockout Adaptation (ORD-2026-8801)
               </button>
-
               <button
                 type="button"
                 onClick={() => loadPreset('high_value')}
-                className="px-4 py-2.5 rounded-[12px] bg-[#201515] hover:bg-[#2f2a26] text-[#fffefb] font-bold text-xs transition-all shadow-md flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-[#fffefb] hover:bg-[#f8f4f0] text-[#201515] font-semibold text-xs sm:text-sm transition-all"
               >
-                <span>2. High-Value $200+ Approval</span>
-                <span className="text-[10px] opacity-80">(ORD-2026-8802)</span>
+                2. High-Value $200+ Approval (ORD-2026-8802)
               </button>
-
               <button
                 type="button"
                 onClick={() => loadPreset('expired')}
-                className="px-4 py-2.5 rounded-[12px] bg-[#fffefb] hover:bg-[#f8f4f0] text-[#201515] border border-[#201515] font-bold text-xs transition-all shadow-sm flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-[#2f2a26] hover:bg-[#36342e] text-[#fffefb] border border-[#c5c0b1]/30 font-semibold text-xs sm:text-sm transition-all"
               >
-                <span>3. Expired Return Window</span>
-                <span className="text-[10px] opacity-70">(ORD-2026-8803)</span>
+                3. Expired Return Window (ORD-2026-8803)
               </button>
-
               <button
                 type="button"
                 onClick={() => loadPreset('cancel')}
-                className="px-4 py-2.5 rounded-[12px] bg-[#fffefb] hover:bg-[#f8f4f0] text-[#201515] border border-[#c5c0b1] font-bold text-xs transition-all shadow-sm flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-[#2f2a26] hover:bg-[#36342e] text-[#fffefb] border border-[#c5c0b1]/30 font-semibold text-xs sm:text-sm transition-all"
               >
-                <span>4. Pre-Shipment Cancel</span>
-                <span className="text-[10px] opacity-70">(ORD-2026-8804)</span>
+                4. Pre-Shipment Cancellation (ORD-2026-8804)
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Agent Execution State Visualizer */}
-      <AgentLoopVisualizer isComplete={true} />
-
-      {/* Category Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Category Cards (Zapier Soft Cream Cards) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {categories.map((cat) => {
           const Icon = cat.icon;
           const isSelected = selectedCategory === cat.id;
@@ -150,33 +134,34 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
             <div
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`cursor-pointer p-6 rounded-[12px] border transition-all ${
+              className={`cursor-pointer p-6 rounded-xl transition-all ${
                 isSelected
-                  ? 'bg-[#201515] text-[#fffefb] border-[#201515] shadow-lg'
-                  : 'bg-[#f8f4f0] text-[#201515] border-[#c5c0b1] hover:border-[#201515]'
+                  ? 'bg-[#fffefb] border-2 border-[#ff4f00] shadow-md'
+                  : 'zapier-card hover:border-[#201515] hover:bg-[#fffefb]'
               }`}
             >
-              <div className={`w-12 h-12 rounded-[12px] flex items-center justify-center mb-4 ${
-                isSelected ? 'bg-[#ff4f00] text-[#fffefb]' : 'bg-[#fffefb] text-[#201515] border border-[#c5c0b1]'
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
+                isSelected ? 'bg-[#ff4f00] text-[#fffefb]' : 'bg-[#201515] text-[#fffefb]'
               }`}>
                 <Icon className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-base">{cat.title}</h3>
-              <p className={`text-xs mt-1.5 ${isSelected ? 'text-[#c5c0b1]' : 'text-[#605d52]'}`}>{cat.desc}</p>
+              <h3 className="font-semibold text-[#201515] text-lg">{cat.title}</h3>
+              <p className="text-[#605d52] text-sm mt-1">{cat.desc}</p>
             </div>
           );
         })}
       </div>
 
       {/* Issue Submission Form */}
-      <div className="bg-[#f8f4f0] rounded-[12px] p-6 sm:p-10 border border-[#c5c0b1] shadow-sm">
-        <div className="border-b border-[#c5c0b1] pb-6 mb-6">
-          <h2 className="text-2xl font-bold text-[#201515]">Submit Resolution Request</h2>
-          <p className="text-[#605d52] text-sm mt-1">Enter your order details and issue summary to initiate autonomous agent processing.</p>
+      <div className="zapier-card p-8 sm:p-12">
+        <div className="border-b border-[#c5c0b1]/40 pb-6 mb-8">
+          <span className="zapier-eyebrow block mb-1">AUTOMATED WORKFLOW INITIATION</span>
+          <h2 className="text-3xl font-semibold text-[#201515]">Submit Resolution Request</h2>
+          <p className="text-[#605d52] text-base mt-1">Enter your order details and requested outcome to initiate autonomous resolution.</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-[12px] bg-rose-50 border border-rose-200 text-rose-800 text-sm font-medium">
+          <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm font-medium">
             {error}
           </div>
         )}
@@ -184,40 +169,40 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         <form onSubmit={handleSubmitIssue} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-bold text-[#201515] mb-2">Order Number</label>
+              <label className="block text-sm font-semibold text-[#201515] mb-2">Order Number</label>
               <input
                 type="text"
                 required
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
                 placeholder="e.g. ORD-2026-8801"
-                className="w-full px-4 py-3 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] font-semibold"
+                className="zapier-input w-full text-base font-medium"
               />
-              <span className="text-xs text-[#939084] mt-1.5 block">Demo Orders: ORD-2026-8801, ORD-2026-8802, ORD-2026-8803, ORD-2026-8804</span>
+              <span className="text-xs text-[#939084] mt-1.5 block">Try demo order: ORD-2026-8801 (Damaged Headphones) or ORD-2026-8802 (High-Value)</span>
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-[#201515] mb-2">Issue Title</label>
+              <label className="block text-sm font-semibold text-[#201515] mb-2">Issue Title</label>
               <input
                 type="text"
                 required
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
                 placeholder="Brief title of the problem"
-                className="w-full px-4 py-3 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] font-semibold"
+                className="zapier-input w-full text-base font-medium"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-[#201515] mb-2">Detailed Issue Description</label>
+            <label className="block text-sm font-semibold text-[#201515] mb-2">Detailed Issue Description</label>
             <textarea
               required
               rows={4}
               value={issueDescription}
               onChange={(e) => setIssueDescription(e.target.value)}
               placeholder="Describe what happened and what outcome you desire..."
-              className="w-full px-4 py-3 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] font-semibold"
+              className="zapier-input w-full text-base font-medium"
             />
           </div>
 
@@ -225,10 +210,10 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-sm transition-all disabled:opacity-50 shadow-md"
+              className="zapier-btn-primary inline-flex items-center gap-2 px-8 py-4 text-base disabled:opacity-50"
             >
               {loading ? 'Processing Resolution...' : 'Submit Resolution Request'}
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </form>

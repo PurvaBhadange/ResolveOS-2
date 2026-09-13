@@ -62,6 +62,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   const handleGoogleSignIn = () => {
+    // Check if Google OAuth ID environment variable is provided
     const hasGoogleEnv = Boolean(process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID || process.env.AUTH_GOOGLE_ID);
     if (!hasGoogleEnv) {
       setGoogleNotice(
@@ -74,30 +75,31 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#201515]/75 backdrop-blur-sm animate-fade-in">
-      <div className="bg-[#fffefb] w-full max-w-md rounded-[12px] p-6 sm:p-8 shadow-2xl border border-[#c5c0b1] relative space-y-6 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#201515]/70 backdrop-blur-sm animate-fade-in">
+      <div className="bg-[#fffefb] w-full max-w-md rounded-xl p-6 sm:p-8 shadow-2xl border border-[#c5c0b1] relative space-y-6 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-full text-[#939084] hover:text-[#201515] hover:bg-[#f8f4f0] transition-all"
+          className="absolute right-5 top-5 p-2 rounded-full text-[#605d52] hover:text-[#201515] hover:bg-[#f8f4f0] transition-all"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="space-y-2">
-          <div className="w-12 h-12 rounded-[12px] bg-[#ff4f00]/10 text-[#ff4f00] flex items-center justify-center mb-2">
-            <ShieldCheck className="w-7 h-7" />
+          <div className="w-12 h-12 rounded-xl bg-[#201515] text-[#fffefb] flex items-center justify-center mb-2">
+            <ShieldCheck className="w-7 h-7 text-[#ff4f00]" />
           </div>
-          <h2 className="text-2xl font-bold text-[#201515]">ResolveOS Portal</h2>
+          <span className="zapier-eyebrow block text-xs">PORTAL AUTHENTICATION</span>
+          <h2 className="text-2xl font-semibold text-[#201515]">ResolveOS Account</h2>
           <p className="text-[#605d52] text-xs sm:text-sm">
             Sign in to access your customer orders or staff operation console.
           </p>
         </div>
 
         {/* Modal Header Tabs */}
-        <div className="flex bg-[#f8f4f0] p-1 rounded-[12px] border border-[#c5c0b1]">
+        <div className="flex bg-[#f8f4f0] p-1.5 rounded-xl border border-[#c5c0b1]/60">
           <button
             onClick={() => { setActiveTab('signin'); setGoogleNotice(null); }}
-            className={`flex-1 py-2 text-xs font-bold rounded-[12px] transition-all ${
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
               activeTab === 'signin' ? 'bg-[#201515] text-[#fffefb] shadow-sm' : 'text-[#605d52] hover:text-[#201515]'
             }`}
           >
@@ -105,7 +107,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           </button>
           <button
             onClick={() => { setActiveTab('register'); setGoogleNotice(null); }}
-            className={`flex-1 py-2 text-xs font-bold rounded-[12px] transition-all ${
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
               activeTab === 'register' ? 'bg-[#201515] text-[#fffefb] shadow-sm' : 'text-[#605d52] hover:text-[#201515]'
             }`}
           >
@@ -114,9 +116,9 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {googleNotice && (
-          <div className="p-3.5 rounded-[12px] bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed space-y-1">
+          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs leading-relaxed space-y-1">
             <div className="flex items-center gap-1.5 font-bold">
-              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
               <span>Google OAuth Setup Notice</span>
             </div>
             <p className="text-[11px] text-amber-800">{googleNotice}</p>
@@ -128,7 +130,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             {/* Google OAuth Button */}
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-[12px] bg-[#f8f4f0] hover:bg-[#fffefb] text-[#201515] border border-[#201515] font-bold text-sm transition-all shadow-sm"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-[#201515] hover:bg-[#f8f4f0] text-[#201515] font-semibold text-sm transition-all"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
@@ -139,18 +141,18 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               Continue with Google
             </button>
 
-            <div className="relative flex items-center justify-center my-2">
+            <div className="relative flex items-center justify-center my-3">
               <div className="border-t border-[#c5c0b1] w-full" />
-              <span className="bg-[#fffefb] px-3 text-[11px] uppercase font-bold text-[#939084] shrink-0">Or Select Quick Account Role</span>
+              <span className="bg-[#fffefb] px-3 text-[10px] uppercase font-bold text-[#939084] shrink-0">Or Select Quick Account Role</span>
               <div className="border-t border-[#c5c0b1] w-full" />
             </div>
 
             {/* Quick Staff & Customer Role Selection */}
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <button
                 onClick={() => handleStaffLogin('sarah.jenkins@example.com', 'Sarah Jenkins', 'customer')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-[12px] bg-[#f8f4f0] hover:bg-[#ff4f00]/10 border border-[#c5c0b1] text-left transition-all group"
+                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#f8f4f0] hover:bg-[#e8e2d8] border border-[#c5c0b1] text-left transition-all group"
               >
                 <div>
                   <span className="text-xs font-bold text-[#201515] block">Customer Account (Sarah Jenkins)</span>
@@ -162,7 +164,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <button
                 onClick={() => handleStaffLogin('ops@resolveos.com', 'Operations Lead', 'operations')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-[12px] bg-[#201515] text-[#fffefb] hover:bg-[#2f2a26] border border-[#201515] text-left transition-all group shadow-md"
+                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#201515] hover:bg-[#2f2a26] text-[#fffefb] text-left transition-all group"
               >
                 <div>
                   <span className="text-xs font-bold text-[#fffefb] block">Operations Lead (Judge Role)</span>
@@ -174,7 +176,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <button
                 onClick={() => handleStaffLogin('admin@resolveos.com', 'Admin Supervisor', 'admin')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-[12px] bg-[#f8f4f0] hover:bg-[#fffefb] border border-[#c5c0b1] text-left transition-all group"
+                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#f8f4f0] hover:bg-[#e8e2d8] border border-[#c5c0b1] text-left transition-all group"
               >
                 <div>
                   <span className="text-xs font-bold text-[#201515] block">Admin Supervisor</span>
@@ -188,35 +190,35 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           /* Create New Account Registration Form */
           <form onSubmit={handleCreateAccount} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-[#201515] mb-1">Full Name</label>
+              <label className="block text-xs font-semibold text-[#201515] mb-1">Full Name</label>
               <input
                 type="text"
                 required
                 value={regName}
                 onChange={(e) => setRegName(e.target.value)}
                 placeholder="e.g. Alex Morgan"
-                className="w-full px-3.5 py-2.5 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] text-xs font-semibold"
+                className="zapier-input w-full text-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#201515] mb-1">Email Address</label>
+              <label className="block text-xs font-semibold text-[#201515] mb-1">Email Address</label>
               <input
                 type="email"
                 required
                 value={regEmail}
                 onChange={(e) => setRegEmail(e.target.value)}
                 placeholder="e.g. alex.morgan@example.com"
-                className="w-full px-3.5 py-2.5 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] text-xs font-semibold"
+                className="zapier-input w-full text-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#201515] mb-1">Account Role / Access Type</label>
+              <label className="block text-xs font-semibold text-[#201515] mb-1">Account Role / Access Type</label>
               <select
                 value={regRole}
                 onChange={(e: any) => setRegRole(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] text-xs font-semibold"
+                className="zapier-input w-full text-xs font-medium bg-[#fffefb]"
               >
                 <option value="customer">Customer (End-User Portal)</option>
                 <option value="operations">Operations Lead (Judge Console & Approvals)</option>
@@ -226,21 +228,21 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#201515] mb-1">Password</label>
+              <label className="block text-xs font-semibold text-[#201515] mb-1">Password</label>
               <input
                 type="password"
                 required
                 value={regPassword}
                 onChange={(e) => setRegPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 rounded-[12px] bg-[#fffefb] border border-[#201515] focus:outline-none focus:ring-2 focus:ring-[#ff4f00] text-[#201515] text-xs font-semibold"
+                className="zapier-input w-full text-xs font-medium"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md shadow-[#ff4f00]/20 disabled:opacity-50"
+              className="zapier-btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-xs disabled:opacity-50"
             >
               <UserPlus className="w-4 h-4" />
               {loading ? 'Creating Account...' : 'Register Account & Sign In'}

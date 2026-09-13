@@ -7,22 +7,47 @@
 :root {
   --background: #fffefb;
   --foreground: #201515;
+  --canvas-soft: #f8f4f0;
+  --primary: #ff4f00;
+  --ink: #201515;
+  --body: #605d52;
+  --mute: #c5c0b1;
 }
 
 body {
-  background-color: #fffefb;
-  color: #201515;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-.glass-card {
-  background: rgba(255, 254, 251, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid #c5c0b1;
-  box-shadow: 0 4px 12px -2px rgba(32, 21, 21, 0.04);
+/* Zapier Design System Primitives */
+
+/* Warm Cream Soft Card */
+.zapier-card {
+  background-color: #f8f4f0;
+  color: #201515;
+  border: 1px solid #e8e2d8;
+  border-radius: 12px;
 }
 
+/* White Elevated Card */
+.zapier-card-white {
+  background-color: #fffefb;
+  color: #201515;
+  border: 1px solid #e8e2d8;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(32, 21, 21, 0.04);
+}
+
+/* Polarity-Flipped Dark Coffee Card */
+.zapier-card-dark {
+  background-color: #201515;
+  color: #fffefb;
+  border-radius: 12px;
+}
+
+/* Buttons */
 .zapier-btn-primary {
   background-color: #ff4f00;
   color: #fffefb;
@@ -30,21 +55,74 @@ body {
   border-radius: 12px;
   transition: all 0.15s ease-in-out;
 }
-
 .zapier-btn-primary:hover {
   background-color: #e04500;
   transform: translateY(-1px);
 }
 
-.zapier-card {
-  background-color: #f8f4f0;
-  color: #201515;
-  border-radius: 12px;
-  border: 1px solid #c5c0b1;
-}
-
-.zapier-card-dark {
+.zapier-btn-secondary {
   background-color: #201515;
   color: #fffefb;
+  font-weight: 600;
   border-radius: 12px;
+  transition: all 0.15s ease-in-out;
+}
+.zapier-btn-secondary:hover {
+  background-color: #2f2a26;
+  transform: translateY(-1px);
+}
+
+.zapier-btn-outline {
+  background-color: #fffefb;
+  color: #201515;
+  border: 1px solid #201515;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.15s ease-in-out;
+}
+.zapier-btn-outline:hover {
+  background-color: #f8f4f0;
+}
+
+/* Text Input */
+.zapier-input {
+  background-color: #fffefb;
+  color: #201515;
+  border: 1px solid #c5c0b1;
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+.zapier-input:focus {
+  outline: none;
+  border-color: #ff4f00;
+  box-shadow: 0 0 0 2px rgba(255, 79, 0, 0.15);
+}
+
+/* Eyebrow Uppercase */
+.zapier-eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #605d52;
+}
+
+/* Timeline vertical line */
+.timeline-step {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-step::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 1.5rem;
+  bottom: -1rem;
+  width: 2px;
+  background-color: #c5c0b1;
+}
+
+.timeline-step:last-child::before {
+  display: none;
 }

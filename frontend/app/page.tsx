@@ -52,17 +52,18 @@ export default function Home() {
           isStaff ? (
             <OperationsDashboard />
           ) : (
-            <div className="p-12 bg-[#f8f4f0] rounded-[12px] text-center border border-[#c5c0b1] shadow-sm max-w-xl mx-auto space-y-4 my-12">
-              <div className="w-12 h-12 rounded-[12px] bg-[#201515] text-[#fffefb] flex items-center justify-center mx-auto">
+            <div className="zapier-card p-10 text-center max-w-xl mx-auto space-y-4 my-12">
+              <div className="w-12 h-12 rounded-xl bg-[#201515] text-[#ff4f00] flex items-center justify-center mx-auto">
                 <Lock className="w-6 h-6" />
               </div>
-              <h2 className="text-xl font-bold text-[#201515]">Staff Authentication Required</h2>
+              <span className="zapier-eyebrow block text-xs">RESTRICTED GOVERNANCE ACCESS</span>
+              <h2 className="text-2xl font-semibold text-[#201515]">Staff Authentication Required</h2>
               <p className="text-[#605d52] text-sm leading-relaxed">
                 The Operations Dashboard & Approval Console is restricted to internal Operations Leads and Admin Supervisors.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md"
+                className="zapier-btn-primary px-6 py-3 text-sm"
               >
                 Sign In as Operations Lead
               </button>
@@ -74,17 +75,18 @@ export default function Home() {
           isStaff ? (
             <AgentTraceInspector selectedCaseId={selectedCaseId} />
           ) : (
-            <div className="p-12 bg-[#f8f4f0] rounded-[12px] text-center border border-[#c5c0b1] shadow-sm max-w-xl mx-auto space-y-4 my-12">
-              <div className="w-12 h-12 rounded-[12px] bg-[#201515] text-[#fffefb] flex items-center justify-center mx-auto">
+            <div className="zapier-card p-10 text-center max-w-xl mx-auto space-y-4 my-12">
+              <div className="w-12 h-12 rounded-xl bg-[#201515] text-[#ff4f00] flex items-center justify-center mx-auto">
                 <ShieldAlert className="w-6 h-6" />
               </div>
-              <h2 className="text-xl font-bold text-[#201515]">Agent Inspector Restricted</h2>
+              <span className="zapier-eyebrow block text-xs">RESTRICTED GRAPH AUDIT</span>
+              <h2 className="text-2xl font-semibold text-[#201515]">Agent Inspector Restricted</h2>
               <p className="text-[#605d52] text-sm leading-relaxed">
                 The Agent Trace Graph contains internal decision payloads and enterprise policy audit logs. Staff sign-in is required.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md"
+                className="zapier-btn-primary px-6 py-3 text-sm"
               >
                 Staff Sign In
               </button>
@@ -95,12 +97,13 @@ export default function Home() {
 
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
 
-      {/* Zapier-Inspired Dark Coffee Ink Footer */}
-      <footer className="bg-[#201515] border-t border-[#36342e] py-8 mt-16 text-[#f8f4f0]">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-[#c5c0b1] font-medium space-y-2">
-          <p className="text-[#fffefb] font-bold">ResolveOS Autonomous Customer Resolution Engine</p>
-          <p>Agentic AI Hackathon 2026 • Track 3: Smart Automation • IIT Bhubaneswar</p>
-          <p className="text-[11px] text-[#939084] pt-2">Powered by LangGraph, Google Gemini, FastAPI, Next.js & Neon PostgreSQL</p>
+      {/* Zapier Dark Coffee Footer */}
+      <footer className="bg-[#201515] text-[#f8f4f0] py-10 mt-16 border-t border-[#2f2a26]">
+        <div className="max-w-7xl mx-auto px-4 text-center space-y-2">
+          <span className="zapier-eyebrow text-[#ff4f00] text-xs block">AUTONOMOUS WORKFLOW PLATFORM</span>
+          <p className="text-sm font-medium text-[#c5c0b1]">
+            ResolveOS Platform • Powered by LangGraph, Google Gemini, FastAPI & Enterprise DB
+          </p>
         </div>
       </footer>
     </div>

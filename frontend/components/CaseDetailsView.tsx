@@ -53,34 +53,35 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8 pb-16">
+      <div className="flex items-center justify-between border-b border-[#c5c0b1]/40 pb-5">
         <div>
-          <h1 className="text-3xl font-extrabold text-[#201515]">Case Resolution Tracker</h1>
-          <p className="text-[#605d52] text-sm mt-1">Track real-time autonomous agent progress and decision timelines.</p>
+          <span className="zapier-eyebrow block mb-1">REAL-TIME TIMELINE</span>
+          <h1 className="text-3xl font-semibold text-[#201515]">Support Case Resolution Tracker</h1>
+          <p className="text-[#605d52] text-base mt-1">Track real-time autonomous agent progress and decision timelines.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Case List Sidebar */}
-        <div className="bg-[#f8f4f0] rounded-[12px] p-4 border border-[#c5c0b1] shadow-sm space-y-2 h-fit">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#605d52] px-3 py-1">All Support Cases</h3>
+        <div className="zapier-card p-5 space-y-3 h-fit">
+          <span className="zapier-eyebrow block text-xs px-2 text-[#939084]">ALL SUPPORT CASES</span>
           {loading ? (
-            <div className="p-4 text-xs text-[#605d52]">Loading cases...</div>
+            <div className="p-4 text-sm text-[#939084]">Loading cases...</div>
           ) : (
             cases.map((c) => (
               <div
                 key={c.id}
                 onClick={() => onSelectCase(c.id)}
-                className={`p-4 rounded-[12px] cursor-pointer transition-all border ${
+                className={`p-4 rounded-xl cursor-pointer transition-all border ${
                   activeCase?.id === c.id
                     ? 'bg-[#201515] text-[#fffefb] border-[#201515] shadow-md'
-                    : 'bg-[#fffefb] hover:bg-[#f8f4f0] border-[#c5c0b1] text-[#201515]'
+                    : 'bg-[#fffefb] hover:bg-[#f8f4f0] border-[#c5c0b1]/60 text-[#201515]'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1.5">
                   <span className="font-bold tracking-tight">{c.case_number}</span>
-                  <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase ${
+                  <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase ${
                     c.case_status === 'resolved' ? 'bg-emerald-600 text-white' :
                     c.case_status === 'escalated' ? 'bg-rose-600 text-white' :
                     c.case_status === 'awaiting_approval' ? 'bg-[#ff4f00] text-white' : 'bg-[#605d52] text-white'
@@ -88,8 +89,8 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                     {c.case_status}
                   </span>
                 </div>
-                <p className="font-bold text-sm truncate">{c.title}</p>
-                <span className={`text-[11px] mt-1 block ${activeCase?.id === c.id ? 'text-[#c5c0b1]' : 'text-[#605d52]'}`}>
+                <p className="font-semibold text-base truncate">{c.title}</p>
+                <span className="text-xs opacity-75 mt-1 block">
                   Created {new Date(c.created_at).toLocaleDateString()}
                 </span>
               </div>
@@ -100,35 +101,35 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
         {/* Active Case Timeline Detail */}
         <div className="lg:col-span-2 space-y-6">
           {activeCase ? (
-            <div className="bg-[#f8f4f0] rounded-[12px] p-6 sm:p-8 border border-[#c5c0b1] shadow-sm space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#c5c0b1] pb-6">
+            <div className="zapier-card p-6 sm:p-10 space-y-8">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#c5c0b1]/40 pb-6">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-bold text-[#201515]">{activeCase.title}</h2>
-                    <span className="text-xs px-2.5 py-1 rounded-full font-bold bg-[#fffefb] text-[#201515] border border-[#201515]">
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-semibold text-[#201515]">{activeCase.title}</h2>
+                    <span className="text-xs px-3 py-1 rounded-full font-bold bg-[#201515] text-[#fffefb]">
                       {activeCase.case_number}
                     </span>
                   </div>
-                  <p className="text-[#605d52] text-sm mt-1">{activeCase.description}</p>
+                  <p className="text-[#605d52] text-base mt-2">{activeCase.description}</p>
                 </div>
 
                 <button
                   onClick={() => handleRunAgent(activeCase.id)}
                   disabled={runningAgent}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[12px] bg-[#ff4f00] hover:bg-[#e04500] text-[#fffefb] font-bold text-xs transition-all shadow-md disabled:opacity-50"
+                  className="zapier-btn-primary inline-flex items-center gap-2 px-5 py-3 text-sm disabled:opacity-50"
                 >
-                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <Play className="w-4 h-4 fill-current" />
                   {runningAgent ? 'Running Agent...' : 'Trigger Agent Execution'}
                 </button>
               </div>
 
-              {/* Resolution Timeline */}
+              {/* Resolution Event Stream */}
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#605d52] mb-6">Resolution Event Stream</h3>
+                <span className="zapier-eyebrow block text-xs mb-6 text-[#939084]">RESOLUTION EVENT STREAM</span>
 
                 {events.length === 0 ? (
-                  <div className="p-8 bg-[#fffefb] rounded-[12px] text-center text-[#605d52] text-sm border border-[#c5c0b1]">
-                    No resolution events recorded yet. Click <strong>Trigger Agent Execution</strong> to run the LangGraph state machine.
+                  <div className="p-8 bg-[#fffefb] rounded-xl text-center text-[#605d52] text-base border border-[#c5c0b1]">
+                    No resolution events recorded yet. Click <strong className="text-[#201515]">Trigger Agent Execution</strong> to run the LangGraph state machine.
                   </div>
                 ) : (
                   <div className="space-y-6 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-[#c5c0b1]">
@@ -138,20 +139,20 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                           ev.event_type === 'OUTCOME' ? 'bg-emerald-600 text-white' :
                           ev.event_type === 'ADAPTATION' ? 'bg-[#ff4f00] text-white' :
                           ev.event_type === 'ACTION' ? 'bg-[#201515] text-white' :
-                          ev.event_type === 'VERIFICATION' ? 'bg-sky-600 text-white' : 'bg-[#201515] text-white'
+                          ev.event_type === 'VERIFICATION' ? 'bg-sky-700 text-white' : 'bg-[#605d52] text-white'
                         }`}>
                           {idx + 1}
                         </div>
 
-                        <div className="bg-[#fffefb] rounded-[12px] p-5 border border-[#201515] space-y-3 shadow-md">
+                        <div className="bg-[#fffefb] rounded-xl p-5 border border-[#c5c0b1] space-y-3">
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-[#201515] text-sm">{ev.title}</span>
-                            <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#f8f4f0] text-[#201515] border border-[#c5c0b1]">
+                            <span className="font-semibold text-[#201515] text-base">{ev.title}</span>
+                            <span className="text-xs font-bold uppercase px-2.5 py-0.5 rounded bg-[#f8f4f0] text-[#201515] border border-[#c5c0b1]">
                               {ev.event_type}
                             </span>
                           </div>
 
-                          <pre className="bg-[#201515] text-emerald-300 p-4 rounded-[12px] border border-[#36342e] text-xs font-mono overflow-x-auto leading-relaxed">
+                          <pre className="bg-[#201515] text-[#5eead4] p-4 rounded-lg border border-[#2f2a26] text-xs font-mono overflow-x-auto leading-relaxed">
                             {JSON.stringify(ev.detail_json, null, 2)}
                           </pre>
                         </div>
@@ -162,7 +163,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
               </div>
             </div>
           ) : (
-            <div className="p-12 bg-[#f8f4f0] rounded-[12px] text-center text-[#605d52] border border-[#c5c0b1]">
+            <div className="p-12 zapier-card text-center text-[#939084] text-base">
               Select a support case to view its resolution timeline.
             </div>
           )}
