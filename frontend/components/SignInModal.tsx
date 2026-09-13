@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
+import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles, Zap } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 
 interface SignInModalProps {
@@ -12,7 +12,7 @@ interface SignInModalProps {
 export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<'signin' | 'register'>('signin');
   const [googleNotice, setGoogleNotice] = useState<string | null>(null);
-  
+
   // Registration State
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
@@ -62,11 +62,10 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   const handleGoogleSignIn = () => {
-    // Check if Google OAuth ID environment variable is provided
     const hasGoogleEnv = Boolean(process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID || process.env.AUTH_GOOGLE_ID);
     if (!hasGoogleEnv) {
       setGoogleNotice(
-        "Google OAuth keys (AUTH_GOOGLE_ID) are not configured in frontend/.env.local. You can paste your Google Client ID into .env.local, or use 'Create Account' below to sign in instantly!"
+        "Google OAuth credentials (AUTH_GOOGLE_ID) are not configured. You can use 'Quick Account Role' below to sign in instantly without setup!"
       );
       return;
     }
@@ -75,40 +74,41 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#201515]/70 backdrop-blur-sm animate-fade-in">
-      <div className="bg-[#fffefb] w-full max-w-md rounded-xl p-6 sm:p-8 shadow-2xl border border-[#c5c0b1] relative space-y-6 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/70 backdrop-blur-sm animate-fade-in">
+      {/* Modal Dialog Surface - ex-modal-card in DESIGN.md */}
+      <div className="bg-canvas w-full max-w-md rounded-md p-6 sm:p-8 shadow-modal border border-[#e8e2d8] relative space-y-6 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-full text-[#605d52] hover:text-[#201515] hover:bg-[#f8f4f0] transition-all"
+          className="absolute right-5 top-5 p-2 rounded-md text-body-mid hover:text-ink hover:bg-canvas-soft border border-transparent hover:border-mute/40 transition-all"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="space-y-2">
-          <div className="w-12 h-12 rounded-xl bg-[#201515] text-[#fffefb] flex items-center justify-center mb-2">
-            <ShieldCheck className="w-7 h-7 text-[#ff4f00]" />
+          <div className="w-12 h-12 rounded-md bg-canvas-soft border border-mute/50 flex items-center justify-center mb-2">
+            <ShieldCheck className="w-6 h-6 text-primary" />
           </div>
-          <span className="zapier-eyebrow block text-xs">PORTAL AUTHENTICATION</span>
-          <h2 className="text-2xl font-semibold text-[#201515]">ResolveOS Account</h2>
-          <p className="text-[#605d52] text-xs sm:text-sm">
-            Sign in to access your customer orders or staff operation console.
+          <span className="eyebrow-uppercase text-body-mid text-[11px]">Authentication</span>
+          <h2 className="text-2xl font-bold text-ink tracking-tight">ResolveOS Portal</h2>
+          <p className="text-body text-xs sm:text-sm leading-relaxed">
+            Sign in to access your customer claims or operations governance console.
           </p>
         </div>
 
         {/* Modal Header Tabs */}
-        <div className="flex bg-[#f8f4f0] p-1.5 rounded-xl border border-[#c5c0b1]/60">
+        <div className="flex bg-canvas-soft p-1 rounded-md border border-[#e8e2d8]">
           <button
             onClick={() => { setActiveTab('signin'); setGoogleNotice(null); }}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-              activeTab === 'signin' ? 'bg-[#201515] text-[#fffefb] shadow-sm' : 'text-[#605d52] hover:text-[#201515]'
+            className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${
+              activeTab === 'signin' ? 'bg-ink text-canvas shadow-sm' : 'text-body hover:text-ink'
             }`}
           >
-            Sign In / Quick Login
+            Quick Role Sign In
           </button>
           <button
             onClick={() => { setActiveTab('register'); setGoogleNotice(null); }}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-              activeTab === 'register' ? 'bg-[#201515] text-[#fffefb] shadow-sm' : 'text-[#605d52] hover:text-[#201515]'
+            className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${
+              activeTab === 'register' ? 'bg-ink text-canvas shadow-sm' : 'text-body hover:text-ink'
             }`}
           >
             Create New Account
@@ -116,12 +116,12 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {googleNotice && (
-          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs leading-relaxed space-y-1">
-            <div className="flex items-center gap-1.5 font-bold">
-              <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
-              <span>Google OAuth Setup Notice</span>
+          <div className="p-3.5 rounded-md bg-accent-amber/10 border border-accent-amber/30 text-ink text-xs leading-relaxed space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-accent-amber">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>Authentication Note</span>
             </div>
-            <p className="text-[11px] text-amber-800">{googleNotice}</p>
+            <p className="text-[11px] text-body">{googleNotice}</p>
           </div>
         )}
 
@@ -130,7 +130,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             {/* Google OAuth Button */}
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-[#201515] hover:bg-[#f8f4f0] text-[#201515] font-semibold text-sm transition-all"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-md border border-mute hover:border-ink hover:bg-canvas-soft text-ink font-semibold text-sm transition-all shadow-sm"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
@@ -141,48 +141,50 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               Continue with Google
             </button>
 
-            <div className="relative flex items-center justify-center my-3">
-              <div className="border-t border-[#c5c0b1] w-full" />
-              <span className="bg-[#fffefb] px-3 text-[10px] uppercase font-bold text-[#939084] shrink-0">Or Select Quick Account Role</span>
-              <div className="border-t border-[#c5c0b1] w-full" />
+            <div className="relative flex items-center justify-center my-2">
+              <div className="border-t border-[#e8e2d8] w-full" />
+              <span className="bg-canvas px-3 text-[11px] uppercase font-bold text-body-mid shrink-0">
+                Or Quick Staff Login
+              </span>
+              <div className="border-t border-[#e8e2d8] w-full" />
             </div>
 
-            {/* Quick Staff & Customer Role Selection */}
+            {/* Quick Role Options */}
             <div className="space-y-2.5">
-              <button
-                onClick={() => handleStaffLogin('sarah.jenkins@example.com', 'Sarah Jenkins', 'customer')}
-                disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#f8f4f0] hover:bg-[#e8e2d8] border border-[#c5c0b1] text-left transition-all group"
-              >
-                <div>
-                  <span className="text-xs font-bold text-[#201515] block">Customer Account (Sarah Jenkins)</span>
-                  <span className="text-[11px] text-[#605d52]">Customer portal: orders, claims & return status</span>
-                </div>
-                <ArrowRight className="w-4 h-4 text-[#ff4f00] group-hover:translate-x-0.5 transition-transform" />
-              </button>
-
               <button
                 onClick={() => handleStaffLogin('ops@resolveos.com', 'Operations Lead', 'operations')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#201515] hover:bg-[#2f2a26] text-[#fffefb] text-left transition-all group"
+                className="w-full flex items-center justify-between p-3.5 rounded-md bg-canvas-soft hover:bg-[#efe8df] border border-[#e8e2d8] text-left transition-all group shadow-sm"
               >
                 <div>
-                  <span className="text-xs font-bold text-[#fffefb] block">Operations Lead (Judge Role)</span>
-                  <span className="text-[11px] text-[#c5c0b1]">Authorizes $200+ high-value refund approvals</span>
+                  <span className="text-xs font-bold text-ink block">Operations Lead (Judge Role)</span>
+                  <span className="text-[11px] text-body">Authorizes $200+ high-value refund approvals</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-[#ff4f00] group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
               </button>
 
               <button
                 onClick={() => handleStaffLogin('admin@resolveos.com', 'Admin Supervisor', 'admin')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-[#f8f4f0] hover:bg-[#e8e2d8] border border-[#c5c0b1] text-left transition-all group"
+                className="w-full flex items-center justify-between p-3.5 rounded-md bg-canvas-soft hover:bg-[#efe8df] border border-[#e8e2d8] text-left transition-all group shadow-sm"
               >
                 <div>
-                  <span className="text-xs font-bold text-[#201515] block">Admin Supervisor</span>
-                  <span className="text-[11px] text-[#605d52]">Full system & policy administration</span>
+                  <span className="text-xs font-bold text-ink block">Admin Supervisor</span>
+                  <span className="text-[11px] text-body">Full system audit & policy management</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-[#201515] group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
+              <button
+                onClick={() => handleStaffLogin('sarah.jenkins@example.com', 'Sarah Jenkins', 'customer')}
+                disabled={loading}
+                className="w-full flex items-center justify-between p-3.5 rounded-md bg-canvas-soft hover:bg-[#efe8df] border border-[#e8e2d8] text-left transition-all group shadow-sm"
+              >
+                <div>
+                  <span className="text-xs font-bold text-ink block">Customer Account (Sarah Jenkins)</span>
+                  <span className="text-[11px] text-body">Demo orders, claims & return status</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
           </div>
@@ -190,35 +192,35 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           /* Create New Account Registration Form */
           <form onSubmit={handleCreateAccount} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-[#201515] mb-1">Full Name</label>
+              <label className="block text-xs font-semibold text-ink mb-1">Full Name</label>
               <input
                 type="text"
                 required
                 value={regName}
                 onChange={(e) => setRegName(e.target.value)}
                 placeholder="e.g. Alex Morgan"
-                className="zapier-input w-full text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#201515] mb-1">Email Address</label>
+              <label className="block text-xs font-semibold text-ink mb-1">Email Address</label>
               <input
                 type="email"
                 required
                 value={regEmail}
                 onChange={(e) => setRegEmail(e.target.value)}
                 placeholder="e.g. alex.morgan@example.com"
-                className="zapier-input w-full text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#201515] mb-1">Account Role / Access Type</label>
+              <label className="block text-xs font-semibold text-ink mb-1">Account Role / Access Type</label>
               <select
                 value={regRole}
                 onChange={(e: any) => setRegRole(e.target.value)}
-                className="zapier-input w-full text-xs font-medium bg-[#fffefb]"
+                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
               >
                 <option value="customer">Customer (End-User Portal)</option>
                 <option value="operations">Operations Lead (Judge Console & Approvals)</option>
@@ -228,21 +230,21 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#201515] mb-1">Password</label>
+              <label className="block text-xs font-semibold text-ink mb-1">Password</label>
               <input
                 type="password"
                 required
                 value={regPassword}
                 onChange={(e) => setRegPassword(e.target.value)}
                 placeholder="••••••••"
-                className="zapier-input w-full text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="zapier-btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-xs disabled:opacity-50"
+              className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-xs font-semibold shadow-sm disabled:opacity-50"
             >
               <UserPlus className="w-4 h-4" />
               {loading ? 'Creating Account...' : 'Register Account & Sign In'}

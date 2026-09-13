@@ -1,15 +1,8 @@
 import logging
-import os
-import sys
-
-# Ensure repository root is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 from datetime import datetime, timedelta
 from decimal import Decimal
 from sqlalchemy.orm import Session
 from app.core.database import Base, engine, SessionLocal
-
 from app.models import (
     User, UserRole,
     Customer, CustomerTier, CustomerAddress, CustomerProfile,

@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./resolveos_dev.db"
 
-    # AI / Gemini
+    # AI (Mistral & Gemini)
+    MISTRAL_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
 
     # Auth & Security

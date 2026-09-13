@@ -6,7 +6,8 @@ from app.core.database import SessionLocal
 from app.agent.state import AgentState, CandidatePlan
 from app.services import (
     CustomerService, OrderService, InventoryService,
-    PolicyService, ActionService, VerificationService, AuditService
+    PolicyService, ActionService, VerificationService, AuditService,
+    LLMService
 )
 from app.models import SupportCase, CaseStatus, Approval, Escalation, UserRole
 
@@ -14,17 +15,12 @@ from app.models import SupportCase, CaseStatus, Approval, Escalation, UserRole
 def understand_case_node(state: AgentState) -> AgentState:
     db: Session = SessionLocal()
     try:
-        desc = state.get("case_description", "").lower()
-        title = state.get("case_title", "").lower()
+        title = state.get("case_title", "")
+        desc = state.get("case_description", "")
 
-        if "damaged" in desc or "broken" in desc or "cracked" in desc:
-            goal = "Customer requested replacement/resolution for damaged product"
-        elif "cancel" in desc or "cancel" in title:
-            goal = "Customer requested order cancellation prior to fulfillment"
-        elif "return" in desc or "refund" in desc:
-            goal = "Customer requested order return and full refund"
-        else:
-            goal = "Customer requested general support resolution"
+        intent_res = LLMService.understand_customer_intent(title, desc)
+        goal = intent_res["goal"]
+        category = intent_res.get("category", "return_refund")
 
         state["goal"] = goal
         state["current_step"] = "understand_case"
@@ -35,7 +31,14 @@ def understand_case_node(state: AgentState) -> AgentState:
             case_id=state["case_id"],
             event_type="GOAL",
             title="Understood Customer Intent & Goal",
-            detail_json={"goal": goal, "title": state["case_title"], "description": state["case_description"]}
+            detail_json={
+                "goal": goal,
+                "category": category,
+                "llm_powered": intent_res.get("llm_powered", False),
+                "model": intent_res.get("model", "deterministic-rules"),
+                "title": title,
+                "description": desc
+            }
         )
         return state
     finally:
@@ -414,14 +417,19 @@ def adapt_or_replan_node(state: AgentState) -> AgentState:
         # ADAPTATION LOGIC:
         # If previous plan was replacement and failed stock check -> Adapt to REFUND!
         if current_plan.get("action_type") == "replace":
+            adapt_reason = LLMService.explain_adaptation(
+                previous_action="physical replacement",
+                reason="variant is out of stock across all warehouses",
+                adapted_action="full transaction refund"
+            )
             adapted_plan: CandidatePlan = {
                 "action_type": "refund",
                 "score": 0.90,
-                "reason": "Adapted Plan: Replacement variant out of stock across all warehouses; issuing full refund as alternate resolution.",
+                "reason": adapt_reason,
                 "parameters": {
                     "order_id": state["order_id"],
                     "amount": state.get("order_total", 199.99),
-                    "reason": "Full refund issued because replacement item is out of stock"
+                    "reason": adapt_reason
                 }
             }
             state["selected_plan"] = adapted_plan

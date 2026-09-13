@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
@@ -6,19 +5,10 @@ from app.core.database import Base, engine
 from app.api.v1 import api_v1_router
 import app.models  # ensure models loaded
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Ensure tables exist on startup
-    Base.metadata.create_all(bind=engine)
-    yield
-
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    lifespan=lifespan
+    openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
 # Set CORS middleware
@@ -38,6 +28,10 @@ app.add_middleware(
 app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 
 
+@app.on_event("startup")
+def startup_event():
+    # Ensure tables exist
+    Base.metadata.create_all(bind=engine)
 
 
 @app.get("/health")

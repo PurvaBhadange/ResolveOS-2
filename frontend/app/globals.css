@@ -1,113 +1,87 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #fffefb;
-  --foreground: #201515;
+  --canvas: #fffefb;
   --canvas-soft: #f8f4f0;
-  --primary: #ff4f00;
   --ink: #201515;
+  --ink-soft: #2f2a26;
+  --ink-mid: #36342e;
   --body: #605d52;
+  --body-mid: #939084;
   --mute: #c5c0b1;
+  --primary: #ff4f00;
+  --on-primary: #fffefb;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Zapier Design System Primitives */
-
-/* Warm Cream Soft Card */
-.zapier-card {
-  background-color: #f8f4f0;
-  color: #201515;
-  border: 1px solid #e8e2d8;
-  border-radius: 12px;
-}
-
-/* White Elevated Card */
-.zapier-card-white {
-  background-color: #fffefb;
-  color: #201515;
-  border: 1px solid #e8e2d8;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(32, 21, 21, 0.04);
-}
-
-/* Polarity-Flipped Dark Coffee Card */
-.zapier-card-dark {
-  background-color: #201515;
-  color: #fffefb;
-  border-radius: 12px;
-}
-
-/* Buttons */
-.zapier-btn-primary {
+/* Base button primitives from DESIGN.md */
+.btn-primary {
   background-color: #ff4f00;
   color: #fffefb;
-  font-weight: 600;
   border-radius: 12px;
+  font-weight: 600;
   transition: all 0.15s ease-in-out;
 }
-.zapier-btn-primary:hover {
-  background-color: #e04500;
-  transform: translateY(-1px);
+.btn-primary:hover:not(:disabled) {
+  background-color: #e54700;
+  box-shadow: 0 4px 12px -2px rgba(255, 79, 0, 0.25);
 }
 
-.zapier-btn-secondary {
+.btn-secondary {
   background-color: #201515;
   color: #fffefb;
-  font-weight: 600;
   border-radius: 12px;
+  font-weight: 600;
   transition: all 0.15s ease-in-out;
 }
-.zapier-btn-secondary:hover {
-  background-color: #2f2a26;
-  transform: translateY(-1px);
+.btn-secondary:hover:not(:disabled) {
+  background-color: #36342e;
 }
 
-.zapier-btn-outline {
+.btn-tertiary {
   background-color: #fffefb;
   color: #201515;
   border: 1px solid #201515;
-  font-weight: 600;
   border-radius: 12px;
+  font-weight: 600;
   transition: all 0.15s ease-in-out;
 }
-.zapier-btn-outline:hover {
+.btn-tertiary:hover:not(:disabled) {
   background-color: #f8f4f0;
 }
 
-/* Text Input */
-.zapier-input {
-  background-color: #fffefb;
-  color: #201515;
-  border: 1px solid #c5c0b1;
-  border-radius: 6px;
-  padding: 10px 14px;
-}
-.zapier-input:focus {
-  outline: none;
-  border-color: #ff4f00;
-  box-shadow: 0 0 0 2px rgba(255, 79, 0, 0.15);
+/* Card surfaces from DESIGN.md */
+.card-cream {
+  background-color: #f8f4f0;
+  border: 1px solid #e7e2d7;
+  border-radius: 12px;
 }
 
-/* Eyebrow Uppercase */
-.zapier-eyebrow {
+.card-dark {
+  background-color: #201515;
+  color: #fffefb;
+  border-radius: 12px;
+}
+
+.eyebrow-uppercase {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: #605d52;
 }
 
-/* Timeline vertical line */
+/* Step Timeline connection styling */
 .timeline-step {
   position: relative;
   padding-left: 2rem;
