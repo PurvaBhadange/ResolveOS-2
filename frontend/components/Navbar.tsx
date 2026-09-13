@@ -1,5 +1,6 @@
 import React from 'react';
-import { ShieldCheck, ShoppingBag, LifeBuoy, Activity, Layers, Cpu } from 'lucide-react';
+import { ShieldCheck, ShoppingBag, LifeBuoy, Activity, Layers, Cpu, LogIn, LogOut, User } from 'lucide-react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 interface NavbarProps {
   activeTab: string;
@@ -7,6 +8,8 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
+  const { data: session } = useSession();
+
   const navItems = [
     { id: 'help', label: 'Help Center', icon: LifeBuoy },
     { id: 'orders', label: 'My Orders', icon: ShoppingBag },
@@ -57,6 +60,33 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 </button>
               );
             })}
+
+            {/* NextAuth Authentication Session Badge */}
+            <div className="ml-2 border-l border-slate-200 pl-2">
+              {session ? (
+                <div className="flex items-center gap-2">
+                  <div className="hidden sm:flex flex-col text-right">
+                    <span className="text-xs font-bold text-slate-900 leading-none">{session.user?.name || 'Logged User'}</span>
+                    <span className="text-[10px] text-tealbrand-600 font-semibold uppercase">{session.user?.email || 'Operations'}</span>
+                  </div>
+                  <button
+                    onClick={() => signOut()}
+                    title="Sign Out"
+                    className="p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => signIn('google')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-tealbrand-50 hover:bg-tealbrand-100 text-tealbrand-700 border border-tealbrand-200 text-xs font-semibold transition-all"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  <span>Sign In</span>
+                </button>
+              )}
+            </div>
           </nav>
         </div>
       </div>
