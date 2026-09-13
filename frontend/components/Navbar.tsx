@@ -28,25 +28,6 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      {/* Top Enterprise System Status Bar */}
-      <div className="bg-slate-50 text-slate-600 text-xs font-medium py-1.5 px-4 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-md bg-tealbrand-50 text-tealbrand-700 font-bold border border-tealbrand-200 text-[10px] uppercase tracking-wider">
-              Enterprise Edition
-            </span>
-            <span className="text-slate-600 hidden sm:inline">ResolveOS Logistics &amp; Fulfillment Resolution Suite</span>
-          </div>
-          <div className="flex items-center gap-3 text-[11px] text-slate-500">
-            <span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" /> Systems Operational
-            </span>
-            <span className="hidden md:inline text-slate-300">•</span>
-            <span className="hidden md:inline text-slate-600 font-mono">Real-Time Sync Active</span>
-          </div>
-        </div>
-      </div>
-
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
