@@ -70,9 +70,10 @@ def run_integrity_checks():
         # 4. Inventory Consistency Check
         print("\n4. Warehouse Inventory Math Integrity:")
         inv_math_errors = db.execute(text(
-            "SELECT id, quantity_on_hand, reserved_quantity, quantity_available FROM inventory "
-            "WHERE quantity_available != (quantity_on_hand - reserved_quantity) OR reserved_quantity > quantity_on_hand"
+            "SELECT id, total_stock, reserved_stock, available_stock FROM inventory "
+            "WHERE available_stock != (total_stock - reserved_stock) OR reserved_stock > total_stock"
         )).fetchall()
+
         if inv_math_errors:
             errors.append(f"Inventory quantity mismatch in {len(inv_math_errors)} inventory rows!")
         else:
@@ -91,7 +92,8 @@ def run_integrity_checks():
 
         # 6. Post-Action State Independent Verification Engine
         print("\n6. Independent Post-Action Verification Engine:")
-        resolved_cases = db.query(SupportCase).filter(SupportCase.status == "resolved").all()
+        resolved_cases = db.query(SupportCase).filter(SupportCase.case_status == "resolved").all()
+
         verified_cases_cnt = 0
         for case in resolved_cases:
             verif = VerificationService.verify_case_resolution(db, case.id)
