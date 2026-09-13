@@ -2,6 +2,13 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+// Ensure NEXTAUTH_URL dynamically detects Vercel deployment if unset or set to localhost
+if (process.env.VERCEL_URL) {
+  if (!process.env.NEXTAUTH_URL || process.env.NEXTAUTH_URL.includes('localhost')) {
+    process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+  }
+}
+
 // Resolve Google OAuth credentials with multiple standard environment variable fallbacks
 const googleClientId =
   process.env.AUTH_GOOGLE_ID ||
@@ -17,6 +24,7 @@ const googleClientSecret =
   '';
 
 export const authOptions: NextAuthOptions = {
+  useSecureCookies: process.env.NODE_ENV === 'production',
   providers: [
     // Google OAuth 2.0 Provider
     ...(googleClientId && googleClientSecret
