@@ -56,8 +56,8 @@ export default function Home() {
           isStaff ? (
             <OperationsDashboard />
           ) : (
-            <div className="border-4 border-black p-8 sm:p-12 bg-white text-center max-w-md mx-auto space-y-4 my-16">
-              <div className="w-12 h-12 border-2 border-black bg-black text-white flex items-center justify-center mx-auto">
+            <div className="border-2 border-black rounded-2xl p-8 sm:p-12 bg-white text-center max-w-md mx-auto space-y-4 my-16 shadow-sm">
+              <div className="w-12 h-12 border-2 border-black rounded-xl bg-black text-white flex items-center justify-center mx-auto">
                 <Lock size={20} strokeWidth={2} />
               </div>
               <h2 className="font-display text-xl font-bold uppercase tracking-tight text-black">
@@ -68,7 +68,7 @@ export default function Home() {
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-white hover:text-black transition-colors duration-100"
               >
                 <span>Authorize Credentials</span>
               </button>
@@ -80,8 +80,8 @@ export default function Home() {
           isStaff ? (
             <AgentTraceInspector selectedCaseId={selectedCaseId} />
           ) : (
-            <div className="border-4 border-black p-8 sm:p-12 bg-white text-center max-w-md mx-auto space-y-4 my-16">
-              <div className="w-12 h-12 border-2 border-black bg-black text-white flex items-center justify-center mx-auto">
+            <div className="border-2 border-black rounded-2xl p-8 sm:p-12 bg-white text-center max-w-md mx-auto space-y-4 my-16 shadow-sm">
+              <div className="w-12 h-12 border-2 border-black rounded-xl bg-black text-white flex items-center justify-center mx-auto">
                 <ShieldAlert size={20} strokeWidth={2} />
               </div>
               <h2 className="font-display text-xl font-bold uppercase tracking-tight text-black">
@@ -92,7 +92,7 @@ export default function Home() {
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-white hover:text-black transition-colors duration-100"
               >
                 <span>Staff Sign In</span>
               </button>

@@ -71,7 +71,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         </div>
 
         {activeCase && (
-          <div className="border-2 border-black bg-black text-white px-4 py-2 text-right">
+          <div className="border-2 border-black bg-black text-white px-4 py-2 text-right rounded-lg">
             <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 block">
               Active Case Key
             </span>
@@ -83,21 +83,21 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       </div>
 
       {/* Horizontal Stepper Progress */}
-      <div className="border-2 border-black p-4 bg-white overflow-x-auto">
+      <div className="border-2 border-black p-4 bg-white overflow-x-auto rounded-2xl">
         <div className="flex items-center justify-between min-w-[720px] gap-2">
           {graphSteps.map((step, idx) => {
             const hasEvent = events.some((e) => e.event_type === step.key);
             return (
               <React.Fragment key={step.key}>
                 <div
-                  className={`flex flex-col items-center text-center p-3 border transition-colors duration-100 ${
+                  className={`flex flex-col items-center text-center p-3 border rounded-xl transition-colors duration-100 ${
                     hasEvent
                       ? 'bg-black text-white border-black'
                       : 'bg-white text-neutral-400 border-neutral-300'
                   }`}
                 >
                   <div
-                    className={`w-6 h-6 border flex items-center justify-center font-mono font-bold text-[10px] mb-1.5 ${
+                    className={`w-6 h-6 border flex items-center justify-center font-mono font-bold text-[10px] mb-1.5 rounded-md ${
                       hasEvent
                         ? 'border-white bg-white text-black'
                         : 'border-neutral-300 bg-neutral-100 text-neutral-400'
@@ -123,7 +123,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       {/* Event List and Detailed JSON Viewer */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Event List (4 cols) */}
-        <div className="lg:col-span-4 border-2 border-black p-4 bg-white space-y-3 h-fit">
+        <div className="lg:col-span-4 border-2 border-black p-4 bg-white space-y-3 h-fit rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-2">
             <span className="font-display font-bold uppercase text-xs tracking-wider text-black">
               Execution Events
@@ -142,7 +142,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
                   key={ev.id}
                   type="button"
                   onClick={() => setSelectedEventId(ev.id)}
-                  className={`w-full text-left p-3 border-2 cursor-pointer transition-colors duration-100 ${
+                  className={`w-full text-left p-3 border-2 cursor-pointer transition-colors duration-100 rounded-xl ${
                     selectedEventId === ev.id
                       ? 'bg-black text-white border-black'
                       : 'bg-white text-black border-black hover:bg-black hover:text-white group'
@@ -164,7 +164,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         </div>
 
         {/* Payload Detail (8 cols) */}
-        <div className="lg:col-span-8 border-2 border-black p-6 sm:p-8 bg-white space-y-6">
+        <div className="lg:col-span-8 border-2 border-black p-6 sm:p-8 bg-white space-y-6 rounded-2xl">
           {selectedEvent ? (
             <>
               <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
@@ -177,12 +177,12 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
                   </h2>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs font-bold text-black border border-black px-2 py-0.5">
+                  <span className="font-mono text-xs font-bold text-black border border-black px-2 py-0.5 rounded-md">
                     EVENT #{selectedEvent.id}
                   </span>
                   <button
                     onClick={handleCopyJson}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase font-bold hover:bg-black hover:text-white transition-colors duration-100"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase font-bold hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
                   >
                     {copied ? <Check size={12} strokeWidth={2.5} /> : <Copy size={12} strokeWidth={2} />}
                     <span>{copied ? 'Copied' : 'Copy JSON'}</span>
@@ -194,7 +194,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
                 <span className="font-mono text-xs font-bold uppercase tracking-widest text-black mb-2 block">
                   Structured Ledger JSON Payload
                 </span>
-                <pre className="border-2 border-black bg-black text-white p-5 text-xs font-mono overflow-x-auto leading-relaxed select-text">
+                <pre className="border-2 border-black bg-black text-white p-5 text-xs font-mono overflow-x-auto leading-relaxed select-text rounded-xl">
                   {JSON.stringify(selectedEvent.detail_json, null, 2)}
                 </pre>
               </div>

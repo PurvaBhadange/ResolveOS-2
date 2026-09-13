@@ -357,10 +357,10 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
             </p>
           </div>
           <div className="flex items-center gap-3 font-mono text-xs tracking-wider uppercase">
-            <span className="border border-black px-2.5 py-1 bg-black text-white font-semibold">
+            <span className="border border-black px-2.5 py-1 bg-black text-white font-semibold rounded-full">
               Live DB Synced
             </span>
-            <span className="border border-black px-2.5 py-1 bg-white text-black">
+            <span className="border border-black px-2.5 py-1 bg-white text-black rounded-full">
               INR (&bull;) Standard
             </span>
           </div>
@@ -386,7 +386,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 key={p.id}
                 type="button"
                 onClick={() => handleSelectPreset(p)}
-                className={`text-left p-4 border-2 transition-colors duration-100 ${
+                className={`text-left p-4 border-2 rounded-xl transition-colors duration-100 ${
                   isSelected
                     ? 'bg-black text-white border-black'
                     : 'bg-white text-black border-black hover:bg-black hover:text-white group'
@@ -396,7 +396,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                   <span className="font-mono text-xs tracking-widest font-bold">
                     [{p.num}]
                   </span>
-                  <span className={`font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border ${
+                  <span className={`font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border rounded-md ${
                     isSelected
                       ? 'border-white bg-white text-black font-semibold'
                       : 'border-black text-black group-hover:border-white group-hover:text-white'
@@ -420,7 +420,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
       {/* 3. Main Two-Column Console (Form + Order Details) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* LEFT: Ticket Submission Form (7 cols) */}
-        <div className="lg:col-span-7 border-2 border-black p-6 sm:p-8 bg-white space-y-6">
+        <div className="lg:col-span-7 border-2 border-black p-6 sm:p-8 bg-white space-y-6 rounded-2xl">
           <div className="border-b-2 border-black pb-3">
             <h2 className="font-display text-xl font-bold uppercase tracking-wide text-black">
               Dispute Intake Specification
@@ -431,7 +431,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
           </div>
 
           {error && (
-            <div className="p-4 border-2 border-black bg-black text-white text-xs font-mono flex items-start gap-3">
+            <div className="p-4 border-2 border-black bg-black text-white text-xs font-mono flex items-start gap-3 rounded-xl">
               <AlertTriangle className="w-4 h-4 text-white shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold uppercase tracking-wider block">System Execution Error</span>
@@ -452,7 +452,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 value={orderNumber}
                 onChange={(e) => handleOrderNumberChange(e.target.value)}
                 placeholder="e.g. ORD-2026-8801"
-                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-mono focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-mono rounded-lg focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
               <p className="font-mono text-[10px] tracking-wider uppercase text-neutral-500 mt-1">
                 Audited against warehouse manifests &amp; transactional logs.
@@ -478,7 +478,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                       key={c.id}
                       type="button"
                       onClick={() => handleCategoryChange(c.id)}
-                      className={`flex items-center justify-center gap-2 p-2.5 border-2 text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
+                      className={`flex items-center justify-center gap-2 p-2.5 border-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
                         isSelected
                           ? 'bg-black text-white border-black font-bold'
                           : 'bg-white text-black border-black hover:bg-black hover:text-white'
@@ -503,7 +503,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
                 placeholder="Brief summary of dispute claim"
-                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif font-semibold focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif font-semibold rounded-lg focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
             </div>
 
@@ -518,7 +518,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 value={issueDescription}
                 onChange={(e) => setIssueDescription(e.target.value)}
                 placeholder="Enter verified customer claim statement..."
-                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif resize-none focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif resize-none rounded-lg focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
             </div>
 
@@ -532,7 +532,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="px-6 py-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
+                className="px-6 py-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold rounded-lg transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
               >
                 {isProcessing ? (
                   <>
@@ -553,12 +553,12 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
         {/* RIGHT: Live Order Context & Policy Guardrails (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Order Record Card */}
-          <div className="border-2 border-black p-6 bg-white space-y-4">
+          <div className="border-2 border-black p-6 bg-white space-y-4 rounded-2xl">
             <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
               <span className="font-display font-bold text-sm tracking-wider uppercase text-black">
                 Verified Order Manifest
               </span>
-              <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white">
+              <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white rounded-md">
                 {orderPreview?.order_status || 'DELIVERED'}
               </span>
             </div>
@@ -588,18 +588,18 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
           </div>
 
           {/* Active Policy Rules */}
-          <div className="border-2 border-black p-6 bg-white space-y-4">
+          <div className="border-2 border-black p-6 bg-white space-y-4 rounded-2xl">
             <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
               <span className="font-display font-bold text-sm tracking-wider uppercase text-black">
                 System Policy Guardrails
               </span>
-              <span className="border border-black px-1.5 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black">
+              <span className="border border-black px-1.5 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black rounded-md">
                 v2.0 STRICT
               </span>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="p-3 border border-black bg-neutral-50">
+              <div className="p-3 border border-black bg-neutral-50 rounded-xl">
                 <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
                   Stockout Fallback Guard
                 </span>
@@ -608,7 +608,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 </span>
               </div>
 
-              <div className="p-3 border border-black bg-neutral-50">
+              <div className="p-3 border border-black bg-neutral-50 rounded-xl">
                 <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
                   ₹15,000 HITL Approval Gate
                 </span>

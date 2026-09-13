@@ -95,7 +95,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
   }, [simulating, simStep, steps.length]);
 
   return (
-    <div className="border-2 border-black p-6 sm:p-8 bg-white text-black space-y-6">
+    <div className="border-2 border-black p-6 sm:p-8 bg-white text-black space-y-6 rounded-2xl">
       {/* Header & Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-black">
         <div>
@@ -103,7 +103,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
             <h3 className="font-display font-bold uppercase tracking-wider text-base text-black">
               Deterministic Pipeline
             </h3>
-            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white">
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white rounded-md">
               7-Step Protocol
             </span>
           </div>
@@ -117,17 +117,17 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
             <button
               type="button"
               onClick={runSimulation}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
             >
               <Play size={12} fill="currentColor" />
               <span>Replay Pipeline</span>
             </button>
           )}
 
-          <span className="border border-black px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase bg-neutral-100 text-black">
+          <span className="border border-black px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase bg-neutral-100 text-black rounded-md">
             Idempotency Guard Active
           </span>
-          <span className="border border-black px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase bg-neutral-100 text-black">
+          <span className="border border-black px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase bg-neutral-100 text-black rounded-md">
             Policy v2.0
           </span>
         </div>
@@ -144,7 +144,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
               <React.Fragment key={step.id}>
                 <div className="flex-1 flex flex-col items-center text-center">
                   <div
-                    className={`w-9 h-9 border-2 flex items-center justify-center font-mono text-xs tracking-wider transition-colors duration-100 ${
+                    className={`w-9 h-9 border-2 flex items-center justify-center font-mono text-xs tracking-wider transition-colors duration-100 rounded-xl ${
                       isFinished
                         ? 'bg-black text-white border-black font-bold'
                         : isActive
@@ -195,7 +195,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
       {/* Live Pipeline Status Ticker */}
       <div className="pt-4 border-t-2 border-black flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         <div className="flex items-center gap-3">
-          <span className={`px-2 py-0.5 border border-black uppercase text-[10px] tracking-widest font-bold ${
+          <span className={`px-2 py-0.5 border border-black uppercase text-[10px] tracking-widest font-bold rounded-md ${
             effectiveIsRunning
               ? 'bg-black text-white'
               : effectiveIsComplete

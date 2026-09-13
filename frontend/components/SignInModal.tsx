@@ -78,17 +78,17 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-      <div className="bg-white w-full max-w-md border-4 border-black p-6 sm:p-8 relative space-y-6 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white w-full max-w-md border-4 border-black p-6 sm:p-8 relative space-y-6 max-h-[90vh] overflow-y-auto rounded-2xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100"
+          className="absolute right-4 top-4 p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
         >
           <X size={14} strokeWidth={2} />
         </button>
 
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 bg-black text-white font-display font-bold text-sm flex items-center justify-center border border-black">
+            <div className="w-7 h-7 bg-black text-white font-display font-bold text-sm flex items-center justify-center border border-black rounded-lg">
               R
             </div>
             <h2 className="text-xl font-display font-bold uppercase tracking-tight text-black">
@@ -101,10 +101,10 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {/* Segmented Control Tabs */}
-        <div className="flex border-2 border-black p-0.5 text-xs font-mono tracking-wider uppercase">
+        <div className="flex border-2 border-black p-0.5 text-xs font-mono tracking-wider uppercase rounded-lg overflow-hidden">
           <button
             onClick={() => { setActiveTab('signin'); setGoogleNotice(null); }}
-            className={`flex-1 py-1.5 transition-colors duration-100 font-bold ${
+            className={`flex-1 py-1.5 transition-colors duration-100 font-bold rounded-md ${
               activeTab === 'signin' ? 'bg-black text-white' : 'bg-white text-black hover:bg-neutral-100'
             }`}
           >
@@ -112,7 +112,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           </button>
           <button
             onClick={() => { setActiveTab('register'); setGoogleNotice(null); }}
-            className={`flex-1 py-1.5 transition-colors duration-100 font-bold ${
+            className={`flex-1 py-1.5 transition-colors duration-100 font-bold rounded-md ${
               activeTab === 'register' ? 'bg-black text-white' : 'bg-white text-black hover:bg-neutral-100'
             }`}
           >
@@ -121,7 +121,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {googleNotice && (
-          <div className="p-3 border-2 border-black bg-neutral-50 text-black text-xs font-mono leading-normal flex items-start gap-2.5">
+          <div className="p-3 border-2 border-black bg-neutral-50 text-black text-xs font-mono leading-normal flex items-start gap-2.5 rounded-xl">
             <AlertCircle size={14} className="shrink-0 mt-0.5" />
             <p className="text-[11px] font-serif italic">{googleNotice}</p>
           </div>
@@ -133,7 +133,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             <button
               onClick={handleGoogleSignIn}
               disabled={googleLoading || loading}
-              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 border-2 border-black bg-white text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50 group"
+              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 border-2 border-black bg-white text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50 group rounded-xl"
             >
               {googleLoading ? (
                 <>
@@ -161,7 +161,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <button
                 onClick={() => handleStaffLogin('sarah.jenkins@example.com', 'Sarah Jenkins', 'customer')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group"
+                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group rounded-xl"
               >
                 <div>
                   <span className="font-serif font-bold text-xs block">Customer (Sarah Jenkins)</span>
@@ -175,7 +175,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <button
                 onClick={() => handleStaffLogin('marcus.vance@example.com', 'Marcus Vance', 'operations')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group"
+                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group rounded-xl"
               >
                 <div>
                   <span className="font-serif font-bold text-xs block">Operations Lead (Marcus Vance)</span>
@@ -189,7 +189,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <button
                 onClick={() => handleStaffLogin('elena.rostova@example.com', 'Elena Rostova', 'admin')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group"
+                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group rounded-xl"
               >
                 <div>
                   <span className="font-serif font-bold text-xs block">Admin Supervisor (Elena Rostova)</span>
@@ -203,7 +203,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <button
                 onClick={() => handleStaffLogin('david.kim@example.com', 'David Kim', 'support_agent')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group"
+                className="w-full flex items-center justify-between p-3 border-2 border-black bg-white hover:bg-black hover:text-white text-black text-left transition-colors duration-100 group rounded-xl"
               >
                 <div>
                   <span className="font-serif font-bold text-xs block">Support Specialist (David Kim)</span>
@@ -227,7 +227,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
                 value={regName}
                 onChange={(e) => setRegName(e.target.value)}
                 placeholder="e.g. Priya Sharma"
-                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-serif placeholder:italic placeholder:text-neutral-400 focus:border-b-4"
+                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-serif placeholder:italic placeholder:text-neutral-400 focus:border-b-4 rounded-lg"
               />
             </div>
 
@@ -241,7 +241,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
                 value={regEmail}
                 onChange={(e) => setRegEmail(e.target.value)}
                 placeholder="e.g. priya.sharma@example.com"
-                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-mono placeholder:italic placeholder:text-neutral-400 focus:border-b-4"
+                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-mono placeholder:italic placeholder:text-neutral-400 focus:border-b-4 rounded-lg"
               />
             </div>
 
@@ -252,7 +252,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
               <select
                 value={regRole}
                 onChange={(e) => setRegRole(e.target.value as any)}
-                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-mono focus:border-b-4"
+                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-mono focus:border-b-4 rounded-lg"
               >
                 <option value="customer">Customer (Standard Client)</option>
                 <option value="operations">Operations Lead (Review Queue)</option>
@@ -271,14 +271,14 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
                 value={regPassword}
                 onChange={(e) => setRegPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-mono focus:border-b-4"
+                className="w-full px-3 py-2 border-2 border-black bg-white text-black text-xs font-mono focus:border-b-4 rounded-lg"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 border-2 border-black bg-black text-white font-mono text-xs tracking-widest uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 mt-2"
+              className="w-full py-3 border-2 border-black bg-black text-white font-mono text-xs tracking-widest uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 mt-2 rounded-lg"
             >
               {loading ? 'Creating Credentials...' : 'Create Account & Authorize'}
             </button>

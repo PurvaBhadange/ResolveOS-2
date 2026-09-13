@@ -20,10 +20,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Enforce 0px radius across the entire document */
-*, *::before, *::after {
-  border-radius: 0 !important;
-}
 
 /* Accessibility Focus States */
 :focus-visible {

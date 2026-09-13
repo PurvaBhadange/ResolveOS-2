@@ -77,7 +77,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Case List Sidebar (4 cols) */}
-        <div className="lg:col-span-4 border-2 border-black p-5 bg-white space-y-4 h-fit">
+        <div className="lg:col-span-4 border-2 border-black p-5 bg-white space-y-4 h-fit rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
             <span className="font-display font-bold uppercase text-xs tracking-wider text-black">
               Logged Cases
@@ -88,7 +88,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
           {loading ? (
             <div className="space-y-2 pt-1">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-14 skeleton-mono" />
+                <div key={i} className="h-14 skeleton-mono rounded-xl" />
               ))}
             </div>
           ) : cases.length === 0 ? (
@@ -105,7 +105,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                     key={c.id}
                     type="button"
                     onClick={() => onSelectCase(c.id)}
-                    className={`w-full text-left p-3.5 border-2 transition-colors duration-100 ${
+                    className={`w-full text-left p-3.5 border-2 transition-colors duration-100 rounded-xl ${
                       isSelected
                         ? 'bg-black text-white border-black'
                         : 'bg-white text-black border-black hover:bg-black hover:text-white group'
@@ -115,7 +115,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                       <span className="font-bold">
                         {c.case_number}
                       </span>
-                      <span className="border border-current px-1.5 py-0.5 text-[10px] tracking-widest uppercase font-bold">
+                      <span className="border border-current px-1.5 py-0.5 text-[10px] tracking-widest uppercase font-bold rounded-md">
                         {c.case_status}
                       </span>
                     </div>
@@ -135,12 +135,12 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
         {/* Active Case Timeline Detail (8 cols) */}
         <div className="lg:col-span-8 space-y-6">
           {activeCase ? (
-            <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-6">
+            <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-6 rounded-2xl">
               {/* Case Header Card */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
                 <div>
                   <div className="flex items-center gap-2.5">
-                    <span className="font-mono text-xs px-2 py-0.5 bg-black text-white font-bold border border-black">
+                    <span className="font-mono text-xs px-2 py-0.5 bg-black text-white font-bold border border-black rounded-md">
                       {activeCase.case_number}
                     </span>
                     <h2 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-black">
@@ -153,7 +153,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                 <button
                   onClick={() => handleRunWorkflow(activeCase.id)}
                   disabled={runningWorkflow}
-                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs tracking-wider uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs tracking-wider uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 rounded-lg"
                 >
                   <Play size={12} fill="currentColor" />
                   <span>{runningWorkflow ? 'Executing...' : 'Re-Run Pipeline'}</span>
@@ -167,7 +167,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                 </span>
 
                 {events.length === 0 ? (
-                  <div className="p-8 border-2 border-black bg-neutral-50 text-center font-serif italic text-neutral-600 text-xs">
+                  <div className="p-8 border-2 border-black bg-neutral-50 text-center font-serif italic text-neutral-600 text-xs rounded-xl">
                     No resolution events recorded yet for this case. Click <strong>Re-Run Pipeline</strong> to trigger execution.
                   </div>
                 ) : (
@@ -176,21 +176,21 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                       const isExpanded = Boolean(expandedEvents[ev.id]);
                       return (
                         <div key={ev.id} className="relative pl-10">
-                          <div className="absolute left-1 top-2.5 w-6 h-6 border-2 border-black bg-black text-white font-mono text-[11px] font-bold flex items-center justify-center">
+                          <div className="absolute left-1 top-2.5 w-6 h-6 border-2 border-black bg-black text-white font-mono text-[11px] font-bold flex items-center justify-center rounded-full">
                             {idx + 1}
                           </div>
 
-                          <div className="border-2 border-black p-4 bg-white space-y-2">
+                          <div className="border-2 border-black p-4 bg-white space-y-2 rounded-xl">
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <span className="font-serif font-bold text-sm text-black">{ev.title}</span>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-[10px] tracking-wider uppercase px-2 py-0.5 border border-black bg-neutral-100 text-black font-semibold">
+                                <span className="font-mono text-[10px] tracking-wider uppercase px-2 py-0.5 border border-black bg-neutral-100 text-black font-semibold rounded-md">
                                   {ev.event_type}
                                 </span>
                                 <button
                                   type="button"
                                   onClick={() => toggleEventExpand(ev.id)}
-                                  className="font-mono text-xs tracking-wider uppercase border border-black px-2 py-0.5 bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 flex items-center gap-1"
+                                  className="font-mono text-xs tracking-wider uppercase border border-black px-2 py-0.5 bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 flex items-center gap-1 rounded-md"
                                 >
                                   <span>{isExpanded ? 'Hide JSON' : 'Inspect JSON'}</span>
                                   {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
@@ -199,7 +199,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                             </div>
 
                             {isExpanded && (
-                              <pre className="border-2 border-black bg-black text-white p-4 font-mono text-[11px] overflow-x-auto leading-relaxed select-text mt-3">
+                              <pre className="border-2 border-black bg-black text-white p-4 font-mono text-[11px] overflow-x-auto leading-relaxed select-text mt-3 rounded-xl">
                                 {JSON.stringify(ev.detail_json, null, 2)}
                               </pre>
                             )}
@@ -212,7 +212,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
               </div>
             </div>
           ) : (
-            <div className="p-16 border-2 border-black bg-white text-center font-serif italic text-neutral-500 text-sm">
+            <div className="p-16 border-2 border-black bg-white text-center font-serif italic text-neutral-500 text-sm rounded-2xl">
               Select a support case from the sidebar to inspect its deterministic ledger trail.
             </div>
           )}

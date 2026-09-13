@@ -36,14 +36,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               className="flex items-center gap-3 cursor-pointer select-none group"
               onClick={() => setActiveTab('help')}
             >
-              <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-display font-bold text-lg border border-black transition-colors duration-100 group-hover:bg-white group-hover:text-black">
+              <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-display font-bold text-lg border border-black rounded-lg transition-colors duration-100 group-hover:bg-white group-hover:text-black">
                 R
               </div>
               <div className="flex items-baseline gap-2.5">
                 <span className="text-xl font-display font-bold tracking-tight text-black">
                   RESOLVE<span className="font-normal italic">OS</span>
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase text-black border border-black bg-white">
+                <span className="hidden sm:inline-block px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase text-black border border-black bg-white rounded-md">
                   {userRole === 'customer' ? 'Customer Portal' : `${userRole} Workspace`}
                 </span>
               </div>
@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider uppercase border transition-colors duration-100 ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider uppercase border rounded-lg transition-colors duration-100 ${
                       isActive
                         ? 'bg-black text-white border-black font-semibold'
                         : 'bg-white text-black border-transparent hover:border-black hover:bg-black hover:text-white'
@@ -79,10 +79,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                         src={session.user.image}
                         alt={session.user.name || 'User'}
                         referrerPolicy="no-referrer"
-                        className="w-8 h-8 border-2 border-black object-cover"
+                        className="w-8 h-8 border-2 border-black object-cover rounded-full"
                       />
                     ) : (
-                      <div className="w-8 h-8 bg-black text-white font-mono font-medium text-xs flex items-center justify-center border-2 border-black">
+                      <div className="w-8 h-8 bg-black text-white font-mono font-medium text-xs flex items-center justify-center border-2 border-black rounded-full">
                         {(session.user?.name || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                     <button
                       onClick={() => signOut()}
                       title="Sign Out"
-                      className="p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100"
+                      className="p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
                     >
                       <LogOut size={14} strokeWidth={1.5} />
                     </button>
@@ -105,7 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 ) : (
                   <button
                     onClick={() => setIsSignInOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black text-xs font-mono tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100"
+                    className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black text-xs font-mono tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
                   >
                     <User size={14} strokeWidth={1.5} />
                     <span>Sign In</span>

@@ -71,7 +71,7 @@ export const OperationsDashboard: React.FC = () => {
           <button
             type="button"
             onClick={loadOpsData}
-            className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-100"
+            className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
           >
             Refresh Ledger
           </button>
@@ -79,7 +79,7 @@ export const OperationsDashboard: React.FC = () => {
       </div>
 
       {/* KPI Metrics Row */}
-      <div className="border-2 border-black bg-white">
+      <div className="border-2 border-black bg-white rounded-2xl overflow-hidden">
         <div className="grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x-2 divide-black text-left">
           <div className="p-5">
             <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Total Logged</span>
@@ -107,12 +107,12 @@ export const OperationsDashboard: React.FC = () => {
       {/* Main Operations Queues */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Human Approval Queue */}
-        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5 rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
             <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
               Pending Approval Queue
             </h2>
-            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold">
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold rounded-md">
               {approvals.length} Required
             </span>
           </div>
@@ -126,12 +126,12 @@ export const OperationsDashboard: React.FC = () => {
               {approvals.map((appr) => {
                 const isBusy = actionLoadingId === appr.id;
                 return (
-                  <div key={appr.id} className="p-4 border-2 border-black bg-neutral-50 space-y-3">
+                  <div key={appr.id} className="p-4 border-2 border-black bg-neutral-50 space-y-3 rounded-xl">
                     <div className="flex items-center justify-between font-mono text-xs">
                       <span className="font-bold text-black">
                         Case #{appr.case_id} &bull; Request #{appr.id}
                       </span>
-                      <span className="border border-black px-1.5 py-0.5 text-[10px] tracking-widest uppercase bg-white text-black font-semibold">
+                      <span className="border border-black px-1.5 py-0.5 text-[10px] tracking-widest uppercase bg-white text-black font-semibold rounded-md">
                         Role: {appr.required_role}
                       </span>
                     </div>
@@ -144,14 +144,14 @@ export const OperationsDashboard: React.FC = () => {
                       <button
                         onClick={() => handleApprovalDecision(appr.id, 'rejected')}
                         disabled={isBusy}
-                        className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50"
+                        className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50 rounded-lg"
                       >
                         Decline
                       </button>
                       <button
                         onClick={() => handleApprovalDecision(appr.id, 'approved')}
                         disabled={isBusy}
-                        className="px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50"
+                        className="px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 rounded-lg"
                       >
                         Authorize Settlement &rarr;
                       </button>
@@ -164,12 +164,12 @@ export const OperationsDashboard: React.FC = () => {
         </div>
 
         {/* Escalations Queue */}
-        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5 rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
             <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
               Escalation Triage Queue
             </h2>
-            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold">
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold rounded-md">
               {escalations.length} Active
             </span>
           </div>
@@ -181,12 +181,12 @@ export const OperationsDashboard: React.FC = () => {
           ) : (
             <div className="space-y-4">
               {escalations.map((esc) => (
-                <div key={esc.id} className="p-4 border-2 border-black bg-neutral-50 space-y-2">
+                <div key={esc.id} className="p-4 border-2 border-black bg-neutral-50 space-y-2 rounded-xl">
                   <div className="flex items-center justify-between font-mono text-xs">
                     <span className="font-bold text-black">
                       Escalation #{esc.id} (Case #{esc.case_id})
                     </span>
-                    <span className="border border-black px-1.5 py-0.5 text-[10px] uppercase font-bold bg-white text-black">
+                    <span className="border border-black px-1.5 py-0.5 text-[10px] uppercase font-bold bg-white text-black rounded-md">
                       Tier-2 Specialist
                     </span>
                   </div>
@@ -204,20 +204,20 @@ export const OperationsDashboard: React.FC = () => {
       {/* Constraints & Policy Inspectors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Inventory Constraint Monitor */}
-        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-4">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-4 rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
             <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
               Inventory Constraint Ledger
             </h2>
-            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black font-semibold">
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black font-semibold rounded-md">
               SKU: AURASOUND-BLK
             </span>
           </div>
 
-          <div className="p-4 border-2 border-black bg-neutral-50 space-y-2">
+          <div className="p-4 border-2 border-black bg-neutral-50 space-y-2 rounded-xl">
             <div className="flex items-center justify-between font-mono text-xs">
               <span className="font-bold text-black">AuraSound Headphones (Matte Black)</span>
-              <span className="border border-black px-2 py-0.5 uppercase bg-black text-white font-bold">
+              <span className="border border-black px-2 py-0.5 uppercase bg-black text-white font-bold rounded-md">
                 0 Units (Out of Stock)
               </span>
             </div>
@@ -228,17 +228,17 @@ export const OperationsDashboard: React.FC = () => {
         </div>
 
         {/* Policy Rules Version Monitor */}
-        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-4">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-4 rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
             <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
               Policy Engine Guardrails
             </h2>
-            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold">
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold rounded-md">
               v2.0 Active
             </span>
           </div>
 
-          <div className="p-4 border-2 border-black bg-neutral-50 space-y-2 text-xs">
+          <div className="p-4 border-2 border-black bg-neutral-50 space-y-2 text-xs rounded-xl">
             <span className="font-mono font-bold uppercase tracking-wider text-black block">
               Electronics Return &amp; Replacement Rules
             </span>
