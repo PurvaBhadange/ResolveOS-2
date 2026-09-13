@@ -89,7 +89,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
 
     const timer = setTimeout(() => {
       setSimStep((prev) => prev + 1);
-    }, 850);
+    }, 350);
 
     return () => clearTimeout(timer);
   }, [simulating, simStep, steps.length]);

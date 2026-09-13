@@ -317,7 +317,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
       } else {
         clearInterval(stepInterval);
       }
-    }, 380);
+    }, 180);
 
     try {
       // 1. Fetch Order details to get numeric order_id
@@ -359,18 +359,18 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
       // Step 6: Verify
       setActiveStepIndex(5);
       setStatusMessage(stepDescriptions[5]);
-      await new Promise((r) => setTimeout(r, 400));
+      await new Promise((r) => setTimeout(r, 150));
 
       // Step 7: Adapt
       setActiveStepIndex(6);
       setStatusMessage(stepDescriptions[6]);
-      await new Promise((r) => setTimeout(r, 400));
+      await new Promise((r) => setTimeout(r, 150));
 
       // Complete
       setActiveStepIndex(7);
       setIsLoopComplete(true);
       setStatusMessage('Resolution completed and verified against database. Redirecting to Case Tracker...');
-      await new Promise((r) => setTimeout(r, 650));
+      await new Promise((r) => setTimeout(r, 300));
 
       onCaseCreated(newCase.id);
       setActiveTab('cases');
