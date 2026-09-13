@@ -17,36 +17,58 @@ export const authOptions = {
         ]
       : []),
 
-    // Staff & Demo Credentials Provider
+    // Staff & Customer Credentials / Registration Provider
     CredentialsProvider({
-      name: 'ResolveOS Staff Account',
+      name: 'ResolveOS Account',
       credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'admin@resolveos.com' },
+        email: { label: 'Email', type: 'email' },
+        name: { label: 'Name', type: 'text' },
+        role: { label: 'Role', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email) return null;
 
-        if (credentials.email.includes('ops')) {
-          return { id: '2', name: 'Operations Lead', email: 'ops@resolveos.com', role: 'operations' };
-        } else if (credentials.email.includes('admin')) {
-          return { id: '1', name: 'Admin Supervisor', email: 'admin@resolveos.com', role: 'admin' };
-        } else {
-          return { id: '3', name: 'Support Agent Tier 2', email: 'agent@resolveos.com', role: 'support_agent' };
-        }
+        const email = credentials.email.toLowerCase();
+        const name =
+          credentials.name ||
+          (email.includes('ops')
+            ? 'Operations Lead'
+            : email.includes('admin')
+            ? 'Admin Supervisor'
+            : email.includes('agent')
+            ? 'Support Agent Tier 2'
+            : email.split('@')[0]);
+
+        const role =
+          credentials.role ||
+          (email.includes('ops')
+            ? 'operations'
+            : email.includes('admin')
+            ? 'admin'
+            : email.includes('agent')
+            ? 'support_agent'
+            : 'customer');
+
+        return {
+          id: String(Date.now()),
+          name: name,
+          email: email,
+          role: role,
+        };
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }: any) {
       if (user) {
-        token.role = user.role || 'operations';
+        token.role = user.role || 'customer';
       }
       return token;
     },
     async session({ session, token }: any) {
       if (session.user) {
-        session.user.role = token.role;
+        (session.user as any).role = token.role;
       }
       return session;
     },

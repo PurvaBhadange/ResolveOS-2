@@ -2,7 +2,7 @@ import uuid
 from typing import Dict, Any
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
-from app.models import SupportCase, AgentRun
+from app.models import SupportCase, AgentRun, Approval
 from app.agent.state import AgentState
 from app.agent.graph import resolution_agent_graph
 
@@ -25,6 +25,11 @@ def run_agent_on_case(case_id: int) -> Dict[str, Any]:
         db.add(agent_run)
         db.commit()
 
+        # Check existing approval status from DB
+        appr_rec = db.query(Approval).filter(Approval.case_id == case.id).order_by(Approval.created_at.desc()).first()
+        appr_status = appr_rec.status if appr_rec else None
+        appr_id = appr_rec.id if appr_rec else None
+
         initial_state: AgentState = {
             "case_id": case.id,
             "customer_id": case.customer_id,
@@ -44,9 +49,9 @@ def run_agent_on_case(case_id: int) -> Dict[str, Any]:
             "selected_plan": None,
             "guard_passed": False,
             "guard_reasons": [],
-            "approval_required": False,
-            "approval_id": None,
-            "approval_status": None,
+            "approval_required": True if appr_status == "approved" else False,
+            "approval_id": appr_id,
+            "approval_status": appr_status,
             "action_result": None,
             "verification_result": None,
             "replan_count": 0,

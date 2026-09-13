@@ -33,14 +33,20 @@ def submit_approval_decision(approval_id: int, payload: ApprovalDecisionRequest,
     approval.decision_by = "operations_user"
     approval.decision_at = datetime.utcnow()
 
-    # Update case status
+    # Update case status & trigger agent run
     case = db.query(SupportCase).filter(SupportCase.id == approval.case_id).first()
     if case:
         if payload.decision == "approved":
             case.case_status = CaseStatus.ACTION_EXECUTING.value
+            db.commit()
+            try:
+                from app.agent import run_agent_on_case
+                run_agent_on_case(case.id)
+            except Exception as e:
+                print("Error running agent after approval:", e)
         else:
             case.case_status = CaseStatus.ESCALATED.value
+            db.commit()
 
-    db.commit()
     db.refresh(approval)
     return approval
