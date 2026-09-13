@@ -28,29 +28,29 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-neutral-200/90 shadow-subtle">
+      <header className="sticky top-0 z-40 bg-white border-b-2 border-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-15">
+          <div className="flex items-center justify-between h-16">
             {/* Brand Logo & Portal Badge */}
             <div
               className="flex items-center gap-3 cursor-pointer select-none group"
               onClick={() => setActiveTab('help')}
             >
-              <div className="w-8 h-8 rounded-md bg-neutral-900 text-white flex items-center justify-center font-serif font-bold text-base shadow-subtle">
+              <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-display font-bold text-lg border border-black transition-colors duration-100 group-hover:bg-white group-hover:text-black">
                 R
               </div>
               <div className="flex items-baseline gap-2.5">
-                <span className="text-lg font-serif font-bold tracking-tight text-neutral-900">
-                  Resolve<span className="font-normal italic">OS</span>
+                <span className="text-xl font-display font-bold tracking-tight text-black">
+                  RESOLVE<span className="font-normal italic">OS</span>
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 rounded font-mono text-[10px] tracking-widest uppercase text-neutral-600 border border-neutral-200 bg-neutral-50">
+                <span className="hidden sm:inline-block px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase text-black border border-black bg-white">
                   {userRole === 'customer' ? 'Customer Portal' : `${userRole} Workspace`}
                 </span>
               </div>
             </div>
 
             {/* Navigation Tabs */}
-            <nav className="flex items-center gap-1 sm:gap-1.5">
+            <nav className="flex items-center gap-1 sm:gap-2">
               {visibleNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -58,20 +58,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono tracking-wide uppercase transition-colors ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider uppercase border transition-colors duration-100 ${
                       isActive
-                        ? 'bg-neutral-900 text-white font-medium shadow-subtle'
-                        : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
+                        ? 'bg-black text-white border-black font-semibold'
+                        : 'bg-white text-black border-transparent hover:border-black hover:bg-black hover:text-white'
                     }`}
                   >
-                    <Icon size={14} strokeWidth={1.5} className={isActive ? 'text-white' : 'text-neutral-500'} />
+                    <Icon size={14} strokeWidth={1.5} className={isActive ? 'text-white' : 'text-black'} />
                     <span>{item.label}</span>
                   </button>
                 );
               })}
 
               {/* Role-Based Session & Sign In */}
-              <div className="ml-2 pl-3 border-l border-neutral-200 flex items-center gap-2">
+              <div className="ml-2 pl-3 border-l-2 border-black flex items-center gap-2">
                 {session ? (
                   <div className="flex items-center gap-2.5">
                     {session.user?.image ? (
@@ -79,25 +79,25 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                         src={session.user.image}
                         alt={session.user.name || 'User'}
                         referrerPolicy="no-referrer"
-                        className="w-7 h-7 rounded-full border border-neutral-300 object-cover shadow-subtle"
+                        className="w-8 h-8 border-2 border-black object-cover"
                       />
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-neutral-900 text-white font-mono font-medium text-xs flex items-center justify-center">
+                      <div className="w-8 h-8 bg-black text-white font-mono font-medium text-xs flex items-center justify-center border-2 border-black">
                         {(session.user?.name || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="hidden sm:flex flex-col text-right">
-                      <span className="text-xs font-serif font-bold text-neutral-900 leading-none">
+                      <span className="text-xs font-serif font-bold text-black leading-none">
                         {session.user?.name || 'Authorized'}
                       </span>
-                      <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-500">
+                      <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-600">
                         {userRole}
                       </span>
                     </div>
                     <button
                       onClick={() => signOut()}
                       title="Sign Out"
-                      className="p-1.5 rounded-md text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
+                      className="p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100"
                     >
                       <LogOut size={14} strokeWidth={1.5} />
                     </button>
@@ -105,9 +105,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 ) : (
                   <button
                     onClick={() => setIsSignInOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 bg-white text-neutral-800 text-xs font-mono tracking-wide uppercase hover:bg-neutral-50 hover:border-neutral-400 shadow-subtle transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black text-xs font-mono tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100"
                   >
-                    <User size={14} strokeWidth={1.5} className="text-neutral-500" />
+                    <User size={14} strokeWidth={1.5} />
                     <span>Sign In</span>
                   </button>
                 )}

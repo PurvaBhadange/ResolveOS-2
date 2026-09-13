@@ -6,7 +6,9 @@ import {
   Package,
   ArrowRight,
   Loader2,
-  Info
+  Info,
+  CheckCircle2,
+  ShieldCheck
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { AgentLoopVisualizer } from './AgentLoopVisualizer';
@@ -253,26 +255,26 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
   };
 
   return (
-    <div className="space-y-6 pb-16">
-      {/* 1. Refined Editorial Header */}
-      <div className="border-b border-neutral-200/90 pb-5">
+    <div className="space-y-8 pb-16">
+      {/* 1. Architectural Editorial Header */}
+      <div className="border-b-4 border-black pb-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="font-mono text-[11px] tracking-widest uppercase text-neutral-500 mb-1">
-              Autonomous Governance &bull; Dispute Resolution
+            <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+              Autonomous Governance &bull; Enterprise Operations
             </div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-neutral-900">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight text-black uppercase">
               Resolution Center
             </h1>
-            <p className="text-xs sm:text-sm font-serif italic text-neutral-600 mt-1 max-w-2xl">
-              Deterministic intake for customer dispute mitigation, warehouse inventory audit, and verifiable state commitment.
+            <p className="text-base font-serif italic text-neutral-700 mt-2 max-w-2xl">
+              Deterministic, policy-governed intake for customer dispute mitigation, warehouse inventory checks, and transactional state verification.
             </p>
           </div>
-          <div className="flex items-center gap-2 font-mono text-[11px] tracking-wide uppercase">
-            <span className="rounded-md border border-neutral-200 px-2.5 py-1 bg-neutral-50 text-neutral-700 font-medium">
+          <div className="flex items-center gap-3 font-mono text-xs tracking-wider uppercase">
+            <span className="border border-black px-2.5 py-1 bg-black text-white font-semibold">
               Live DB Synced
             </span>
-            <span className="rounded-md border border-neutral-200 px-2.5 py-1 bg-white text-neutral-600">
+            <span className="border border-black px-2.5 py-1 bg-white text-black">
               INR (&bull;) Standard
             </span>
           </div>
@@ -280,12 +282,12 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
       </div>
 
       {/* 2. Preset Scenarios Strip */}
-      <div className="space-y-2.5">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-mono text-xs tracking-wider uppercase font-semibold text-neutral-800">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between border-b border-black pb-1">
+          <span className="font-mono text-xs tracking-widest uppercase font-bold text-black">
             Deterministic Test Scenarios
           </span>
-          <span className="font-mono text-[11px] text-neutral-500">
+          <span className="font-mono text-[11px] tracking-wider uppercase text-neutral-500">
             Select to execute automated policy evaluation
           </span>
         </div>
@@ -298,30 +300,30 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 key={p.id}
                 type="button"
                 onClick={() => handleSelectPreset(p)}
-                className={`text-left p-3.5 rounded-lg border transition-all shadow-subtle ${
+                className={`text-left p-4 border-2 transition-colors duration-100 ${
                   isSelected
-                    ? 'bg-neutral-900 text-white border-neutral-900'
-                    : 'bg-white text-neutral-800 border-neutral-200 hover:border-neutral-400 hover:bg-neutral-50/70'
+                    ? 'bg-black text-white border-black'
+                    : 'bg-white text-black border-black hover:bg-black hover:text-white group'
                 }`}
               >
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <span className="font-mono text-[11px] font-bold tracking-wider opacity-75">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="font-mono text-xs tracking-widest font-bold">
                     [{p.num}]
                   </span>
-                  <span className={`font-mono text-[10px] tracking-wider uppercase px-1.5 py-0.5 rounded border ${
+                  <span className={`font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border ${
                     isSelected
-                      ? 'border-neutral-700 bg-neutral-800 text-neutral-200'
-                      : 'border-neutral-200 bg-neutral-50 text-neutral-600'
+                      ? 'border-white bg-white text-black font-semibold'
+                      : 'border-black text-black group-hover:border-white group-hover:text-white'
                   }`}>
                     {p.badge}
                   </span>
                 </div>
-                <div className="font-serif font-semibold text-xs tracking-tight mb-1.5">
+                <div className="font-serif font-bold text-sm tracking-tight mb-2">
                   {p.title}
                 </div>
-                <div className="flex items-center justify-between font-mono text-[11px] pt-2 border-t border-neutral-200/40 opacity-85">
+                <div className="flex items-center justify-between font-mono text-xs pt-2 border-t border-current opacity-90">
                   <span>{p.order}</span>
-                  <span className="font-semibold">{p.amount}</span>
+                  <span className="font-bold">{p.amount}</span>
                 </div>
               </button>
             );
@@ -330,32 +332,32 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
       </div>
 
       {/* 3. Main Two-Column Console (Form + Order Details) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* LEFT: Ticket Submission Form (7 cols) */}
-        <div className="lg:col-span-7 rounded-lg border border-neutral-200/90 p-5 sm:p-6 bg-white shadow-subtle space-y-5">
-          <div className="border-b border-neutral-100 pb-3">
-            <h2 className="font-serif text-base font-bold tracking-tight text-neutral-900">
+        <div className="lg:col-span-7 border-2 border-black p-6 sm:p-8 bg-white space-y-6">
+          <div className="border-b-2 border-black pb-3">
+            <h2 className="font-display text-xl font-bold uppercase tracking-wide text-black">
               Dispute Intake Specification
             </h2>
-            <p className="font-serif italic text-xs text-neutral-500 mt-0.5">
+            <p className="font-serif italic text-xs text-neutral-600 mt-1">
               Submit case parameters for policy evaluation, inventory verification, and database state commitment.
             </p>
           </div>
 
           {error && (
-            <div className="p-3 rounded-md border border-neutral-300 bg-neutral-50 text-neutral-900 text-xs font-mono flex items-start gap-2.5">
-              <AlertTriangle size={14} className="text-neutral-700 shrink-0 mt-0.5" />
+            <div className="p-4 border-2 border-black bg-black text-white text-xs font-mono flex items-start gap-3">
+              <AlertTriangle className="w-4 h-4 text-white shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold uppercase tracking-wider block">Execution Error</span>
-                <span className="mt-0.5 block font-sans">{error}</span>
+                <span className="font-bold uppercase tracking-wider block">System Execution Error</span>
+                <span className="mt-1 block font-sans">{error}</span>
               </div>
             </div>
           )}
 
-          <form onSubmit={handleSubmitIssue} className="space-y-4">
+          <form onSubmit={handleSubmitIssue} className="space-y-5">
             {/* Order Number Field */}
             <div>
-              <label className="block font-mono text-xs tracking-wider uppercase font-semibold text-neutral-700 mb-1">
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
                 Order Identifier *
               </label>
               <input
@@ -364,17 +366,17 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
                 placeholder="e.g. ORD-2026-8801"
-                className="w-full px-3.5 py-2 rounded-md border border-neutral-300 bg-white text-neutral-900 text-xs font-mono focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 placeholder:italic placeholder:text-neutral-400"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-mono focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
-              <p className="font-mono text-[10px] text-neutral-400 mt-1">
+              <p className="font-mono text-[10px] tracking-wider uppercase text-neutral-500 mt-1">
                 Audited against warehouse manifests &amp; transactional logs.
               </p>
             </div>
 
             {/* Category Selector */}
             <div>
-              <label className="block font-mono text-xs tracking-wider uppercase font-semibold text-neutral-700 mb-1">
-                Issue Category *
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
+                Issue Category Classification *
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {categories.map((c) => {
@@ -385,13 +387,13 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                       key={c.id}
                       type="button"
                       onClick={() => setSelectedCategory(c.id)}
-                      className={`flex items-center justify-center gap-1.5 p-2 rounded-md border text-xs font-mono tracking-wide uppercase transition-all ${
+                      className={`flex items-center justify-center gap-2 p-2.5 border-2 text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
                         isSelected
-                          ? 'bg-neutral-900 text-white border-neutral-900 font-semibold shadow-subtle'
-                          : 'bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300'
+                          ? 'bg-black text-white border-black font-bold'
+                          : 'bg-white text-black border-black hover:bg-black hover:text-white'
                       }`}
                     >
-                      <Icon size={13} strokeWidth={1.5} />
+                      <Icon size={14} strokeWidth={1.5} />
                       <span className="truncate">{c.title}</span>
                     </button>
                   );
@@ -401,7 +403,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
 
             {/* Issue Title */}
             <div>
-              <label className="block font-mono text-xs tracking-wider uppercase font-semibold text-neutral-700 mb-1">
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
                 Dispute Subject *
               </label>
               <input
@@ -410,14 +412,14 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
                 placeholder="Brief summary of dispute claim"
-                className="w-full px-3.5 py-2 rounded-md border border-neutral-300 bg-white text-neutral-900 text-xs font-serif font-semibold focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 placeholder:italic placeholder:text-neutral-400"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif font-semibold focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
             </div>
 
             {/* Issue Description */}
             <div>
-              <label className="block font-mono text-xs tracking-wider uppercase font-semibold text-neutral-700 mb-1">
-                Customer Statement *
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
+                Customer Statement Details *
               </label>
               <textarea
                 required
@@ -425,31 +427,31 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 value={issueDescription}
                 onChange={(e) => setIssueDescription(e.target.value)}
                 placeholder="Enter verified customer claim statement..."
-                className="w-full px-3.5 py-2 rounded-md border border-neutral-300 bg-white text-neutral-900 text-xs font-serif resize-none focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 placeholder:italic placeholder:text-neutral-400"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif resize-none focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
             </div>
 
             {/* Form Actions */}
-            <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100">
-              <div className="font-mono text-[11px] tracking-wide text-neutral-500 flex items-center gap-1.5">
-                <Info size={13} strokeWidth={1.5} />
+            <div className="pt-4 flex flex-wrap items-center justify-between gap-4 border-t-2 border-black">
+              <div className="font-mono text-[11px] tracking-wider uppercase text-neutral-600 flex items-center gap-2">
+                <Info size={14} strokeWidth={1.5} />
                 <span>Deterministic Idempotency Key Guard Active</span>
               </div>
 
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="px-5 py-2.5 rounded-md bg-neutral-900 text-white hover:bg-neutral-800 font-mono text-xs tracking-wider uppercase font-semibold shadow-subtle transition-all flex items-center gap-1.5 disabled:opacity-50"
+                className="px-6 py-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 size={13} className="animate-spin" />
+                    <Loader2 size={14} className="animate-spin" />
                     <span>Executing Pipeline...</span>
                   </>
                 ) : (
                   <>
                     <span>Execute Resolution</span>
-                    <ArrowRight size={13} strokeWidth={2} />
+                    <ArrowRight size={14} strokeWidth={1.5} />
                   </>
                 )}
               </button>
@@ -458,36 +460,36 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
         </div>
 
         {/* RIGHT: Live Order Context & Policy Guardrails (5 cols) */}
-        <div className="lg:col-span-5 space-y-5">
+        <div className="lg:col-span-5 space-y-6">
           {/* Order Record Card */}
-          <div className="rounded-lg border border-neutral-200/90 p-5 bg-white shadow-subtle space-y-3.5">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
-              <span className="font-serif font-bold text-xs tracking-wide uppercase text-neutral-900">
+          <div className="border-2 border-black p-6 bg-white space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
+              <span className="font-display font-bold text-sm tracking-wider uppercase text-black">
                 Verified Order Manifest
               </span>
-              <span className="rounded px-2 py-0.5 font-mono text-[10px] tracking-wider uppercase border border-neutral-200 bg-neutral-100 text-neutral-800 font-semibold">
+              <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white">
                 {orderPreview?.order_status || 'DELIVERED'}
               </span>
             </div>
 
-            <div className="space-y-1.5 text-xs font-mono">
-              <div className="flex items-center justify-between py-1 border-b border-neutral-50">
-                <span className="text-neutral-400 uppercase text-[11px]">Order ID</span>
-                <span className="font-semibold text-neutral-800">{orderPreview?.order_number || orderNumber}</span>
+            <div className="space-y-2 text-xs font-mono">
+              <div className="flex items-center justify-between py-1.5 border-b border-black/20">
+                <span className="text-neutral-500 uppercase">Order ID</span>
+                <span className="font-bold text-black">{orderPreview?.order_number || orderNumber}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-neutral-50">
-                <span className="text-neutral-400 uppercase text-[11px]">Total Settled</span>
-                <span className="font-bold text-neutral-900">₹{orderPreview?.total_amount}</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-black/20">
+                <span className="text-neutral-500 uppercase">Total Settled</span>
+                <span className="font-bold text-black text-sm">₹{orderPreview?.total_amount}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-neutral-50">
-                <span className="text-neutral-400 uppercase text-[11px]">Manifest Item</span>
-                <span className="font-serif font-medium text-neutral-800 text-right max-w-[190px] truncate">
+              <div className="flex items-center justify-between py-1.5 border-b border-black/20">
+                <span className="text-neutral-500 uppercase">Manifest Item</span>
+                <span className="font-serif font-semibold text-black text-right max-w-[200px] truncate">
                   {orderPreview?.item_title}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-1">
-                <span className="text-neutral-400 uppercase text-[11px]">Carrier / AWB</span>
-                <span className="text-neutral-700">
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-neutral-500 uppercase">Carrier / AWB</span>
+                <span className="text-black font-semibold">
                   {orderPreview?.carrier} ({orderPreview?.tracking})
                 </span>
               </div>
@@ -495,31 +497,31 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
           </div>
 
           {/* Active Policy Rules */}
-          <div className="rounded-lg border border-neutral-200/90 p-5 bg-white shadow-subtle space-y-3.5">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
-              <span className="font-serif font-bold text-xs tracking-wide uppercase text-neutral-900">
+          <div className="border-2 border-black p-6 bg-white space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
+              <span className="font-display font-bold text-sm tracking-wider uppercase text-black">
                 System Policy Guardrails
               </span>
-              <span className="rounded px-1.5 py-0.5 font-mono text-[10px] tracking-wider uppercase border border-neutral-200 bg-neutral-50 text-neutral-600">
+              <span className="border border-black px-1.5 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black">
                 v2.0 STRICT
               </span>
             </div>
 
-            <div className="space-y-2.5 text-xs">
-              <div className="p-3 rounded-md border border-neutral-200/70 bg-neutral-50/70">
-                <span className="font-mono text-xs font-semibold uppercase tracking-wide block text-neutral-900">
+            <div className="space-y-3 text-xs">
+              <div className="p-3 border border-black bg-neutral-50">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
                   Stockout Fallback Guard
                 </span>
-                <span className="font-serif italic text-neutral-600 block mt-0.5 leading-relaxed text-[11px]">
+                <span className="font-serif italic text-neutral-700 block mt-1 leading-relaxed">
                   If replacement SKU inventory equals zero across regional nodes (WH-EAST &amp; WH-WEST), transaction automatically adapts to immediate UPI credit.
                 </span>
               </div>
 
-              <div className="p-3 rounded-md border border-neutral-200/70 bg-neutral-50/70">
-                <span className="font-mono text-xs font-semibold uppercase tracking-wide block text-neutral-900">
+              <div className="p-3 border border-black bg-neutral-50">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
                   ₹15,000 HITL Approval Gate
                 </span>
-                <span className="font-serif italic text-neutral-600 block mt-0.5 leading-relaxed text-[11px]">
+                <span className="font-serif italic text-neutral-700 block mt-1 leading-relaxed">
                   Dispute claims exceeding ₹15,000 threshold enforce cryptographic halt and mandate supervisory verification before settlement.
                 </span>
               </div>

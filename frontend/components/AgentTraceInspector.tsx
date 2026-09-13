@@ -55,27 +55,27 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
   };
 
   return (
-    <div className="space-y-5 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-neutral-200/90 pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-6">
         <div>
-          <div className="font-mono text-[11px] tracking-widest uppercase text-neutral-500 mb-1">
-            Diagnostic Ledger &bull; Raw Payloads
+          <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+            Diagnostic Ledger &bull; Raw System Payloads
           </div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-neutral-900">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
             Execution Trace Inspector
           </h1>
-          <p className="text-xs sm:text-sm font-serif italic text-neutral-600 mt-1">
-            Step-by-step diagnostic audit log and JSON payloads for Case #{selectedCaseId || '1'}.
+          <p className="text-sm font-serif italic text-neutral-700 mt-1">
+            Step-by-step diagnostic audit log and cryptographic JSON payloads for Case #{selectedCaseId || '1'}.
           </p>
         </div>
 
         {activeCase && (
-          <div className="rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-right shadow-subtle">
-            <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-400 block">
-              Active Case
+          <div className="border-2 border-black bg-black text-white px-4 py-2 text-right">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 block">
+              Active Case Key
             </span>
-            <span className="text-xs font-mono font-semibold text-neutral-900">
+            <span className="text-xs font-mono font-bold">
               {activeCase.case_number}
             </span>
           </div>
@@ -83,38 +83,36 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       </div>
 
       {/* Horizontal Stepper Progress */}
-      <div className="rounded-lg border border-neutral-200/90 p-4 bg-white shadow-subtle overflow-x-auto">
-        <div className="flex items-center justify-between min-w-[700px] gap-2">
+      <div className="border-2 border-black p-4 bg-white overflow-x-auto">
+        <div className="flex items-center justify-between min-w-[720px] gap-2">
           {graphSteps.map((step, idx) => {
             const hasEvent = events.some((e) => e.event_type === step.key);
             return (
               <React.Fragment key={step.key}>
                 <div
-                  className={`flex flex-col items-center text-center p-2.5 rounded-md border transition-all ${
+                  className={`flex flex-col items-center text-center p-3 border transition-colors duration-100 ${
                     hasEvent
-                      ? 'bg-neutral-900 text-white border-neutral-900 shadow-subtle'
-                      : 'bg-neutral-50/70 text-neutral-400 border-neutral-200/80'
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-neutral-400 border-neutral-300'
                   }`}
                 >
                   <div
-                    className={`w-5 h-5 rounded-full flex items-center justify-center font-mono font-semibold text-[10px] mb-1 ${
+                    className={`w-6 h-6 border flex items-center justify-center font-mono font-bold text-[10px] mb-1.5 ${
                       hasEvent
-                        ? 'bg-white text-neutral-900'
-                        : 'bg-neutral-200 text-neutral-500'
+                        ? 'border-white bg-white text-black'
+                        : 'border-neutral-300 bg-neutral-100 text-neutral-400'
                     }`}
                   >
                     {idx + 1}
                   </div>
-                  <span className="font-mono text-[10px] tracking-wide uppercase font-semibold">{step.label}</span>
-                  <span className={`font-serif italic text-[10px] mt-0.5 max-w-[85px] leading-tight ${
-                    hasEvent ? 'text-neutral-300' : 'text-neutral-400'
-                  }`}>
+                  <span className="font-mono text-[10px] tracking-wider uppercase font-bold">{step.label}</span>
+                  <span className="font-serif italic text-[10px] mt-0.5 max-w-[90px] leading-tight">
                     {step.desc}
                   </span>
                 </div>
 
                 {idx < graphSteps.length - 1 && (
-                  <ArrowRight size={13} className={hasEvent ? 'text-neutral-700' : 'text-neutral-300'} />
+                  <ArrowRight size={14} className={hasEvent ? 'text-black' : 'text-neutral-300'} />
                 )}
               </React.Fragment>
             );
@@ -123,40 +121,40 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       </div>
 
       {/* Event List and Detailed JSON Viewer */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Event List (4 cols) */}
-        <div className="lg:col-span-4 rounded-lg border border-neutral-200/90 p-3.5 bg-white shadow-subtle space-y-2 h-fit">
-          <div className="flex items-center justify-between border-b border-neutral-100 pb-2 px-1">
-            <span className="font-serif font-bold text-xs uppercase tracking-wider text-neutral-800">
+        <div className="lg:col-span-4 border-2 border-black p-4 bg-white space-y-3 h-fit">
+          <div className="flex items-center justify-between border-b-2 border-black pb-2">
+            <span className="font-display font-bold uppercase text-xs tracking-wider text-black">
               Execution Events
             </span>
-            <span className="font-mono text-xs text-neutral-500">{events.length}</span>
+            <span className="font-mono text-xs font-bold text-black">{events.length}</span>
           </div>
 
           {events.length === 0 ? (
-            <div className="p-6 text-center font-serif italic text-xs text-neutral-400">
+            <div className="p-6 text-center font-serif italic text-xs text-neutral-500">
               No events recorded for this case.
             </div>
           ) : (
-            <div className="space-y-1.5 pt-1">
+            <div className="space-y-2 pt-1">
               {events.map((ev) => (
                 <button
                   key={ev.id}
                   type="button"
                   onClick={() => setSelectedEventId(ev.id)}
-                  className={`w-full text-left p-2.5 rounded-md cursor-pointer transition-all border ${
+                  className={`w-full text-left p-3 border-2 cursor-pointer transition-colors duration-100 ${
                     selectedEventId === ev.id
-                      ? 'bg-neutral-900 text-white border-neutral-900 shadow-subtle'
-                      : 'bg-white text-neutral-800 border-neutral-200/80 hover:bg-neutral-50/80 hover:border-neutral-300'
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-black border-black hover:bg-black hover:text-white group'
                   }`}
                 >
                   <div className="flex items-center justify-between text-[11px] mb-1 font-mono">
-                    <span className="font-semibold">{ev.event_type}</span>
-                    <span className={selectedEventId === ev.id ? 'text-neutral-300' : 'text-neutral-400'}>
+                    <span className="font-bold">{ev.event_type}</span>
+                    <span className={selectedEventId === ev.id ? 'text-neutral-400' : 'text-neutral-500 group-hover:text-neutral-400'}>
                       {new Date(ev.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
-                  <p className="font-serif font-medium text-xs truncate">
+                  <p className="font-serif font-bold text-xs truncate">
                     {ev.title}
                   </p>
                 </button>
@@ -166,43 +164,43 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         </div>
 
         {/* Payload Detail (8 cols) */}
-        <div className="lg:col-span-8 rounded-lg border border-neutral-200/90 p-5 sm:p-6 bg-white shadow-subtle space-y-4">
+        <div className="lg:col-span-8 border-2 border-black p-6 sm:p-8 bg-white space-y-6">
           {selectedEvent ? (
             <>
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 pb-3">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
                 <div>
-                  <span className="font-mono text-[10px] tracking-wider uppercase text-neutral-400 block">
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block mb-0.5">
                     {selectedEvent.event_type} AUDIT RECORD
                   </span>
-                  <h2 className="font-serif text-base font-bold tracking-tight text-neutral-900">
+                  <h2 className="font-display text-lg font-bold uppercase tracking-tight text-black">
                     {selectedEvent.title}
                   </h2>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[11px] text-neutral-500 rounded border border-neutral-200 bg-neutral-50 px-2 py-0.5">
-                    Event #{selectedEvent.id}
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-bold text-black border border-black px-2 py-0.5">
+                    EVENT #{selectedEvent.id}
                   </span>
                   <button
                     onClick={handleCopyJson}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 font-mono text-xs tracking-wide uppercase hover:border-neutral-400 shadow-subtle transition-all"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase font-bold hover:bg-black hover:text-white transition-colors duration-100"
                   >
-                    {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
+                    {copied ? <Check size={12} strokeWidth={2.5} /> : <Copy size={12} strokeWidth={2} />}
                     <span>{copied ? 'Copied' : 'Copy JSON'}</span>
                   </button>
                 </div>
               </div>
 
               <div>
-                <span className="font-mono text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-2 block">
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-black mb-2 block">
                   Structured Ledger JSON Payload
                 </span>
-                <pre className="rounded-md border border-neutral-300 bg-neutral-900 text-neutral-100 p-4 text-xs font-mono overflow-x-auto leading-relaxed select-text">
+                <pre className="border-2 border-black bg-black text-white p-5 text-xs font-mono overflow-x-auto leading-relaxed select-text">
                   {JSON.stringify(selectedEvent.detail_json, null, 2)}
                 </pre>
               </div>
             </>
           ) : (
-            <div className="p-12 text-center font-serif italic text-neutral-400 text-xs">
+            <div className="p-16 text-center font-serif italic text-neutral-500 text-sm">
               Select an event to inspect its structured JSON payload.
             </div>
           )}
