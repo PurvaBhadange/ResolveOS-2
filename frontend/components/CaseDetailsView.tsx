@@ -105,7 +105,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                     key={c.id}
                     type="button"
                     onClick={() => onSelectCase(c.id)}
-                    className={`w-full text-left p-3.5 border-2 transition-colors duration-100 rounded-xl ${
+                    className={`float-3d w-full text-left p-3.5 border-2 transition-colors duration-100 rounded-xl ${
                       isSelected
                         ? 'bg-black text-white border-black'
                         : 'bg-white text-black border-black hover:bg-black hover:text-white group'

@@ -58,6 +58,47 @@ const TiltCard3D: React.FC<{
   );
 };
 
+// ─── Magnetic Button Component ───────────────────────────────────────────────
+const MagneticButton: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  onClick?: () => void;
+}> = ({ children, className = '', type = 'button', disabled, onClick }) => {
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const btn = btnRef.current;
+    if (!btn || disabled) return;
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.28}px, ${y * 0.28}px) perspective(300px) rotateX(${y * -0.05}deg) rotateY(${x * 0.05}deg)`;
+  }, [disabled]);
+
+  const handleMouseLeave = useCallback(() => {
+    const btn = btnRef.current;
+    if (!btn) return;
+    btn.style.transform = 'translate(0,0) perspective(300px) rotateX(0) rotateY(0)';
+  }, []);
+
+  return (
+    <button
+      ref={btnRef}
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`magnetic-btn ${className}`}
+      style={{ transition: 'transform 0.2s cubic-bezier(0.23, 1, 0.32, 1)' }}
+    >
+      {children}
+    </button>
+  );
+};
+
 interface HelpCenterProps {
   onCaseCreated: (caseId: number) => void;
   setActiveTab: (tab: string) => void;
@@ -521,7 +562,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                       key={c.id}
                       type="button"
                       onClick={() => handleCategoryChange(c.id)}
-                      className={`flex items-center justify-center gap-2 p-2.5 border-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
+                      className={`press-3d flex items-center justify-center gap-2 p-2.5 border-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
                         isSelected
                           ? 'bg-black text-white border-black font-bold'
                           : 'bg-white text-black border-black hover:bg-black hover:text-white'
@@ -572,7 +613,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 <span>Deterministic Idempotency Key Guard Active</span>
               </div>
 
-              <button
+              <MagneticButton
                 type="submit"
                 disabled={isProcessing}
                 className="px-6 py-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold rounded-lg transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
@@ -588,7 +629,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                     <ArrowRight size={14} strokeWidth={1.5} />
                   </>
                 )}
-              </button>
+              </MagneticButton>
             </div>
           </form>
         </div>

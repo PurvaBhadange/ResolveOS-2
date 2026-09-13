@@ -164,3 +164,54 @@ button, a, input, select, textarea {
   background: radial-gradient(circle at 35% 35%, #86efac, #16a34a 60%, #14532d);
 }
 
+/* ─── Magnetic Button ───────────────────────────────────────────────────────── */
+.magnetic-btn {
+  transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.15s ease;
+  will-change: transform;
+}
+.magnetic-btn:hover {
+  box-shadow: 0 8px 32px -4px rgba(0,0,0,0.35);
+}
+
+/* ─── 3D Press Button ───────────────────────────────────────────────────────── */
+.press-3d {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transform: perspective(400px) translateZ(0px);
+  box-shadow: 0 4px 0 0 rgba(0,0,0,0.8);
+}
+.press-3d:hover {
+  transform: perspective(400px) translateZ(4px) translateY(-2px);
+  box-shadow: 0 8px 0 0 rgba(0,0,0,0.15);
+}
+.press-3d:active {
+  transform: perspective(400px) translateZ(-2px) translateY(2px);
+  box-shadow: 0 1px 0 0 rgba(0,0,0,0.6);
+}
+
+/* ─── 3D Row Lift (table rows) ──────────────────────────────────────────────── */
+.row-3d {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transform: perspective(800px) translateZ(0px);
+}
+.row-3d:hover {
+  transform: perspective(800px) translateZ(6px);
+  box-shadow: 0 6px 24px -4px rgba(0,0,0,0.18);
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── 3D Float Card (sidebar items) ────────────────────────────────────────── */
+@keyframes float-up {
+  from { transform: perspective(600px) translateZ(0px) translateY(0px); }
+  to   { transform: perspective(600px) translateZ(8px)  translateY(-3px); }
+}
+.float-3d {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  transform: perspective(600px) translateZ(0);
+}
+.float-3d:hover {
+  transform: perspective(600px) translateZ(10px) translateY(-3px);
+  box-shadow: 0 12px 32px -6px rgba(0,0,0,0.2);
+}
+
+

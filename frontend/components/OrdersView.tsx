@@ -97,7 +97,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
                   return (
                     <tr
                       key={order.id}
-                      className="hover:bg-black hover:text-white transition-colors duration-100 group"
+                      className="row-3d hover:bg-black hover:text-white transition-colors duration-100 group"
                     >
                       {/* Order Number & Items */}
                       <td className="py-4 px-4">
