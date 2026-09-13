@@ -1,8 +1,8 @@
-import { NextAuthOptions } from 'next-auth';
+﻿import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const googleClientId = process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID;
+const googleClientId = process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID;
 const googleClientSecret = process.env.AUTH_GOOGLE_SECRET || process.env.GOOGLE_CLIENT_SECRET;
 
 export const authOptions: NextAuthOptions = {
@@ -78,3 +78,4 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'resolveos_dev_secret_key_32_characters_minimum_len',
 };
+

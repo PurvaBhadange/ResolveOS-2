@@ -1,4 +1,4 @@
-from contextlib import asynccontextmanager
+﻿from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
@@ -23,21 +23,33 @@ app = FastAPI(
 )
 
 # Build CORS origins list
-cors_origins: list = []
+cors_origins: list = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+]
+
 if settings.CORS_ORIGINS:
     origins_raw = settings.CORS_ORIGINS
     if isinstance(origins_raw, str):
-        cors_origins = [o.strip() for o in origins_raw.split(",") if o.strip()]
+        for o in origins_raw.split(","):
+            cleaned = o.strip()
+            if cleaned and cleaned not in cors_origins:
+                cors_origins.append(cleaned)
     else:
-        cors_origins = list(origins_raw)
+        for o in origins_raw:
+            if o not in cors_origins:
+                cors_origins.append(o)
 
 # Add production frontend origin if configured
-if settings.PRODUCTION_ORIGIN and settings.PRODUCTION_ORIGIN not in cors_origins:
+if settings.PRODUCTION_ORIGIN and settings.PRODUCTION_ORIGIN.strip() not in cors_origins:
     cors_origins.append(settings.PRODUCTION_ORIGIN.strip())
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins if cors_origins else ["*"],
+    allow_origins=cors_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
