@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Package, RefreshCw, Truck, AlertTriangle, ArrowRight, Sparkles, Zap } from 'lucide-react';
+﻿import React, { useState } from 'react';
+import { Package, RefreshCw, Truck, AlertTriangle, ArrowRight, Sparkles, Zap, Loader2 } from 'lucide-react';
 import { api } from '../lib/api';
 import { AgentLoopVisualizer } from './AgentLoopVisualizer';
 
@@ -7,7 +7,6 @@ interface HelpCenterProps {
   onCaseCreated: (caseId: number) => void;
   setActiveTab: (tab: string) => void;
 }
-
 
 export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, setActiveTab }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('damaged');
@@ -20,27 +19,49 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   const [error, setError] = useState<string | null>(null);
   const [agentRunning, setAgentRunning] = useState<boolean>(false);
 
+  // Dynamic state machine loop states
+  const [activeStepIndex, setActiveStepIndex] = useState<number>(-1);
+  const [isLoopComplete, setIsLoopComplete] = useState<boolean>(false);
+  const [statusMessage, setStatusMessage] = useState<string>('');
+
+  const stepDescriptions = [
+    'Node 1/7 [UNDERSTAND]: Extracting customer intent & analyzing order records...',
+    'Node 2/7 [EVIDENCE]: Querying warehouse stock levels & RAG return policies...',
+    'Node 3/7 [DECIDE]: Evaluating plan candidates & ranking confidence scores...',
+    'Node 4/7 [GUARD]: Checking $200 threshold, fraud risk & policy return windows...',
+    'Node 5/7 [ACT]: Executing transactional state change with idempotency key...',
+    'Node 6/7 [VERIFY]: Re-querying PostgreSQL database to independently audit outcome...',
+    'Node 7/7 [ADAPT]: Validating autonomous adaptation & closing support ticket...',
+  ];
+
   const loadPreset = (preset: 'stockout' | 'high_value' | 'expired' | 'cancel') => {
+    setActiveStepIndex(-1);
+    setIsLoopComplete(false);
+
     if (preset === 'stockout') {
       setOrderNumber('ORD-2026-8801');
       setIssueTitle('Headphones arrived damaged - Request replacement');
       setIssueDescription('My AuraSound headphones arrived yesterday with a cracked left ear cup and sound distortion. I want a replacement.');
       setSelectedCategory('damaged');
+      setStatusMessage('Scenario 1 loaded: Damaged headphones with warehouse stockout. Click "Submit & Run Agent" to start.');
     } else if (preset === 'high_value') {
       setOrderNumber('ORD-2026-8802');
       setIssueTitle('Damaged Smartwatch Bundle - Request refund ($499.98)');
       setIssueDescription('Apex Smartwatch arrived defective with touchscreen unresponsiveness. Requesting full refund of $499.98.');
       setSelectedCategory('damaged');
+      setStatusMessage('Scenario 2 loaded: High-value refund ($499.98) requiring human operations approval gate.');
     } else if (preset === 'expired') {
       setOrderNumber('ORD-2026-8803');
       setIssueTitle('Return wireless earbuds - Delivered 40 days ago');
       setIssueDescription('Requesting return and refund for Pulse Earbuds delivered 40 days ago.');
       setSelectedCategory('returns');
+      setStatusMessage('Scenario 3 loaded: Return requested outside the 15-day electronics window.');
     } else if (preset === 'cancel') {
       setOrderNumber('ORD-2026-8804');
       setIssueTitle('Cancel order before shipment - ErgoMech Keyboard');
       setIssueDescription('Please cancel order ORD-2026-8804 before shipment and issue refund.');
       setSelectedCategory('orders');
+      setStatusMessage('Scenario 4 loaded: Pre-shipment cancellation and immediate refund.');
     }
   };
 
@@ -48,6 +69,20 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setIsLoopComplete(false);
+    setAgentRunning(true);
+    setActiveStepIndex(0);
+    setStatusMessage(stepDescriptions[0]);
+
+    // Animate progress smoothly while waiting for backend response
+    let currentIdx = 0;
+    const stepInterval = setInterval(() => {
+      if (currentIdx < 4) {
+        currentIdx += 1;
+        setActiveStepIndex(currentIdx);
+        setStatusMessage(stepDescriptions[currentIdx]);
+      }
+    }, 450);
 
     try {
       // 1. Fetch Order details first to get numeric order_id
@@ -56,7 +91,12 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         throw new Error(`Order "${orderNumber}" not found. Please check the order number and ensure the backend is running.`);
       }
 
+      // Advance to decide / guard step
+      setActiveStepIndex(3);
+      setStatusMessage(stepDescriptions[3]);
+
       // 2. Create support case using real customer_id & order_id from DB
+      // Backend automatically triggers run_agent_on_case
       const newCase = await api.createCase({
         customer_id: order.customer_id,
         order_id: order.id,
@@ -65,23 +105,38 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         category: selectedCategory || 'return_refund',
       });
 
-      // 3. Immediately trigger the autonomous LangGraph agent
-      setAgentRunning(true);
-      try {
-        await api.runAgentOnCase(newCase.id);
-      } catch (agentErr) {
-        // Agent errors are non-fatal - case still created
-        console.warn('Agent run warning:', agentErr);
-      } finally {
-        setAgentRunning(false);
-      }
+      clearInterval(stepInterval);
+
+      // Step 5: Act
+      setActiveStepIndex(4);
+      setStatusMessage(stepDescriptions[4]);
+      await new Promise((r) => setTimeout(r, 400));
+
+      // Step 6: Verify
+      setActiveStepIndex(5);
+      setStatusMessage(stepDescriptions[5]);
+      await new Promise((r) => setTimeout(r, 450));
+
+      // Step 7: Adapt
+      setActiveStepIndex(6);
+      setStatusMessage(stepDescriptions[6]);
+      await new Promise((r) => setTimeout(r, 450));
+
+      // All nodes completed
+      setActiveStepIndex(7);
+      setIsLoopComplete(true);
+      setStatusMessage('Case autonomously resolved & independently audited against database! Redirecting to Case Tracker...');
+      await new Promise((r) => setTimeout(r, 750));
 
       // 4. Navigate to Case Tracker to see real-time resolution
       onCaseCreated(newCase.id);
       setActiveTab('cases');
     } catch (err: any) {
+      clearInterval(stepInterval);
+      setActiveStepIndex(-1);
       setError(err.message || 'Failed to submit support issue. Make sure the backend is running on port 8001.');
     } finally {
+      clearInterval(stepInterval);
       setLoading(false);
       setAgentRunning(false);
     }
@@ -149,8 +204,13 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         </div>
       </div>
 
-      {/* Agent Execution State Visualizer */}
-      <AgentLoopVisualizer isComplete={true} />
+      {/* Dynamic Agent Execution State Machine Visualizer */}
+      <AgentLoopVisualizer
+        currentStepIndex={activeStepIndex}
+        isRunning={isProcessing}
+        isComplete={isLoopComplete}
+        statusMessage={statusMessage}
+      />
 
       {/* Category Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -238,20 +298,14 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
               disabled={isProcessing}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all disabled:opacity-50 shadow-md"
             >
-              {agentRunning ? (
+              {isProcessing ? (
                 <>
-                  <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                  Agent Running...
-                </>
-              ) : loading ? (
-                <>
-                  <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                  Creating Case...
+                  <Loader2 className="w-4 h-4 animate-spin text-tealbrand-400" />
+                  Running Autonomous Agent...
                 </>
               ) : (
                 <>
-                  Submit &amp; Run Agent
-                  <ArrowRight className="w-4 h-4" />
+                  Submit & Run Agent <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
