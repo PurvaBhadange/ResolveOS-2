@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Activity, CheckCircle2, Clock, AlertTriangle, ShieldCheck, Play, ArrowRight, ChevronDown, ChevronRight, FileText } from 'lucide-react';
+import { Play, ChevronDown, ChevronRight } from 'lucide-react';
 import { api } from '../lib/api';
 
 interface CaseDetailsViewProps {
@@ -59,78 +59,70 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
   };
 
   return (
-    <div className="space-y-5 pb-12">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-6">
         <div>
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
+          <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+            Audit Trail &bull; Incident Ledger
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
             Case Resolution Tracker
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Audit real-time transactional resolution events, state transitions, and verification logs.
+          <p className="text-sm font-serif italic text-neutral-700 mt-1">
+            Audit real-time transactional resolution events, state transitions, and database ledger verifications.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Case List Sidebar (4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-lg border border-slate-200/90 shadow-subtle p-4 space-y-3 h-fit">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-            <span className="text-xs font-semibold text-slate-900">Support Cases</span>
-            <span className="text-[11px] text-slate-400 font-mono">{cases.length} Total</span>
+        <div className="lg:col-span-4 border-2 border-black p-5 bg-white space-y-4 h-fit">
+          <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
+            <span className="font-display font-bold uppercase text-xs tracking-wider text-black">
+              Logged Cases
+            </span>
+            <span className="font-mono text-xs font-bold text-black">{cases.length} Total</span>
           </div>
 
           {loading ? (
             <div className="space-y-2 pt-1">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-14 bg-slate-100 rounded skeleton" />
+                <div key={i} className="h-14 skeleton-mono" />
               ))}
             </div>
           ) : cases.length === 0 ? (
-            <div className="p-6 text-center text-xs text-slate-400">
+            <div className="p-6 text-center font-serif italic text-xs text-neutral-500">
               No support cases logged yet.
             </div>
           ) : (
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {cases.map((c) => {
                 const isSelected = activeCase?.id === c.id;
-                const isResolved = c.case_status === 'resolved';
-                const isEscalated = c.case_status === 'escalated';
-                const isAwaiting = c.case_status === 'awaiting_approval';
 
                 return (
                   <button
                     key={c.id}
                     type="button"
                     onClick={() => onSelectCase(c.id)}
-                    className={`w-full text-left p-3 rounded-md border transition-all ${
+                    className={`w-full text-left p-3.5 border-2 transition-colors duration-100 ${
                       isSelected
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-subtle'
-                        : 'bg-white hover:bg-slate-50 text-slate-900 border-slate-200/80'
+                        ? 'bg-black text-white border-black'
+                        : 'bg-white text-black border-black hover:bg-black hover:text-white group'
                     }`}
                   >
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className={`font-mono font-medium ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                    <div className="flex items-center justify-between text-xs mb-1 font-mono">
+                      <span className="font-bold">
                         {c.case_number}
                       </span>
-                      <span className={`px-1.5 py-0.2 rounded text-[10px] font-medium border uppercase ${
-                        isSelected
-                          ? 'bg-slate-800 text-slate-200 border-slate-700'
-                          : isResolved
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : isEscalated
-                          ? 'bg-rose-50 text-rose-700 border-rose-200'
-                          : isAwaiting
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
-                          : 'bg-slate-100 text-slate-600 border-slate-200'
-                      }`}>
+                      <span className="border border-current px-1.5 py-0.5 text-[10px] tracking-widest uppercase font-bold">
                         {c.case_status}
                       </span>
                     </div>
-                    <p className={`text-xs font-medium truncate ${isSelected ? 'text-slate-100' : 'text-slate-800'}`}>
+                    <p className="font-serif font-semibold text-xs truncate mt-1">
                       {c.title}
                     </p>
-                    <span className={`text-[10px] block mt-1 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                    <span className="font-mono text-[10px] uppercase text-neutral-500 group-hover:text-neutral-300 block mt-1.5">
                       {new Date(c.created_at).toLocaleDateString()}
                     </span>
                   </button>
@@ -141,71 +133,73 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
         </div>
 
         {/* Active Case Timeline Detail (8 cols) */}
-        <div className="lg:col-span-8 space-y-4">
+        <div className="lg:col-span-8 space-y-6">
           {activeCase ? (
-            <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 sm:p-6 space-y-5">
+            <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-6">
               {/* Case Header Card */}
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium border border-slate-200">
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-mono text-xs px-2 py-0.5 bg-black text-white font-bold border border-black">
                       {activeCase.case_number}
                     </span>
-                    <h2 className="text-base font-semibold text-slate-900">{activeCase.title}</h2>
+                    <h2 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-black">
+                      {activeCase.title}
+                    </h2>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">{activeCase.description}</p>
+                  <p className="font-serif italic text-xs text-neutral-600 mt-1">{activeCase.description}</p>
                 </div>
 
                 <button
                   onClick={() => handleRunWorkflow(activeCase.id)}
                   disabled={runningWorkflow}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition-colors shadow-subtle disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs tracking-wider uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50"
                 >
-                  <Play className="w-3 h-3 fill-current" />
-                  <span>{runningWorkflow ? 'Executing...' : 'Re-Run Workflow'}</span>
+                  <Play size={12} fill="currentColor" />
+                  <span>{runningWorkflow ? 'Executing...' : 'Re-Run Pipeline'}</span>
                 </button>
               </div>
 
               {/* Resolution Timeline */}
-              <div className="space-y-3">
-                <span className="text-xs font-semibold text-slate-900 block uppercase tracking-wider">
-                  Audit Event Trail ({events.length} Events)
+              <div className="space-y-4">
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-black block">
+                  Deterministic Audit Log ({events.length} Events Recorded)
                 </span>
 
                 {events.length === 0 ? (
-                  <div className="p-8 bg-slate-50 rounded-md text-center text-slate-500 text-xs border border-slate-200">
-                    No resolution events recorded yet for this case. Click <strong>Re-Run Workflow</strong> to trigger execution.
+                  <div className="p-8 border-2 border-black bg-neutral-50 text-center font-serif italic text-neutral-600 text-xs">
+                    No resolution events recorded yet for this case. Click <strong>Re-Run Pipeline</strong> to trigger execution.
                   </div>
                 ) : (
-                  <div className="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                  <div className="space-y-4 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-black">
                     {events.map((ev, idx) => {
                       const isExpanded = Boolean(expandedEvents[ev.id]);
                       return (
-                        <div key={ev.id} className="relative pl-8">
-                          <div className="absolute left-0.5 top-2 w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-medium flex items-center justify-center">
+                        <div key={ev.id} className="relative pl-10">
+                          <div className="absolute left-1 top-2.5 w-6 h-6 border-2 border-black bg-black text-white font-mono text-[11px] font-bold flex items-center justify-center">
                             {idx + 1}
                           </div>
 
-                          <div className="bg-slate-50 rounded-md border border-slate-200/80 p-3 space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="font-semibold text-slate-900 text-xs">{ev.title}</span>
+                          <div className="border-2 border-black p-4 bg-white space-y-2">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <span className="font-serif font-bold text-sm text-black">{ev.title}</span>
                               <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white text-slate-600 border border-slate-200">
+                                <span className="font-mono text-[10px] tracking-wider uppercase px-2 py-0.5 border border-black bg-neutral-100 text-black font-semibold">
                                   {ev.event_type}
                                 </span>
                                 <button
                                   type="button"
                                   onClick={() => toggleEventExpand(ev.id)}
-                                  className="text-[11px] text-slate-500 hover:text-slate-900 flex items-center gap-0.5"
+                                  className="font-mono text-xs tracking-wider uppercase border border-black px-2 py-0.5 bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 flex items-center gap-1"
                                 >
-                                  <span>{isExpanded ? 'Hide Payload' : 'View Payload'}</span>
-                                  {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                                  <span>{isExpanded ? 'Hide JSON' : 'Inspect JSON'}</span>
+                                  {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                                 </button>
                               </div>
                             </div>
 
                             {isExpanded && (
-                              <pre className="bg-white text-slate-800 p-3 rounded border border-slate-200 text-[11px] font-mono overflow-x-auto leading-relaxed select-text mt-2">
+                              <pre className="border-2 border-black bg-black text-white p-4 font-mono text-[11px] overflow-x-auto leading-relaxed select-text mt-3">
                                 {JSON.stringify(ev.detail_json, null, 2)}
                               </pre>
                             )}
@@ -218,8 +212,8 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
               </div>
             </div>
           ) : (
-            <div className="p-12 bg-white rounded-lg text-center text-slate-400 text-xs border border-slate-200">
-              Select a support case to view its resolution audit timeline.
+            <div className="p-16 border-2 border-black bg-white text-center font-serif italic text-neutral-500 text-sm">
+              Select a support case from the sidebar to inspect its deterministic ledger trail.
             </div>
           )}
         </div>

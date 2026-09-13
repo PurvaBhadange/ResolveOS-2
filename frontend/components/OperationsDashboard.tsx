@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldCheck, CheckCircle2, Clock, XCircle, FileText, Database, AlertCircle } from 'lucide-react';
 import { api } from '../lib/api';
 
 export const OperationsDashboard: React.FC = () => {
@@ -54,105 +53,107 @@ export const OperationsDashboard: React.FC = () => {
   const successRate = cases.length > 0 ? Math.round((resolvedCount / cases.length) * 100) : 100;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-8 pb-16">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-6">
         <div>
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
-            Operations Governance &amp; Review
+          <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+            Enterprise Governance &bull; Supervisory Review
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
+            Operations Console
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Operational queues, human approval authorization gates, and warehouse constraint policies.
+          <p className="text-sm font-serif italic text-neutral-700 mt-1">
+            Operational queues, cryptographic supervisor authorizations, and multi-warehouse constraint policies.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={loadOpsData}
-            className="px-2.5 py-1.5 rounded-md border border-slate-300 hover:border-slate-400 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors shadow-subtle"
+            className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-100"
           >
-            Refresh Data
+            Refresh Ledger
           </button>
         </div>
       </div>
 
       {/* KPI Metrics Row */}
-      <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-4">
-        <div className="grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 text-left">
-          <div className="p-3">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Total Cases</span>
-            <span className="text-xl font-semibold text-slate-900 mt-1 block">{cases.length}</span>
+      <div className="border-2 border-black bg-white">
+        <div className="grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x-2 divide-black text-left">
+          <div className="p-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Total Logged</span>
+            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{cases.length}</span>
           </div>
-          <div className="p-3">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Auto-Resolved</span>
-            <span className="text-xl font-semibold text-emerald-700 mt-1 block">{resolvedCount}</span>
+          <div className="p-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Auto-Committed</span>
+            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{resolvedCount}</span>
           </div>
-          <div className="p-3">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Resolution Rate</span>
-            <span className="text-xl font-semibold text-slate-900 mt-1 block">{successRate}%</span>
+          <div className="p-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Resolution SLA</span>
+            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{successRate}%</span>
           </div>
-          <div className="p-3">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Pending Approval</span>
-            <span className="text-xl font-semibold text-amber-600 mt-1 block">{approvals.length}</span>
+          <div className="p-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Pending HITL</span>
+            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{approvals.length}</span>
           </div>
-          <div className="p-3">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Escalated Tickets</span>
-            <span className="text-xl font-semibold text-rose-600 mt-1 block">{escalations.length}</span>
+          <div className="p-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Escalated Tier-2</span>
+            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{escalations.length}</span>
           </div>
         </div>
       </div>
 
       {/* Main Operations Queues */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Human Approval Queue */}
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-amber-600" />
-              <h2 className="text-sm font-semibold text-slate-900">Pending Approval Queue</h2>
-            </div>
-            <span className="text-xs px-2 py-0.5 rounded font-medium bg-amber-50 text-amber-700 border border-amber-200">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5">
+          <div className="flex items-center justify-between border-b-2 border-black pb-3">
+            <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
+              Pending Approval Queue
+            </h2>
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold">
               {approvals.length} Required
             </span>
           </div>
 
           {approvals.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs">
+            <div className="p-12 text-center font-serif italic text-neutral-500 text-xs">
               No approval requests pending. All transactions within auto-resolution thresholds.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {approvals.map((appr) => {
                 const isBusy = actionLoadingId === appr.id;
                 return (
-                  <div key={appr.id} className="p-3.5 rounded-md bg-slate-50 border border-slate-200/80 space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-900 font-mono">
+                  <div key={appr.id} className="p-4 border-2 border-black bg-neutral-50 space-y-3">
+                    <div className="flex items-center justify-between font-mono text-xs">
+                      <span className="font-bold text-black">
                         Case #{appr.case_id} &bull; Request #{appr.id}
                       </span>
-                      <span className="text-[10px] font-medium uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
-                        Authority: {appr.required_role}
+                      <span className="border border-black px-1.5 py-0.5 text-[10px] tracking-widest uppercase bg-white text-black font-semibold">
+                        Role: {appr.required_role}
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-700 leading-normal">
+                    <p className="font-serif text-xs text-neutral-800 leading-relaxed">
                       {appr.reason}
                     </p>
 
-                    <div className="flex items-center justify-end gap-2 pt-1">
+                    <div className="flex items-center justify-end gap-3 pt-2 border-t border-black/20">
                       <button
                         onClick={() => handleApprovalDecision(appr.id, 'rejected')}
                         disabled={isBusy}
-                        className="px-3 py-1.5 rounded text-xs font-medium text-rose-700 bg-white hover:bg-rose-50 border border-rose-200 transition-colors disabled:opacity-50"
+                        className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50"
                       >
-                        Reject
+                        Decline
                       </button>
                       <button
                         onClick={() => handleApprovalDecision(appr.id, 'approved')}
                         disabled={isBusy}
-                        className="px-3 py-1.5 rounded text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-subtle disabled:opacity-50"
+                        className="px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50"
                       >
-                        Authorize Transaction
+                        Authorize Settlement &rarr;
                       </button>
                     </div>
                   </div>
@@ -163,35 +164,34 @@ export const OperationsDashboard: React.FC = () => {
         </div>
 
         {/* Escalations Queue */}
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-600" />
-              <h2 className="text-sm font-semibold text-slate-900">Escalated Tickets Queue</h2>
-            </div>
-            <span className="text-xs px-2 py-0.5 rounded font-medium bg-rose-50 text-rose-700 border border-rose-200">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5">
+          <div className="flex items-center justify-between border-b-2 border-black pb-3">
+            <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
+              Escalation Triage Queue
+            </h2>
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold">
               {escalations.length} Active
             </span>
           </div>
 
           {escalations.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs">
-              No active escalations recorded.
+            <div className="p-12 text-center font-serif italic text-neutral-500 text-xs">
+              No active escalations recorded. System routing functioning within constraints.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {escalations.map((esc) => (
-                <div key={esc.id} className="p-3.5 rounded-md bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-900 font-mono">
+                <div key={esc.id} className="p-4 border-2 border-black bg-neutral-50 space-y-2">
+                  <div className="flex items-center justify-between font-mono text-xs">
+                    <span className="font-bold text-black">
                       Escalation #{esc.id} (Case #{esc.case_id})
                     </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 uppercase">
-                      Tier-2 Support
+                    <span className="border border-black px-1.5 py-0.5 text-[10px] uppercase font-bold bg-white text-black">
+                      Tier-2 Specialist
                     </span>
                   </div>
-                  <p className="text-xs text-slate-700 leading-normal">{esc.reason}</p>
-                  <span className="text-[10px] text-slate-400 block font-mono">
+                  <p className="font-serif text-xs text-neutral-800 leading-relaxed">{esc.reason}</p>
+                  <span className="font-mono text-[10px] text-neutral-500 block">
                     Logged: {new Date(esc.created_at).toLocaleTimeString()}
                   </span>
                 </div>
@@ -202,50 +202,50 @@ export const OperationsDashboard: React.FC = () => {
       </div>
 
       {/* Constraints & Policy Inspectors */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Inventory Constraint Monitor */}
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-slate-700" />
-              <h2 className="text-sm font-semibold text-slate-900">Inventory Constraint Monitor</h2>
-            </div>
-            <span className="text-[11px] font-mono font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-4">
+          <div className="flex items-center justify-between border-b-2 border-black pb-3">
+            <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
+              Inventory Constraint Ledger
+            </h2>
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black font-semibold">
               SKU: AURASOUND-BLK
             </span>
           </div>
 
-          <div className="p-3 rounded-md bg-slate-50 border border-slate-200/80 space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-medium text-slate-900">AuraSound Headphones (Matte Black)</span>
-              <span className="font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-                0 In Stock (Out of Stock)
+          <div className="p-4 border-2 border-black bg-neutral-50 space-y-2">
+            <div className="flex items-center justify-between font-mono text-xs">
+              <span className="font-bold text-black">AuraSound Headphones (Matte Black)</span>
+              <span className="border border-black px-2 py-0.5 uppercase bg-black text-white font-bold">
+                0 Units (Out of Stock)
               </span>
             </div>
-            <p className="text-xs text-slate-600 leading-normal">
-              Primary warehouse <strong>WH-EAST</strong> and secondary warehouse <strong>WH-WEST</strong> both show 0 units available. When customer requests replacement for this SKU, the rule engine automatically adapts to a <strong>Full UPI Refund</strong>.
+            <p className="font-serif italic text-xs text-neutral-700 leading-relaxed pt-1">
+              Primary warehouse <strong>WH-EAST</strong> and secondary warehouse <strong>WH-WEST</strong> both record zero units available. When customer requests replacement for this SKU, policy engine enforces automatic replenishment replanning to a <strong>Full UPI Refund</strong>.
             </p>
           </div>
         </div>
 
         {/* Policy Rules Version Monitor */}
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-slate-700" />
-              <h2 className="text-sm font-semibold text-slate-900">Policy Rules Monitor</h2>
-            </div>
-            <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-4">
+          <div className="flex items-center justify-between border-b-2 border-black pb-3">
+            <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
+              Policy Engine Guardrails
+            </h2>
+            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white font-bold">
               v2.0 Active
             </span>
           </div>
 
-          <div className="p-3 rounded-md bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
-            <span className="font-semibold text-slate-900 block">Electronics Return &amp; Replacement Rules</span>
-            <div className="space-y-1 text-slate-600 leading-normal">
-              <p>&bull; <strong>Return Cutoff Window</strong>: 15 days from verified delivery date.</p>
-              <p>&bull; <strong>Auto-Refund Safety Cap</strong>: ₹15,000.00 (Exceeding values require supervisor review).</p>
-              <p>&bull; <strong>Out-of-Stock Fallback</strong>: Mandatory replanning to immediate UPI / card refund.</p>
+          <div className="p-4 border-2 border-black bg-neutral-50 space-y-2 text-xs">
+            <span className="font-mono font-bold uppercase tracking-wider text-black block">
+              Electronics Return &amp; Replacement Rules
+            </span>
+            <div className="space-y-1.5 font-serif italic text-neutral-700 leading-relaxed pt-1">
+              <p>&bull; <strong>Return Window Constraint</strong>: 15 days from verified carrier delivery timestamp.</p>
+              <p>&bull; <strong>Safety Cap Threshold</strong>: ₹15,000.00 (Claims exceeding limit enforce cryptographic halt for supervisory sign-off).</p>
+              <p>&bull; <strong>Stockout Replanning</strong>: Mandatory replanning to immediate UPI / card reversal.</p>
             </div>
           </div>
         </div>

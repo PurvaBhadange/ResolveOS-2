@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Cpu, ArrowRight, Copy, Check } from 'lucide-react';
+import { ArrowRight, Copy, Check } from 'lucide-react';
 import { api } from '../lib/api';
 
 interface AgentTraceProps {
@@ -38,13 +38,13 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
   const selectedEvent = events.find((e) => e.id === selectedEventId) || events[0];
 
   const graphSteps = [
-    { key: 'GOAL', label: '1. UNDERSTAND', desc: 'Parse Intent' },
-    { key: 'EVIDENCE', label: '2. EVIDENCE', desc: 'Policy & DB' },
-    { key: 'DECISION', label: '3. DECIDE', desc: 'Synthesize Plan' },
-    { key: 'ACTION', label: '4. ACT', desc: 'Database Action' },
-    { key: 'VERIFICATION', label: '5. VERIFY', desc: 'Re-query Audit' },
-    { key: 'ADAPTATION', label: '6. ADAPT', desc: 'Replanning' },
-    { key: 'OUTCOME', label: '7. RESOLVE', desc: 'Final State' },
+    { key: 'GOAL', label: '01. UNDERSTAND', desc: 'Intent Parsing' },
+    { key: 'EVIDENCE', label: '02. EVIDENCE', desc: 'Policy & DB' },
+    { key: 'DECISION', label: '03. DECIDE', desc: 'Plan Synthesis' },
+    { key: 'ACTION', label: '04. ACT', desc: 'State Change' },
+    { key: 'VERIFICATION', label: '05. VERIFY', desc: 'Ledger Audit' },
+    { key: 'ADAPTATION', label: '06. ADAPT', desc: 'Replanning' },
+    { key: 'OUTCOME', label: '07. RESOLVE', desc: 'Final State' },
   ];
 
   const handleCopyJson = () => {
@@ -55,24 +55,27 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-6">
         <div>
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
+          <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+            Diagnostic Ledger &bull; Raw System Payloads
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
             Execution Trace Inspector
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Step-by-step diagnostic audit log and JSON payload records for Case #{selectedCaseId || '1'}.
+          <p className="text-sm font-serif italic text-neutral-700 mt-1">
+            Step-by-step diagnostic audit log and cryptographic JSON payloads for Case #{selectedCaseId || '1'}.
           </p>
         </div>
 
         {activeCase && (
-          <div className="bg-white px-3 py-1.5 rounded-md border border-slate-200 shadow-subtle text-right">
-            <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium block">
-              Active Case
+          <div className="border-2 border-black bg-black text-white px-4 py-2 text-right">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 block">
+              Active Case Key
             </span>
-            <span className="text-xs font-mono font-semibold text-slate-900">
+            <span className="text-xs font-mono font-bold">
               {activeCase.case_number}
             </span>
           </div>
@@ -80,36 +83,36 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       </div>
 
       {/* Horizontal Stepper Progress */}
-      <div className="bg-white rounded-lg p-4 border border-slate-200/90 shadow-subtle overflow-x-auto">
-        <div className="flex items-center justify-between min-w-[680px] gap-2">
+      <div className="border-2 border-black p-4 bg-white overflow-x-auto">
+        <div className="flex items-center justify-between min-w-[720px] gap-2">
           {graphSteps.map((step, idx) => {
             const hasEvent = events.some((e) => e.event_type === step.key);
             return (
               <React.Fragment key={step.key}>
                 <div
-                  className={`flex flex-col items-center text-center p-2.5 rounded-md transition-all ${
+                  className={`flex flex-col items-center text-center p-3 border transition-colors duration-100 ${
                     hasEvent
-                      ? 'bg-slate-50 border border-slate-200 text-slate-900'
-                      : 'opacity-40 text-slate-400'
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-neutral-400 border-neutral-300'
                   }`}
                 >
                   <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center font-medium text-[11px] mb-1.5 ${
+                    className={`w-6 h-6 border flex items-center justify-center font-mono font-bold text-[10px] mb-1.5 ${
                       hasEvent
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-200 text-slate-500'
+                        ? 'border-white bg-white text-black'
+                        : 'border-neutral-300 bg-neutral-100 text-neutral-400'
                     }`}
                   >
                     {idx + 1}
                   </div>
-                  <span className="text-[11px] font-semibold tracking-tight">{step.label}</span>
-                  <span className="text-[10px] text-slate-500 mt-0.5 max-w-[85px] leading-tight">
+                  <span className="font-mono text-[10px] tracking-wider uppercase font-bold">{step.label}</span>
+                  <span className="font-serif italic text-[10px] mt-0.5 max-w-[90px] leading-tight">
                     {step.desc}
                   </span>
                 </div>
 
                 {idx < graphSteps.length - 1 && (
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                  <ArrowRight size={14} className={hasEvent ? 'text-black' : 'text-neutral-300'} />
                 )}
               </React.Fragment>
             );
@@ -118,38 +121,40 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       </div>
 
       {/* Event List and Detailed JSON Viewer */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Event List (4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-lg p-3.5 border border-slate-200/90 shadow-subtle space-y-2 h-fit">
-          <div className="flex items-center justify-between px-2 py-1 border-b border-slate-100">
-            <span className="text-xs font-semibold text-slate-700">Execution Events</span>
-            <span className="text-[11px] text-slate-400 font-mono">{events.length}</span>
+        <div className="lg:col-span-4 border-2 border-black p-4 bg-white space-y-3 h-fit">
+          <div className="flex items-center justify-between border-b-2 border-black pb-2">
+            <span className="font-display font-bold uppercase text-xs tracking-wider text-black">
+              Execution Events
+            </span>
+            <span className="font-mono text-xs font-bold text-black">{events.length}</span>
           </div>
 
           {events.length === 0 ? (
-            <div className="p-6 text-center text-xs text-slate-400">
+            <div className="p-6 text-center font-serif italic text-xs text-neutral-500">
               No events recorded for this case.
             </div>
           ) : (
-            <div className="space-y-1.5 pt-1">
+            <div className="space-y-2 pt-1">
               {events.map((ev) => (
                 <button
                   key={ev.id}
                   type="button"
                   onClick={() => setSelectedEventId(ev.id)}
-                  className={`w-full text-left p-2.5 rounded-md cursor-pointer transition-all border ${
+                  className={`w-full text-left p-3 border-2 cursor-pointer transition-colors duration-100 ${
                     selectedEventId === ev.id
-                      ? 'bg-slate-900 text-white border-slate-900 shadow-subtle'
-                      : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-900'
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-black border-black hover:bg-black hover:text-white group'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-[11px] mb-1">
-                    <span className="font-mono font-medium">{ev.event_type}</span>
-                    <span className={selectedEventId === ev.id ? 'text-slate-300' : 'text-slate-400'}>
+                  <div className="flex items-center justify-between text-[11px] mb-1 font-mono">
+                    <span className="font-bold">{ev.event_type}</span>
+                    <span className={selectedEventId === ev.id ? 'text-neutral-400' : 'text-neutral-500 group-hover:text-neutral-400'}>
                       {new Date(ev.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
-                  <p className={`text-xs font-medium truncate ${selectedEventId === ev.id ? 'text-white' : 'text-slate-800'}`}>
+                  <p className="font-serif font-bold text-xs truncate">
                     {ev.title}
                   </p>
                 </button>
@@ -159,39 +164,43 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         </div>
 
         {/* Payload Detail (8 cols) */}
-        <div className="lg:col-span-8 bg-white rounded-lg p-5 border border-slate-200/90 shadow-subtle space-y-4">
+        <div className="lg:col-span-8 border-2 border-black p-6 sm:p-8 bg-white space-y-6">
           {selectedEvent ? (
             <>
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
                 <div>
-                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">
-                    {selectedEvent.event_type} EVENT LOG
+                  <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block mb-0.5">
+                    {selectedEvent.event_type} AUDIT RECORD
                   </span>
-                  <h2 className="text-sm font-semibold text-slate-900">{selectedEvent.title}</h2>
+                  <h2 className="font-display text-lg font-bold uppercase tracking-tight text-black">
+                    {selectedEvent.title}
+                  </h2>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-slate-400 font-mono">Event ID #{selectedEvent.id}</span>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-bold text-black border border-black px-2 py-0.5">
+                    EVENT #{selectedEvent.id}
+                  </span>
                   <button
                     onClick={handleCopyJson}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase font-bold hover:bg-black hover:text-white transition-colors duration-100"
                   >
-                    {copied ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    {copied ? <Check size={12} strokeWidth={2.5} /> : <Copy size={12} strokeWidth={2} />}
                     <span>{copied ? 'Copied' : 'Copy JSON'}</span>
                   </button>
                 </div>
               </div>
 
               <div>
-                <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mb-2 block">
-                  Structured JSON Event Payload
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-black mb-2 block">
+                  Structured Ledger JSON Payload
                 </span>
-                <pre className="bg-slate-50 text-slate-800 p-4 rounded-md text-xs font-mono overflow-x-auto leading-relaxed border border-slate-200 select-text">
+                <pre className="border-2 border-black bg-black text-white p-5 text-xs font-mono overflow-x-auto leading-relaxed select-text">
                   {JSON.stringify(selectedEvent.detail_json, null, 2)}
                 </pre>
               </div>
             </>
           ) : (
-            <div className="p-12 text-center text-slate-400 text-xs">
+            <div className="p-16 text-center font-serif italic text-neutral-500 text-sm">
               Select an event to inspect its structured JSON payload.
             </div>
           )}

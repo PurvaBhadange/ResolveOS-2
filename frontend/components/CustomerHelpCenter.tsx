@@ -5,12 +5,10 @@ import {
   Truck,
   Package,
   ArrowRight,
-  CheckCircle2,
-  Clock,
-  ShieldCheck,
   Loader2,
-  Database,
-  Info
+  Info,
+  CheckCircle2,
+  ShieldCheck
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { AgentLoopVisualizer } from './AgentLoopVisualizer';
@@ -44,7 +42,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
   const [activeStepIndex, setActiveStepIndex] = useState<number>(-1);
   const [isLoopComplete, setIsLoopComplete] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>(
-    'Ready. Select a test scenario below or submit a custom resolution request.'
+    'Ready. Select a test scenario below or submit an issue to execute autonomous resolution.'
   );
 
   // Order preview state
@@ -58,24 +56,23 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
   });
 
   const stepDescriptions = [
-    'Step 1/7 [UNDERSTAND]: Extracting customer intent & analyzing order records...',
-    'Step 2/7 [EVIDENCE]: Querying warehouse stock levels & policy return rules...',
-    'Step 3/7 [DECIDE]: Evaluating plan candidates & ranking confidence scores...',
-    'Step 4/7 [GUARD]: Checking ₹15,000 threshold, fraud risk & policy return windows...',
-    'Step 5/7 [ACT]: Executing transactional state change with idempotency key...',
-    'Step 6/7 [VERIFY]: Re-querying PostgreSQL database to independently audit outcome...',
-    'Step 7/7 [ADAPT]: Validating resolution adaptation & closing support ticket...',
+    '01/07 [UNDERSTAND]: Extracting customer intent & analyzing order records...',
+    '02/07 [EVIDENCE]: Querying warehouse stock levels & policy return rules...',
+    '03/07 [DECIDE]: Evaluating plan candidates & ranking confidence scores...',
+    '04/07 [GUARD]: Checking ₹15,000 threshold, fraud risk & policy return windows...',
+    '05/07 [ACT]: Executing transactional state change with idempotency key...',
+    '06/07 [VERIFY]: Re-querying PostgreSQL database to independently audit outcome...',
+    '07/07 [ADAPT]: Validating resolution adaptation & closing support ticket...',
   ];
 
   const presets = [
     {
       id: 'stockout',
-      num: '1',
+      num: '01',
       title: 'Stockout Adaptation',
       order: 'ORD-2026-8801',
       amount: '₹199.99',
       badge: 'Auto-Replanning',
-      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
       desc: 'Headphones delivered damaged. Warehouse stock is 0, so system automatically adapts replacement request to an instant UPI refund.',
       category: 'damaged',
       issueTitle: 'Headphones arrived damaged - Request replacement',
@@ -91,12 +88,11 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
     },
     {
       id: 'high_value',
-      num: '2',
+      num: '02',
       title: 'High-Value Approval',
       order: 'ORD-2026-8802',
       amount: '₹499.98',
-      badge: 'Human Review Gate',
-      badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
+      badge: 'HITL Gate',
       desc: 'Smartwatch Bundle exceeds safety limit (₹15,000). System halts execution and routes ticket to Operations Approval Queue.',
       category: 'damaged',
       issueTitle: 'Damaged Smartwatch Bundle - Request refund (₹499.98)',
@@ -112,12 +108,11 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
     },
     {
       id: 'expired',
-      num: '3',
+      num: '03',
       title: 'Expired Return Window',
       order: 'ORD-2026-8803',
       amount: '₹89.99',
       badge: 'Policy Guardrail',
-      badgeColor: 'bg-slate-100 text-slate-700 border-slate-200',
       desc: 'Earbuds delivered 40 days ago. Policy engine enforces 15-day return cutoff and safely routes case to tier-2 support team.',
       category: 'returns',
       issueTitle: 'Return wireless earbuds - Delivered 40 days ago',
@@ -133,12 +128,11 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
     },
     {
       id: 'cancel',
-      num: '4',
+      num: '04',
       title: 'Pre-Shipment Cancel',
       order: 'ORD-2026-8804',
       amount: '₹129.99',
-      badge: 'Instant Execution',
-      badgeColor: 'bg-slate-100 text-slate-700 border-slate-200',
+      badge: 'Immediate Action',
       desc: 'Unfulfilled keyboard order in processing state. System verifies order is not yet packed and immediately voids shipment and issues refund.',
       category: 'orders',
       issueTitle: 'Cancel order before shipment - ErgoMech Keyboard',
@@ -163,14 +157,14 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
     setOrderPreview(p.preview);
     setActiveStepIndex(-1);
     setIsLoopComplete(false);
-    setStatusMessage(`Loaded Scenario ${p.num}: ${p.title} (${p.order}). Click "Submit Resolution Request" to execute.`);
+    setStatusMessage(`Loaded Scenario ${p.num}: ${p.title} (${p.order}). Click "Execute Resolution" to run.`);
   };
 
   const categories = [
-    { id: 'damaged', title: 'Damaged / Defective', icon: AlertTriangle },
-    { id: 'returns', title: 'Return & Refund', icon: RefreshCw },
-    { id: 'shipping', title: 'Shipping & Delivery', icon: Truck },
-    { id: 'orders', title: 'Cancel Order', icon: Package },
+    { id: 'damaged', title: 'Damaged Item', icon: AlertTriangle },
+    { id: 'returns', title: 'Return Request', icon: RefreshCw },
+    { id: 'shipping', title: 'Delivery Issue', icon: Truck },
+    { id: 'orders', title: 'Order Cancel', icon: Package },
   ];
 
   const handleSubmitIssue = async (e: React.FormEvent) => {
@@ -261,121 +255,128 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* 1. Page Header & Scenario Selector */}
-      <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 sm:p-6 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+    <div className="space-y-8 pb-16">
+      {/* 1. Architectural Editorial Header */}
+      <div className="border-b-4 border-black pb-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
-              Customer Resolution Center
+            <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+              Autonomous Governance &bull; Enterprise Operations
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight text-black uppercase">
+              Resolution Center
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Verify order parameters, policy return constraints, and multi-warehouse inventory to execute verifiable resolutions.
+            <p className="text-base font-serif italic text-neutral-700 mt-2 max-w-2xl">
+              Deterministic, policy-governed intake for customer dispute mitigation, warehouse inventory checks, and transactional state verification.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-slate-500">
-            <span className="inline-flex items-center gap-1 font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Database Live
+          <div className="flex items-center gap-3 font-mono text-xs tracking-wider uppercase">
+            <span className="border border-black px-2.5 py-1 bg-black text-white font-semibold">
+              Live DB Synced
             </span>
-            <span className="text-slate-300">•</span>
-            <span className="font-mono text-slate-600">INR (₹) Standard</span>
-          </div>
-        </div>
-
-        {/* Test Scenario Selector Strip */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-medium text-slate-700">
-              Preset Test Scenarios:
+            <span className="border border-black px-2.5 py-1 bg-white text-black">
+              INR (&bull;) Standard
             </span>
-            <span className="text-slate-400 text-[11px]">Select to test automated policy handling</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-            {presets.map((p) => {
-              const isSelected = activePreset === p.id;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => handleSelectPreset(p)}
-                  className={`text-left p-3 rounded-md border transition-all ${
-                    isSelected
-                      ? 'bg-slate-900 text-white border-slate-900 shadow-subtle'
-                      : 'bg-slate-50/70 hover:bg-slate-100/70 text-slate-800 border-slate-200/80'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-1 mb-1">
-                    <span className="text-[11px] font-semibold tracking-tight truncate">
-                      {p.num}. {p.title}
-                    </span>
-                    <span className={`text-[10px] font-medium px-1.5 py-0.2 rounded border ${
-                      isSelected
-                        ? 'bg-slate-800 text-slate-200 border-slate-700'
-                        : p.badgeColor
-                    }`}>
-                      {p.badge}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] mt-1.5 opacity-90">
-                    <span className="font-mono">{p.order}</span>
-                    <span className="font-semibold">{p.amount}</span>
-                  </div>
-                </button>
-              );
-            })}
           </div>
         </div>
       </div>
 
-      {/* 2. Main Two-Column Console (Form + Order Details) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* 2. Preset Scenarios Strip */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between border-b border-black pb-1">
+          <span className="font-mono text-xs tracking-widest uppercase font-bold text-black">
+            Deterministic Test Scenarios
+          </span>
+          <span className="font-mono text-[11px] tracking-wider uppercase text-neutral-500">
+            Select to execute automated policy evaluation
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {presets.map((p) => {
+            const isSelected = activePreset === p.id;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => handleSelectPreset(p)}
+                className={`text-left p-4 border-2 transition-colors duration-100 ${
+                  isSelected
+                    ? 'bg-black text-white border-black'
+                    : 'bg-white text-black border-black hover:bg-black hover:text-white group'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="font-mono text-xs tracking-widest font-bold">
+                    [{p.num}]
+                  </span>
+                  <span className={`font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border ${
+                    isSelected
+                      ? 'border-white bg-white text-black font-semibold'
+                      : 'border-black text-black group-hover:border-white group-hover:text-white'
+                  }`}>
+                    {p.badge}
+                  </span>
+                </div>
+                <div className="font-serif font-bold text-sm tracking-tight mb-2">
+                  {p.title}
+                </div>
+                <div className="flex items-center justify-between font-mono text-xs pt-2 border-t border-current opacity-90">
+                  <span>{p.order}</span>
+                  <span className="font-bold">{p.amount}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 3. Main Two-Column Console (Form + Order Details) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* LEFT: Ticket Submission Form (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 sm:p-6 space-y-5">
-          <div className="border-b border-slate-100 pb-3">
-            <h2 className="text-sm font-semibold text-slate-900">
-              Submit Issue for Resolution
+        <div className="lg:col-span-7 border-2 border-black p-6 sm:p-8 bg-white space-y-6">
+          <div className="border-b-2 border-black pb-3">
+            <h2 className="font-display text-xl font-bold uppercase tracking-wide text-black">
+              Dispute Intake Specification
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Enter customer problem details. System evaluates policy rules and executes database transactions.
+            <p className="font-serif italic text-xs text-neutral-600 mt-1">
+              Submit case parameters for policy evaluation, inventory verification, and database state commitment.
             </p>
           </div>
 
           {error && (
-            <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <span className="font-semibold block">Submission Error</span>
-                <span>{error}</span>
+            <div className="p-4 border-2 border-black bg-black text-white text-xs font-mono flex items-start gap-3">
+              <AlertTriangle className="w-4 h-4 text-white shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold uppercase tracking-wider block">System Execution Error</span>
+                <span className="mt-1 block font-sans">{error}</span>
               </div>
             </div>
           )}
 
-          <form onSubmit={handleSubmitIssue} className="space-y-4">
+          <form onSubmit={handleSubmitIssue} className="space-y-5">
             {/* Order Number Field */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Order Identifier
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
+                Order Identifier *
               </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={orderNumber}
-                  onChange={(e) => setOrderNumber(e.target.value)}
-                  placeholder="e.g. ORD-2026-8801"
-                  className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-slate-900 text-slate-900 text-sm font-mono"
-                />
-              </div>
-              <p className="text-[11px] text-slate-400 mt-1">
-                Linked to order records, shipping manifests, and payment receipts.
+              <input
+                type="text"
+                required
+                value={orderNumber}
+                onChange={(e) => setOrderNumber(e.target.value)}
+                placeholder="e.g. ORD-2026-8801"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-mono focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
+              />
+              <p className="font-mono text-[10px] tracking-wider uppercase text-neutral-500 mt-1">
+                Audited against warehouse manifests &amp; transactional logs.
               </p>
             </div>
 
             {/* Category Selector */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1.5">
-                Issue Classification
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
+                Issue Category Classification *
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {categories.map((c) => {
@@ -386,13 +387,13 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                       key={c.id}
                       type="button"
                       onClick={() => setSelectedCategory(c.id)}
-                      className={`flex items-center gap-1.5 p-2 rounded-md border text-xs font-medium transition-all ${
+                      className={`flex items-center justify-center gap-2 p-2.5 border-2 text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
                         isSelected
-                          ? 'bg-slate-900 text-white border-slate-900 shadow-subtle'
-                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                          ? 'bg-black text-white border-black font-bold'
+                          : 'bg-white text-black border-black hover:bg-black hover:text-white'
                       }`}
                     >
-                      <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                      <Icon size={14} strokeWidth={1.5} />
                       <span className="truncate">{c.title}</span>
                     </button>
                   );
@@ -402,55 +403,55 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
 
             {/* Issue Title */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Subject
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
+                Dispute Subject *
               </label>
               <input
                 type="text"
                 required
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
-                placeholder="Brief summary of issue"
-                className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-slate-900 text-slate-900 text-sm font-medium"
+                placeholder="Brief summary of dispute claim"
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif font-semibold focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
             </div>
 
             {/* Issue Description */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Customer Statement
+              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
+                Customer Statement Details *
               </label>
               <textarea
                 required
                 rows={3}
                 value={issueDescription}
                 onChange={(e) => setIssueDescription(e.target.value)}
-                placeholder="Describe issue details..."
-                className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-slate-900 text-slate-900 text-sm font-normal resize-none"
+                placeholder="Enter verified customer claim statement..."
+                className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-serif resize-none focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
             </div>
 
             {/* Form Actions */}
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100">
-              <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5 text-slate-400" />
-                <span>Executes transactional resolution with database verification</span>
+            <div className="pt-4 flex flex-wrap items-center justify-between gap-4 border-t-2 border-black">
+              <div className="font-mono text-[11px] tracking-wider uppercase text-neutral-600 flex items-center gap-2">
+                <Info size={14} strokeWidth={1.5} />
+                <span>Deterministic Idempotency Key Guard Active</span>
               </div>
 
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs transition-colors shadow-subtle disabled:opacity-50"
+                className="px-6 py-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
-                    <span>Processing Resolution...</span>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Executing Pipeline...</span>
                   </>
                 ) : (
                   <>
-                    <span>Submit Resolution Request</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Execute Resolution</span>
+                    <ArrowRight size={14} strokeWidth={1.5} />
                   </>
                 )}
               </button>
@@ -459,61 +460,69 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
         </div>
 
         {/* RIGHT: Live Order Context & Policy Guardrails (5 cols) */}
-        <div className="lg:col-span-5 space-y-4">
+        <div className="lg:col-span-5 space-y-6">
           {/* Order Record Card */}
-          <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <span className="text-xs font-semibold text-slate-900">Verified Order Record</span>
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border capitalize ${
-                orderPreview?.order_status === 'delivered'
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                  : 'bg-amber-50 text-amber-700 border-amber-200'
-              }`}>
-                {orderPreview?.order_status || 'Delivered'}
+          <div className="border-2 border-black p-6 bg-white space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
+              <span className="font-display font-bold text-sm tracking-wider uppercase text-black">
+                Verified Order Manifest
+              </span>
+              <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white">
+                {orderPreview?.order_status || 'DELIVERED'}
               </span>
             </div>
 
-            <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">Order Number</span>
-                <span className="font-mono font-medium text-slate-900">{orderPreview?.order_number || orderNumber}</span>
+            <div className="space-y-2 text-xs font-mono">
+              <div className="flex items-center justify-between py-1.5 border-b border-black/20">
+                <span className="text-neutral-500 uppercase">Order ID</span>
+                <span className="font-bold text-black">{orderPreview?.order_number || orderNumber}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">Order Total</span>
-                <span className="font-semibold text-slate-900">₹{orderPreview?.total_amount}</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-black/20">
+                <span className="text-neutral-500 uppercase">Total Settled</span>
+                <span className="font-bold text-black text-sm">₹{orderPreview?.total_amount}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">Item</span>
-                <span className="font-medium text-slate-800 text-right max-w-[180px] truncate">{orderPreview?.item_title}</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-black/20">
+                <span className="text-neutral-500 uppercase">Manifest Item</span>
+                <span className="font-serif font-semibold text-black text-right max-w-[200px] truncate">
+                  {orderPreview?.item_title}
+                </span>
               </div>
-              <div className="flex items-center justify-between py-1">
-                <span className="text-slate-500">Carrier / Tracking</span>
-                <span className="font-mono text-slate-700 text-[11px]">{orderPreview?.carrier} ({orderPreview?.tracking})</span>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-neutral-500 uppercase">Carrier / AWB</span>
+                <span className="text-black font-semibold">
+                  {orderPreview?.carrier} ({orderPreview?.tracking})
+                </span>
               </div>
             </div>
           </div>
 
           {/* Active Policy Rules */}
-          <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-5 space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <span className="text-xs font-semibold text-slate-900">Active Policy Guardrails</span>
-              <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                v2.0
+          <div className="border-2 border-black p-6 bg-white space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
+              <span className="font-display font-bold text-sm tracking-wider uppercase text-black">
+                System Policy Guardrails
+              </span>
+              <span className="border border-black px-1.5 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-neutral-100 text-black">
+                v2.0 STRICT
               </span>
             </div>
 
-            <div className="space-y-2 text-xs">
-              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70">
-                <span className="font-medium text-slate-900 block text-xs">Stockout Fallback Rule</span>
-                <span className="text-[11px] text-slate-600 leading-normal block mt-0.5">
-                  If replacement item is out of stock across WH-EAST &amp; WH-WEST, system automatically adapts to full refund via UPI.
+            <div className="space-y-3 text-xs">
+              <div className="p-3 border border-black bg-neutral-50">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
+                  Stockout Fallback Guard
+                </span>
+                <span className="font-serif italic text-neutral-700 block mt-1 leading-relaxed">
+                  If replacement SKU inventory equals zero across regional nodes (WH-EAST &amp; WH-WEST), transaction automatically adapts to immediate UPI credit.
                 </span>
               </div>
 
-              <div className="p-2.5 rounded bg-slate-50 border border-slate-200/70">
-                <span className="font-medium text-slate-900 block text-xs">₹15,000 Operations Approval Gate</span>
-                <span className="text-[11px] text-slate-600 leading-normal block mt-0.5">
-                  Transactions exceeding ₹15,000 require manual supervisor sign-off before database execution.
+              <div className="p-3 border border-black bg-neutral-50">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
+                  ₹15,000 HITL Approval Gate
+                </span>
+                <span className="font-serif italic text-neutral-700 block mt-1 leading-relaxed">
+                  Dispute claims exceeding ₹15,000 threshold enforce cryptographic halt and mandate supervisory verification before settlement.
                 </span>
               </div>
             </div>
@@ -521,7 +530,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
         </div>
       </div>
 
-      {/* 3. Workflow Visualizer */}
+      {/* 4. Workflow Visualizer */}
       <AgentLoopVisualizer
         currentStepIndex={activeStepIndex}
         isRunning={isProcessing}

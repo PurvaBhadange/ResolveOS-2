@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Package, Truck, CheckCircle2, Clock, XCircle, ArrowRight } from 'lucide-react';
+import { Package, Truck, ArrowRight } from 'lucide-react';
 import { api } from '../lib/api';
 
 interface OrdersViewProps {
@@ -34,76 +34,83 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
   };
 
   return (
-    <div className="space-y-5 pb-12">
+    <div className="space-y-6 pb-16">
       {/* View Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-6">
         <div>
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">
+          <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+            Customer Ledger &bull; Manifest Archive
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
             Customer Orders
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Verified purchase history, logistics tracking, and post-delivery dispute management.
+          <p className="text-sm font-serif italic text-neutral-700 mt-1">
+            Verified purchase history, logistics tracking records, and post-delivery dispute intake.
           </p>
         </div>
         {!loading && orders.length > 0 && (
-          <span className="text-xs text-slate-500 font-medium bg-white px-2.5 py-1 rounded border border-slate-200">
-            {orders.length} Total Orders
+          <span className="font-mono text-xs tracking-widest uppercase border-2 border-black px-3 py-1 bg-black text-white font-bold">
+            {orders.length} Verified Records
           </span>
         )}
       </div>
 
       {loading ? (
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-6 space-y-4">
-          <div className="h-4 w-48 bg-slate-200 rounded skeleton" />
+        <div className="border-2 border-black p-8 bg-white space-y-4">
+          <div className="h-5 w-48 skeleton-mono" />
           <div className="space-y-3 pt-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-slate-100 rounded-md skeleton" />
+              <div key={i} className="h-16 skeleton-mono" />
             ))}
           </div>
         </div>
       ) : orders.length === 0 ? (
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle p-12 text-center space-y-3">
-          <Package className="w-8 h-8 text-slate-400 mx-auto" />
-          <h3 className="text-sm font-semibold text-slate-900">No orders found</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            There are no past orders recorded under this account. Orders placed through verified checkout will appear here.
+        <div className="border-2 border-black p-12 text-center bg-white space-y-3">
+          <Package size={32} strokeWidth={1.5} className="mx-auto text-black" />
+          <h3 className="font-display text-lg font-bold uppercase tracking-wide text-black">
+            No Orders On File
+          </h3>
+          <p className="font-serif italic text-xs text-neutral-600 max-w-sm mx-auto">
+            There are no past orders recorded under this customer key. Verified transactions will appear here.
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-subtle overflow-hidden">
-          {/* Table for Desktop */}
+        <div className="border-2 border-black bg-white overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200/90 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+              <thead className="bg-black text-white border-b-2 border-black font-mono text-[11px] uppercase tracking-widest">
                 <tr>
-                  <th className="py-3 px-4">Order ID</th>
-                  <th className="py-3 px-4">Date</th>
+                  <th className="py-3 px-4">Order ID / SKU</th>
+                  <th className="py-3 px-4">Timestamp</th>
                   <th className="py-3 px-4">Logistics Carrier</th>
                   <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4 text-right">Amount</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3 px-4 text-right">Settled Total</th>
+                  <th className="py-3 px-4 text-right">Dispute Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-black">
                 {orders.map((order) => {
                   const carrier = getCarrierName(order);
                   const isDelivered = order.order_status === 'delivered';
                   const isCancelled = order.order_status === 'cancelled';
 
                   return (
-                    <tr key={order.id} className="hover:bg-slate-50/70 transition-colors">
+                    <tr
+                      key={order.id}
+                      className="hover:bg-black hover:text-white transition-colors duration-100 group"
+                    >
                       {/* Order Number & Items */}
-                      <td className="py-3.5 px-4">
-                        <span className="font-mono font-medium text-slate-900 block">
+                      <td className="py-4 px-4">
+                        <span className="font-mono font-bold text-xs block">
                           {order.order_number}
                         </span>
-                        <span className="text-[11px] text-slate-500 mt-0.5 block truncate max-w-[200px]">
+                        <span className="font-serif italic text-xs text-neutral-600 group-hover:text-neutral-300 mt-0.5 block truncate max-w-[220px]">
                           {order.items?.[0]?.variant?.title || 'Electronics Purchase'}
                         </span>
                       </td>
 
                       {/* Date */}
-                      <td className="py-3.5 px-4 text-slate-600">
+                      <td className="py-4 px-4 font-mono text-xs">
                         {new Date(order.created_at).toLocaleDateString(undefined, {
                           year: 'numeric',
                           month: 'short',
@@ -112,45 +119,36 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
                       </td>
 
                       {/* Carrier & Tracking */}
-                      <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-1.5 text-slate-800">
-                          <Truck className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span className="font-medium">{carrier}</span>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-1.5 font-serif font-semibold text-xs">
+                          <Truck size={14} strokeWidth={1.5} />
+                          <span>{carrier}</span>
                         </div>
-                        <span className="font-mono text-[10px] text-slate-400 block mt-0.5">
+                        <span className="font-mono text-[10px] text-neutral-500 group-hover:text-neutral-400 block mt-0.5">
                           {order.shipment?.tracking_number || 'Not dispatched'}
                         </span>
                       </td>
 
                       {/* Status */}
-                      <td className="py-3.5 px-4">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium border capitalize ${
-                          isDelivered
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : isCancelled
-                            ? 'bg-rose-50 text-rose-700 border-rose-200'
-                            : 'bg-amber-50 text-amber-700 border-amber-200'
-                        }`}>
-                          {isDelivered && <CheckCircle2 className="w-3 h-3" />}
-                          {isCancelled && <XCircle className="w-3 h-3" />}
-                          {!isDelivered && !isCancelled && <Clock className="w-3 h-3" />}
+                      <td className="py-4 px-4">
+                        <span className="inline-block px-2 py-0.5 border border-current font-mono text-[10px] tracking-widest uppercase font-bold">
                           {order.order_status}
                         </span>
                       </td>
 
                       {/* Amount */}
-                      <td className="py-3.5 px-4 text-right font-semibold text-slate-900">
+                      <td className="py-4 px-4 text-right font-mono text-sm font-bold">
                         ₹{order.total_amount}
                       </td>
 
                       {/* Action */}
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-4 px-4 text-right">
                         <button
                           onClick={() => handleReportIssue(order.order_number)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition-all shadow-subtle"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-black bg-white text-black font-mono text-[11px] tracking-wider uppercase font-bold group-hover:border-white group-hover:bg-white group-hover:text-black hover:bg-neutral-200 transition-colors duration-100"
                         >
-                          <span>Resolution</span>
-                          <ArrowRight className="w-3 h-3 text-slate-400" />
+                          <span>Dispute</span>
+                          <ArrowRight size={12} strokeWidth={2} />
                         </button>
                       </td>
                     </tr>

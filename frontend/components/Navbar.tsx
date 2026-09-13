@@ -28,29 +28,29 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-subtle">
+      <header className="sticky top-0 z-40 bg-white border-b-2 border-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between h-16">
             {/* Brand Logo & Portal Badge */}
             <div
-              className="flex items-center gap-2.5 cursor-pointer select-none"
+              className="flex items-center gap-3 cursor-pointer select-none group"
               onClick={() => setActiveTab('help')}
             >
-              <div className="w-8 h-8 rounded-md bg-slate-900 flex items-center justify-center text-white shadow-subtle">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-display font-bold text-lg border border-black transition-colors duration-100 group-hover:bg-white group-hover:text-black">
+                R
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-semibold tracking-tight text-slate-900">
-                  Resolve<span className="text-emerald-700">OS</span>
+              <div className="flex items-baseline gap-2.5">
+                <span className="text-xl font-display font-bold tracking-tight text-black">
+                  RESOLVE<span className="font-normal italic">OS</span>
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-medium text-slate-600 bg-slate-100 rounded border border-slate-200">
-                  {userRole === 'customer' ? 'Customer Portal' : `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Workspace`}
+                <span className="hidden sm:inline-block px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase text-black border border-black bg-white">
+                  {userRole === 'customer' ? 'Customer Portal' : `${userRole} Workspace`}
                 </span>
               </div>
             </div>
 
             {/* Navigation Tabs */}
-            <nav className="flex items-center gap-1 sm:gap-1.5">
+            <nav className="flex items-center gap-1 sm:gap-2">
               {visibleNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -58,57 +58,57 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider uppercase border transition-colors duration-100 ${
                       isActive
-                        ? 'bg-slate-100 text-slate-900 font-semibold shadow-subtle'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                        ? 'bg-black text-white border-black font-semibold'
+                        : 'bg-white text-black border-transparent hover:border-black hover:bg-black hover:text-white'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-slate-900' : 'text-slate-400'}`} />
+                    <Icon size={14} strokeWidth={1.5} className={isActive ? 'text-white' : 'text-black'} />
                     <span>{item.label}</span>
                   </button>
                 );
               })}
 
               {/* Role-Based Session & Sign In */}
-              <div className="ml-2 pl-2 border-l border-slate-200">
+              <div className="ml-2 pl-3 border-l-2 border-black flex items-center gap-2">
                 {session ? (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     {session.user?.image ? (
                       <img
                         src={session.user.image}
                         alt={session.user.name || 'User'}
                         referrerPolicy="no-referrer"
-                        className="w-7 h-7 rounded-full border border-slate-200 object-cover shadow-subtle"
+                        className="w-8 h-8 border-2 border-black object-cover"
                       />
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-slate-900 text-white font-medium text-[11px] flex items-center justify-center">
+                      <div className="w-8 h-8 bg-black text-white font-mono font-medium text-xs flex items-center justify-center border-2 border-black">
                         {(session.user?.name || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="hidden sm:flex flex-col text-right">
-                      <span className="text-xs font-medium text-slate-900 leading-none">
-                        {session.user?.name || 'Authorized User'}
+                      <span className="text-xs font-serif font-bold text-black leading-none">
+                        {session.user?.name || 'Authorized'}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-medium">
-                        {session.user?.email || 'Active'}
+                      <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-600">
+                        {userRole}
                       </span>
                     </div>
                     <button
                       onClick={() => signOut()}
                       title="Sign Out"
-                      className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                      className="p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100"
                     >
-                      <LogOut className="w-3.5 h-3.5" />
+                      <LogOut size={14} strokeWidth={1.5} />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => setIsSignInOpen(true)}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-slate-300 hover:border-slate-400 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 shadow-subtle transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black text-xs font-mono tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100"
                   >
-                    <User className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Staff Sign In</span>
+                    <User size={14} strokeWidth={1.5} />
+                    <span>Sign In</span>
                   </button>
                 )}
               </div>
