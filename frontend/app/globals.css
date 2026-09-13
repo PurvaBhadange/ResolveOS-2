@@ -20,44 +20,39 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Enforce 0px radius across the entire document */
-*, *::before, *::after {
-  border-radius: 0 !important;
-}
-
 /* Accessibility Focus States */
 :focus-visible {
-  outline: 3px solid #000000 !important;
-  outline-offset: 3px !important;
+  outline: 2px solid #0f172a !important;
+  outline-offset: 2px !important;
 }
 
 input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: none !important;
-  border-color: #000000 !important;
+  border-color: #0f172a !important;
 }
 
-/* Instant / Binary Transitions */
+/* Smooth Restrained Transitions */
 button, a, input, select, textarea {
-  transition: background-color 0.1s linear, color 0.1s linear, border-color 0.1s linear;
+  transition: all 0.15s ease-in-out;
 }
 
-/* High-Contrast Architectural Scrollbar */
+/* Subtle Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFFFFF;
-  border-left: 1px solid #E5E5E5;
+  background: #FAFAFA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000000;
+  background: #CBD5E1;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #525252;
+  background: #94A3B8;
 }
 
 /* Minimalist Monochrome Textures */
