@@ -47,7 +47,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   {userRole === 'customer' ? 'Customer Portal' : `${userRole} Workspace`}
                 </span>
               </div>
+              {/* 3D Live Status Orb */}
+              <div className="hidden sm:flex items-center gap-1.5 ml-1" title="System Online">
+                <div
+                  className="live-orb w-2.5 h-2.5 rounded-full flex-shrink-0"
+                  style={{
+                    background: 'radial-gradient(circle at 35% 35%, #86efac, #16a34a 60%, #14532d)',
+                  }}
+                />
+                <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-400">Live</span>
+              </div>
             </div>
+
 
             {/* Navigation Tabs */}
             <nav className="flex items-center gap-1 sm:gap-2">

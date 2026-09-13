@@ -89,3 +89,78 @@ button, a, input, select, textarea {
   background-color: #E5E5E5;
   animation: mono-pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* ─── 3D Tilt Card ─────────────────────────────────────────────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
+  will-change: transform;
+}
+.tilt-card:hover {
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.25);
+}
+.tilt-card-inner {
+  transform-style: preserve-3d;
+  transform: translateZ(10px);
+}
+.tilt-card-badge {
+  transform: translateZ(20px);
+}
+
+/* ─── 3D Flip KPI Card ─────────────────────────────────────────────────────── */
+.flip-card {
+  perspective: 800px;
+  cursor: pointer;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.flip-card.flipped .flip-card-inner,
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* ─── 3D Gyro Ring ─────────────────────────────────────────────────────────── */
+@keyframes gyro-spin {
+  from { transform: rotateX(68deg) rotateZ(0deg); }
+  to   { transform: rotateX(68deg) rotateZ(360deg); }
+}
+@keyframes gyro-spin-reverse {
+  from { transform: rotateX(68deg) rotateZ(360deg); }
+  to   { transform: rotateX(68deg) rotateZ(0deg); }
+}
+.gyro-ring {
+  animation: gyro-spin 1.8s linear infinite;
+  transform-style: preserve-3d;
+}
+.gyro-ring-inner {
+  animation: gyro-spin-reverse 2.4s linear infinite;
+  transform-style: preserve-3d;
+}
+@keyframes orb-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7), 0 0 0 0 rgba(34, 197, 94, 0.4), inset 0 1px 0 rgba(255,255,255,0.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.2), 0 0 12px 3px rgba(34, 197, 94, 0.3), inset 0 1px 0 rgba(255,255,255,0.5); }
+}
+.live-orb {
+  animation: orb-pulse 2s ease-in-out infinite;
+  background: radial-gradient(circle at 35% 35%, #86efac, #16a34a 60%, #14532d);
+}
+

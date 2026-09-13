@@ -1,6 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 
+// ─── 3D Flip KPI Card ─────────────────────────────────────────────────────────
+const FlipKpiCard: React.FC<{
+  label: string;
+  value: string | number;
+  backLabel: string;
+  backDetail: string;
+  className?: string;
+}> = ({ label, value, backLabel, backDetail, className = '' }) => {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div
+      className={`flip-card h-24 ${className}`}
+      onClick={() => setFlipped((f) => !f)}
+      title="Click to flip"
+    >
+      <div className={`flip-card-inner ${flipped ? 'flipped' : ''}`} style={{ transform: flipped ? 'rotateY(180deg)' : '' }}>
+        {/* Front */}
+        <div className="flip-card-front bg-white border-r border-black/10 rounded-none">
+          <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block mb-1">{label}</span>
+          <span className="font-display text-2xl sm:text-3xl font-bold text-black">{value}</span>
+        </div>
+        {/* Back */}
+        <div className="flip-card-back bg-black text-white rounded-none">
+          <span className="font-mono text-[9px] tracking-widest uppercase text-neutral-400 block mb-1">{backLabel}</span>
+          <span className="font-serif italic text-sm text-white leading-snug">{backDetail}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const OperationsDashboard: React.FC = () => {
   const [approvals, setApprovals] = useState<any[]>([]);
   const [escalations, setEscalations] = useState<any[]>([]);
@@ -78,31 +109,42 @@ export const OperationsDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* KPI Metrics Row */}
+      {/* KPI Metrics Row — hover or click to flip */}
       <div className="border-2 border-black bg-white rounded-2xl overflow-hidden">
         <div className="grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x-2 divide-black text-left">
-          <div className="p-5">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Total Logged</span>
-            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{cases.length}</span>
-          </div>
-          <div className="p-5">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Auto-Committed</span>
-            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{resolvedCount}</span>
-          </div>
-          <div className="p-5">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Resolution SLA</span>
-            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{successRate}%</span>
-          </div>
-          <div className="p-5">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Pending HITL</span>
-            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{approvals.length}</span>
-          </div>
-          <div className="p-5">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 block">Escalated Tier-2</span>
-            <span className="font-display text-2xl sm:text-3xl font-bold text-black mt-1 block">{escalations.length}</span>
-          </div>
+          <FlipKpiCard
+            label="Total Logged"
+            value={cases.length}
+            backLabel="All Cases"
+            backDetail="All dispute cases ingested by the resolution engine since deployment."
+          />
+          <FlipKpiCard
+            label="Auto-Committed"
+            value={resolvedCount}
+            backLabel="Autonomous Resolution"
+            backDetail="Cases resolved end-to-end without human intervention within policy guardrails."
+          />
+          <FlipKpiCard
+            label="Resolution SLA"
+            value={`${successRate}%`}
+            backLabel="Success Rate"
+            backDetail="Ratio of auto-committed cases to total cases logged in the current session."
+          />
+          <FlipKpiCard
+            label="Pending HITL"
+            value={approvals.length}
+            backLabel="Awaiting Authorization"
+            backDetail="High-value transactions exceeding ₹15,000 requiring senior ops approval."
+          />
+          <FlipKpiCard
+            label="Escalated Tier-2"
+            value={escalations.length}
+            backLabel="Policy Boundary Cases"
+            backDetail="Cases outside auto-resolution policy windows routed to human specialist queue."
+          />
         </div>
       </div>
+
 
       {/* Main Operations Queues */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

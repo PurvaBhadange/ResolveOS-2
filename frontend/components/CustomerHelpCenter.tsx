@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   AlertTriangle,
   RefreshCw,
@@ -12,6 +12,51 @@ import {
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { AgentLoopVisualizer } from './AgentLoopVisualizer';
+
+// ─── 3D Tilt Card Component ───────────────────────────────────────────────────
+const TiltCard3D: React.FC<{
+  children: React.ReactNode;
+  isSelected: boolean;
+  onClick: () => void;
+}> = ({ children, isSelected, onClick }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotateX = ((y - cy) / cy) * -10;
+    const rotateY = ((x - cx) / cx) * 12;
+    card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03,1.03,1.03)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`tilt-card text-left p-4 border-2 rounded-xl cursor-pointer select-none min-h-[110px] flex flex-col justify-between ${
+        isSelected
+          ? 'bg-black text-white border-black'
+          : 'bg-white text-black border-black hover:shadow-xl'
+      }`}
+      style={{ transition: 'transform 0.1s ease-out, box-shadow 0.2s ease-out, background-color 0.1s' }}
+    >
+      {children}
+    </div>
+  );
+};
 
 interface HelpCenterProps {
   onCaseCreated: (caseId: number) => void;
@@ -382,39 +427,37 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
           {presets.map((p) => {
             const isSelected = activePreset === p.id;
             return (
-              <button
+              <TiltCard3D
                 key={p.id}
-                type="button"
+                isSelected={isSelected}
                 onClick={() => handleSelectPreset(p)}
-                className={`text-left p-4 border-2 rounded-xl transition-colors duration-100 ${
-                  isSelected
-                    ? 'bg-black text-white border-black'
-                    : 'bg-white text-black border-black hover:bg-black hover:text-white group'
-                }`}
               >
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="font-mono text-xs tracking-widest font-bold">
-                    [{p.num}]
-                  </span>
-                  <span className={`font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border rounded-md ${
-                    isSelected
-                      ? 'border-white bg-white text-black font-semibold'
-                      : 'border-black text-black group-hover:border-white group-hover:text-white'
-                  }`}>
-                    {p.badge}
-                  </span>
+                <div className="tilt-card-inner flex flex-col h-full">
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className={`font-mono text-xs tracking-widest font-bold ${isSelected ? 'text-white' : 'text-black'}`}>
+                      [{p.num}]
+                    </span>
+                    <span className={`tilt-card-badge font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border rounded-md ${
+                      isSelected
+                        ? 'border-white bg-white text-black font-semibold'
+                        : 'border-black text-black'
+                    }`}>
+                      {p.badge}
+                    </span>
+                  </div>
+                  <div className={`font-serif font-bold text-sm tracking-tight mb-2 flex-1 ${isSelected ? 'text-white' : 'text-black'}`}>
+                    {p.title}
+                  </div>
+                  <div className={`flex items-center justify-between font-mono text-xs pt-2 border-t ${isSelected ? 'border-white/50 text-white/90' : 'border-black/20 text-black'}`}>
+                    <span>{p.order}</span>
+                    <span className="font-bold">{p.amount}</span>
+                  </div>
                 </div>
-                <div className="font-serif font-bold text-sm tracking-tight mb-2">
-                  {p.title}
-                </div>
-                <div className="flex items-center justify-between font-mono text-xs pt-2 border-t border-current opacity-90">
-                  <span>{p.order}</span>
-                  <span className="font-bold">{p.amount}</span>
-                </div>
-              </button>
+              </TiltCard3D>
             );
           })}
         </div>
+
       </div>
 
       {/* 3. Main Two-Column Console (Form + Order Details) */}

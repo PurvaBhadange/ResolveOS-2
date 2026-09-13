@@ -133,6 +133,63 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
         </div>
       </div>
 
+      {/* 3D Gyro Ring Status Indicator */}
+      <div className="flex items-center gap-6 py-2">
+        <div className="relative flex-shrink-0 w-16 h-16" style={{ perspective: '200px' }}>
+          {/* Outer ring */}
+          <div
+            className={`absolute inset-0 rounded-full border-[3px] ${
+              effectiveIsRunning
+                ? 'border-black gyro-ring'
+                : effectiveIsComplete
+                ? 'border-black opacity-60'
+                : 'border-neutral-300'
+            }`}
+            style={effectiveIsRunning ? {} : { transform: 'rotateX(68deg)' }}
+          />
+          {/* Middle ring */}
+          <div
+            className={`absolute inset-[8px] rounded-full border-2 ${
+              effectiveIsRunning
+                ? 'border-neutral-600 gyro-ring-inner'
+                : effectiveIsComplete
+                ? 'border-black opacity-40'
+                : 'border-neutral-200'
+            }`}
+            style={effectiveIsRunning ? {} : { transform: 'rotateX(68deg)' }}
+          />
+          {/* Centre dot */}
+          <div className={`absolute inset-0 flex items-center justify-center`}>
+            <div className={`w-3 h-3 rounded-full ${
+              effectiveIsRunning
+                ? 'bg-black animate-ping opacity-70'
+                : effectiveIsComplete
+                ? 'bg-black'
+                : 'bg-neutral-300'
+            }`} />
+          </div>
+        </div>
+        <div className="flex-1">
+          <div className={`font-mono text-[10px] tracking-widest uppercase font-bold mb-1 ${
+            effectiveIsRunning ? 'text-black' : effectiveIsComplete ? 'text-black' : 'text-neutral-400'
+          }`}>
+            {effectiveIsRunning
+              ? `EXECUTING — STEP ${Math.min(effectiveStepIndex + 1, 7)}/07`
+              : effectiveIsComplete
+              ? 'RESOLUTION COMMITTED'
+              : 'SYSTEM STANDBY'}
+          </div>
+          <p className="font-serif italic text-xs text-neutral-600 leading-snug">
+            {statusMessage ||
+              (effectiveIsRunning && steps[effectiveStepIndex]
+                ? steps[effectiveStepIndex].activeDesc
+                : effectiveIsComplete
+                ? 'All 7 deterministic state machine transitions verified against ledger.'
+                : 'Select any scenario or submit an issue to execute autonomous resolution.')}
+          </p>
+        </div>
+      </div>
+
       {/* Horizontal Steps Stepper */}
       <div className="overflow-x-auto pt-2">
         <div className="flex items-center justify-between min-w-[720px] gap-2">
@@ -192,36 +249,13 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
         </div>
       </div>
 
-      {/* Live Pipeline Status Ticker */}
-      <div className="pt-4 border-t-2 border-black flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-center gap-3">
-          <span className={`px-2 py-0.5 border border-black uppercase text-[10px] tracking-widest font-bold rounded-md ${
-            effectiveIsRunning
-              ? 'bg-black text-white'
-              : effectiveIsComplete
-              ? 'bg-black text-white'
-              : 'bg-neutral-100 text-neutral-600'
-          }`}>
-            {effectiveIsRunning
-              ? `STEP ${Math.min(effectiveStepIndex + 1, 7)}/07`
-              : effectiveIsComplete
-              ? 'COMMITTED'
-              : 'STANDBY'}
-          </span>
-          <span className="font-serif italic text-neutral-700 text-xs">
-            {statusMessage ||
-              (effectiveIsRunning && steps[effectiveStepIndex]
-                ? steps[effectiveStepIndex].activeDesc
-                : effectiveIsComplete
-                ? 'All 7 deterministic state machine transitions verified against ledger.'
-                : 'Select any scenario or submit an issue to execute autonomous resolution.')}
-          </span>
-        </div>
-
-        <div className="text-[11px] uppercase tracking-widest text-neutral-500">
+      {/* State label footer */}
+      <div className="pt-3 border-t-2 border-black flex justify-end">
+        <div className="text-[11px] uppercase tracking-widest text-neutral-500 font-mono">
           State: <span className="font-bold text-black">{effectiveIsRunning ? 'EXECUTING' : effectiveIsComplete ? 'RESOLVED' : 'IDLE'}</span>
         </div>
       </div>
     </div>
   );
 };
+
