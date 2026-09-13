@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Search, Package, RefreshCw, Truck, AlertTriangle, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
 import { api } from '../lib/api';
+import { AgentLoopVisualizer } from './AgentLoopVisualizer';
 
 interface HelpCenterProps {
   onCaseCreated: (caseId: number) => void;
   setActiveTab: (tab: string) => void;
 }
+
 
 export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, setActiveTab }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('damaged');
@@ -126,8 +128,12 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
         </div>
       </div>
 
+      {/* Agent Execution State Visualizer */}
+      <AgentLoopVisualizer isComplete={true} />
+
       {/* Category Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
         {categories.map((cat) => {
           const Icon = cat.icon;
           const isSelected = selectedCategory === cat.id;
