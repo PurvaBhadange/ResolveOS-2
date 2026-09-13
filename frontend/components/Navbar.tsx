@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, ShoppingBag, LifeBuoy, Activity, Layers, Cpu, LogOut, User } from 'lucide-react';
+import { ShieldCheck, ShoppingBag, LifeBuoy, Activity, Layers, Cpu, LogOut, User, Menu, X } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { SignInModal } from './SignInModal';
 
@@ -11,6 +11,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const { data: session } = useSession();
   const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Determine active user role (Default: customer when unauthenticated)
   const userRole = (session?.user as any)?.role || (session ? 'operations' : 'customer');
@@ -26,6 +27,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   // Filter tabs based on active user role
   const visibleNavItems = allNavItems.filter((item) => item.roles.includes(userRole));
 
+  const handleSelectTab = (id: string) => {
+    setActiveTab(id);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       <header className="sticky top-0 z-40 bg-white border-b-2 border-black">
@@ -33,14 +39,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           <div className="flex items-center justify-between h-16">
             {/* Brand Logo & Portal Badge */}
             <div
-              className="flex items-center gap-3 cursor-pointer select-none group"
-              onClick={() => setActiveTab('help')}
+              className="flex items-center gap-2.5 cursor-pointer select-none group"
+              onClick={() => handleSelectTab('help')}
             >
               <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-display font-bold text-lg border border-black rounded-lg transition-colors duration-100 group-hover:bg-white group-hover:text-black">
                 R
               </div>
-              <div className="flex items-baseline gap-2.5">
-                <span className="text-xl font-display font-bold tracking-tight text-black">
+              <div className="flex items-baseline gap-2">
+                <span className="text-lg sm:text-xl font-display font-bold tracking-tight text-black">
                   RESOLVE<span className="font-normal italic">OS</span>
                 </span>
                 <span className="hidden sm:inline-block px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase text-black border border-black bg-white rounded-md">
@@ -48,20 +54,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 </span>
               </div>
               {/* 3D Live Status Orb */}
-              <div className="hidden sm:flex items-center gap-1.5 ml-1" title="System Online">
+              <div className="hidden xs:flex items-center gap-1.5 ml-1" title="System Online">
                 <div
-                  className="live-orb w-2.5 h-2.5 rounded-full flex-shrink-0"
+                  className="live-orb w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0"
                   style={{
                     background: 'radial-gradient(circle at 35% 35%, #86efac, #16a34a 60%, #14532d)',
                   }}
                 />
-                <span className="font-mono text-[10px] tracking-widest uppercase text-neutral-400">Live</span>
+                <span className="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase text-neutral-400">Live</span>
               </div>
             </div>
 
-
-            {/* Navigation Tabs */}
-            <nav className="flex items-center gap-1 sm:gap-2">
+            {/* Desktop Navigation Tabs (md:flex) */}
+            <nav className="hidden md:flex items-center gap-1 sm:gap-2">
               {visibleNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -69,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider uppercase border rounded-lg transition-colors duration-100 ${
+                    className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 text-xs font-mono tracking-wider uppercase border rounded-lg transition-colors duration-100 ${
                       isActive
                         ? 'bg-black text-white border-black font-semibold'
                         : 'bg-white text-black border-transparent hover:border-black hover:bg-black hover:text-white'
@@ -81,7 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 );
               })}
 
-              {/* Role-Based Session & Sign In */}
+              {/* Role-Based Session & Sign In (Desktop) */}
               <div className="ml-2 pl-3 border-l-2 border-black flex items-center gap-2">
                 {session ? (
                   <div className="flex items-center gap-2.5">
@@ -97,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                         {(session.user?.name || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
-                    <div className="hidden sm:flex flex-col text-right">
+                    <div className="hidden lg:flex flex-col text-right">
                       <span className="text-xs font-serif font-bold text-black leading-none">
                         {session.user?.name || 'Authorized'}
                       </span>
@@ -124,8 +129,128 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 )}
               </div>
             </nav>
+
+            {/* Mobile Controls (Hamburger + Fast Profile) */}
+            <div className="flex md:hidden items-center gap-2">
+              {session ? (
+                <div className="flex items-center gap-1.5">
+                  {session.user?.image ? (
+                    <img
+                      src={session.user.image}
+                      alt={session.user.name || 'User'}
+                      className="w-7 h-7 border border-black object-cover rounded-full"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 bg-black text-white font-mono text-[11px] font-bold flex items-center justify-center border border-black rounded-full">
+                      {(session.user?.name || 'U').charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsSignInOpen(true)}
+                  className="px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider font-bold border border-black bg-white text-black rounded-md"
+                >
+                  Sign In
+                </button>
+              )}
+
+              {/* Hamburger Button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+                className="p-1.5 border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
+              >
+                {mobileMenuOpen ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t-2 border-black bg-white px-4 py-4 space-y-3 shadow-lg animate-in slide-in-from-top-2 duration-150">
+            <div className="flex items-center justify-between pb-2 border-b border-black/20 text-xs font-mono">
+              <span className="text-neutral-500 uppercase tracking-widest">Active Workspace</span>
+              <span className="font-bold uppercase tracking-wider text-black">{userRole}</span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-1.5">
+              {visibleNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelectTab(item.id)}
+                    className={`flex items-center justify-between w-full px-3.5 py-2.5 text-xs font-mono tracking-wider uppercase border-2 rounded-xl transition-colors duration-100 ${
+                      isActive
+                        ? 'bg-black text-white border-black font-bold'
+                        : 'bg-white text-black border-black/20 hover:border-black hover:bg-black hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon size={16} strokeWidth={1.5} />
+                      <span>{item.label}</span>
+                    </div>
+                    {isActive && (
+                      <span className="text-[10px] uppercase font-bold tracking-widest bg-white text-black px-1.5 py-0.5 rounded">
+                        Active
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Mobile Auth Actions */}
+            <div className="pt-2 border-t border-black/20">
+              {session ? (
+                <div className="flex items-center justify-between p-2.5 border-2 border-black rounded-xl bg-neutral-50">
+                  <div className="flex items-center gap-2">
+                    {session.user?.image ? (
+                      <img
+                        src={session.user.image}
+                        alt="User"
+                        className="w-7 h-7 border border-black rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-7 h-7 bg-black text-white font-mono text-[11px] font-bold flex items-center justify-center rounded-full">
+                        {(session.user?.name || 'U').charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-serif font-bold text-xs leading-none text-black">
+                        {session.user?.name || 'Authorized'}
+                      </div>
+                      <div className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider mt-0.5">
+                        {userRole}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => signOut()}
+                    className="flex items-center gap-1 px-3 py-1.5 border border-black bg-white text-black text-xs font-mono font-bold uppercase rounded-lg hover:bg-black hover:text-white transition-colors duration-100"
+                  >
+                    <LogOut size={12} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setIsSignInOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 border-2 border-black bg-black text-white font-mono text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-white hover:text-black transition-colors duration-100"
+                >
+                  <User size={14} />
+                  <span>Sign In to Account</span>
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Sign In Modal */}

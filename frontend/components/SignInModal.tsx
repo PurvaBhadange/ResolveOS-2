@@ -77,13 +77,14 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-      <div className="bg-white w-full max-w-md border-4 border-black p-6 sm:p-8 relative space-y-6 max-h-[90vh] overflow-y-auto rounded-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70">
+      <div className="bg-white w-[94vw] sm:w-full max-w-md border-3 sm:border-4 border-black p-4 sm:p-8 relative space-y-5 sm:space-y-6 max-h-[88vh] overflow-y-auto rounded-2xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-1.5 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
+          aria-label="Close modal"
+          className="absolute right-3 top-3 sm:right-4 sm:top-4 p-2 min-w-[36px] min-h-[36px] flex items-center justify-center border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-100 rounded-lg"
         >
-          <X size={14} strokeWidth={2} />
+          <X size={16} strokeWidth={2} />
         </button>
 
         <div className="space-y-1">

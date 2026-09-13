@@ -25,7 +25,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-white text-black">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8">
         {activeTab === 'help' && (
           <CustomerHelpCenter
             onCaseCreated={(caseId) => setSelectedCaseId(caseId)}
@@ -104,8 +104,8 @@ export default function Home() {
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
 
       {/* Editorial Monochrome Footer */}
-      <footer className="bg-white border-t-4 border-black py-8 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4 font-mono text-xs tracking-widest uppercase">
+      <footer className="bg-white border-t-4 border-black py-6 sm:py-8 mt-12 sm:mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left font-mono text-xs tracking-widest uppercase">
           <div className="flex items-center gap-2">
             <span className="font-bold text-black">RESOLVE OS</span>
             <span className="text-neutral-400">&bull;</span>

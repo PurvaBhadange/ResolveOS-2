@@ -75,8 +75,64 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
           </p>
         </div>
       ) : (
-        <div className="border-2 border-black bg-white overflow-hidden rounded-2xl">
-          <div className="overflow-x-auto">
+        <div className="border-2 border-black bg-white rounded-2xl overflow-hidden">
+          {/* Mobile Card List (block md:hidden) */}
+          <div className="block md:hidden divide-y-2 divide-black">
+            {orders.map((order) => {
+              const carrier = getCarrierName(order);
+              return (
+                <div key={order.id} className="p-4 space-y-3 bg-white">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono font-bold text-xs text-black">
+                      {order.order_number}
+                    </span>
+                    <span className="px-2 py-0.5 border border-black font-mono text-[10px] tracking-widest uppercase font-bold rounded-md bg-neutral-100 text-black">
+                      {order.order_status}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-black leading-snug">
+                      {order.items?.[0]?.variant?.title || 'Electronics Purchase'}
+                    </h4>
+                    <div className="flex items-center justify-between mt-1 text-xs text-neutral-600 font-mono">
+                      <span>
+                        {new Date(order.created_at).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </span>
+                      <span className="text-base font-bold text-black">
+                        ₹{order.total_amount}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-black/10 text-xs">
+                    <div className="flex items-center gap-1.5 text-neutral-700">
+                      <Truck size={13} strokeWidth={1.5} />
+                      <span className="font-serif font-medium">{carrier}</span>
+                    </div>
+                    <span className="font-mono text-[10px] text-neutral-500">
+                      {order.shipment?.tracking_number || 'Pending'}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => handleReportIssue(order.order_number)}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-black bg-black text-white font-mono text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-white hover:text-black transition-colors duration-100"
+                  >
+                    <span>Dispute Issue</span>
+                    <ArrowRight size={14} strokeWidth={2} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Table View (hidden md:block) */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-black text-white border-b-2 border-black font-mono text-[11px] uppercase tracking-widest">
                 <tr>
@@ -91,9 +147,6 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ onSelectOrder, setActive
               <tbody className="divide-y divide-black">
                 {orders.map((order) => {
                   const carrier = getCarrierName(order);
-                  const isDelivered = order.order_status === 'delivered';
-                  const isCancelled = order.order_status === 'cancelled';
-
                   return (
                     <tr
                       key={order.id}

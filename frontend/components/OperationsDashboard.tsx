@@ -111,7 +111,7 @@ export const OperationsDashboard: React.FC = () => {
 
       {/* KPI Metrics Row — hover or click to flip */}
       <div className="border-2 border-black bg-white rounded-2xl overflow-hidden">
-        <div className="grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x-2 divide-black text-left">
+        <div className="grid grid-cols-2 lg:grid-cols-5 divide-y lg:divide-y-0 divide-x divide-black text-left">
           <FlipKpiCard
             label="Total Logged"
             value={cases.length}
@@ -141,6 +141,7 @@ export const OperationsDashboard: React.FC = () => {
             value={escalations.length}
             backLabel="Policy Boundary Cases"
             backDetail="Cases outside auto-resolution policy windows routed to human specialist queue."
+            className="col-span-2 lg:col-span-1"
           />
         </div>
       </div>
@@ -149,7 +150,7 @@ export const OperationsDashboard: React.FC = () => {
       {/* Main Operations Queues */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Human Approval Queue */}
-        <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-5 rounded-2xl">
+        <div className="border-2 border-black p-4 sm:p-8 bg-white space-y-5 rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
             <h2 className="font-display text-base font-bold uppercase tracking-wider text-black">
               Pending Approval Queue
@@ -182,18 +183,18 @@ export const OperationsDashboard: React.FC = () => {
                       {appr.reason}
                     </p>
 
-                    <div className="flex items-center justify-end gap-3 pt-2 border-t border-black/20">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-2 sm:gap-3 pt-2 border-t border-black/20">
                       <button
                         onClick={() => handleApprovalDecision(appr.id, 'rejected')}
                         disabled={isBusy}
-                        className="px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50 rounded-lg"
+                        className="w-full sm:w-auto px-4 py-2 border-2 border-black bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-black hover:text-white transition-colors duration-100 disabled:opacity-50 rounded-lg text-center"
                       >
                         Decline
                       </button>
                       <button
                         onClick={() => handleApprovalDecision(appr.id, 'approved')}
                         disabled={isBusy}
-                        className="px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 rounded-lg"
+                        className="w-full sm:w-auto px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 rounded-lg text-center"
                       >
                         Authorize Settlement &rarr;
                       </button>

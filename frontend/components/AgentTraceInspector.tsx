@@ -57,22 +57,22 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
   return (
     <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-black pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b-4 border-black pb-4 sm:pb-6">
         <div>
-          <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+          <div className="font-mono text-[10px] sm:text-xs tracking-widest uppercase text-neutral-500 mb-1">
             Diagnostic Ledger &bull; Raw System Payloads
           </div>
-          <h1 className="text-3xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
+          <h1 className="text-2xl sm:text-4xl font-display font-bold uppercase tracking-tight text-black">
             Execution Trace Inspector
           </h1>
-          <p className="text-sm font-serif italic text-neutral-700 mt-1">
+          <p className="text-xs sm:text-sm font-serif italic text-neutral-700 mt-1">
             Step-by-step diagnostic audit log and cryptographic JSON payloads for Case #{selectedCaseId || '1'}.
           </p>
         </div>
 
         {activeCase && (
-          <div className="border-2 border-black bg-black text-white px-4 py-2 text-right rounded-lg">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 block">
+          <div className="border-2 border-black bg-black text-white px-3 sm:px-4 py-2 self-start sm:self-auto rounded-lg">
+            <span className="text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-neutral-400 block">
               Active Case Key
             </span>
             <span className="text-xs font-mono font-bold">
@@ -82,8 +82,14 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         )}
       </div>
 
+      {/* Mobile Swipe Hint */}
+      <div className="flex items-center justify-between text-[11px] font-mono sm:hidden px-1 text-neutral-500">
+        <span>Deterministic 7-Step Pipeline</span>
+        <span className="font-semibold">&larr; Swipe to view &rarr;</span>
+      </div>
+
       {/* Horizontal Stepper Progress */}
-      <div className="border-2 border-black p-4 bg-white overflow-x-auto rounded-2xl">
+      <div className="border-2 border-black p-3 sm:p-4 bg-white overflow-x-auto rounded-2xl">
         <div className="flex items-center justify-between min-w-[720px] gap-2">
           {graphSteps.map((step, idx) => {
             const hasEvent = events.some((e) => e.event_type === step.key);

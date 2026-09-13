@@ -429,24 +429,24 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
   return (
     <div className="space-y-8 pb-16">
       {/* 1. Architectural Editorial Header */}
-      <div className="border-b-4 border-black pb-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="border-b-4 border-black pb-4 sm:pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4">
           <div>
-            <div className="font-mono text-xs tracking-widest uppercase text-neutral-500 mb-1">
+            <div className="font-mono text-[10px] sm:text-xs tracking-widest uppercase text-neutral-500 mb-1">
               Autonomous Governance &bull; Enterprise Operations
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight text-black uppercase">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight text-black uppercase">
               Resolution Center
             </h1>
-            <p className="text-base font-serif italic text-neutral-700 mt-2 max-w-2xl">
+            <p className="text-sm sm:text-base font-serif italic text-neutral-700 mt-1.5 max-w-2xl">
               Deterministic, policy-governed intake for customer dispute mitigation, warehouse inventory checks, and transactional state verification.
             </p>
           </div>
-          <div className="flex items-center gap-3 font-mono text-xs tracking-wider uppercase">
-            <span className="border border-black px-2.5 py-1 bg-black text-white font-semibold rounded-full">
+          <div className="flex items-center gap-2 sm:gap-3 font-mono text-[11px] sm:text-xs tracking-wider uppercase self-start sm:self-auto">
+            <span className="border border-black px-2 sm:px-2.5 py-1 bg-black text-white font-semibold rounded-full">
               Live DB Synced
             </span>
-            <span className="border border-black px-2.5 py-1 bg-white text-black rounded-full">
+            <span className="border border-black px-2 sm:px-2.5 py-1 bg-white text-black rounded-full">
               INR (&bull;) Standard
             </span>
           </div>
@@ -607,16 +607,16 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
             </div>
 
             {/* Form Actions */}
-            <div className="pt-4 flex flex-wrap items-center justify-between gap-4 border-t-2 border-black">
-              <div className="font-mono text-[11px] tracking-wider uppercase text-neutral-600 flex items-center gap-2">
-                <Info size={14} strokeWidth={1.5} />
+            <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 border-t-2 border-black">
+              <div className="font-mono text-[10px] sm:text-[11px] tracking-wider uppercase text-neutral-600 flex items-center gap-2">
+                <Info size={14} strokeWidth={1.5} className="shrink-0" />
                 <span>Deterministic Idempotency Key Guard Active</span>
               </div>
 
               <MagneticButton
                 type="submit"
                 disabled={isProcessing}
-                className="px-6 py-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold rounded-lg transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
+                className="w-full sm:w-auto px-6 py-3 min-h-[44px] justify-center border-2 border-black bg-black text-white hover:bg-white hover:text-black font-mono text-xs tracking-widest uppercase font-bold rounded-lg transition-colors duration-100 flex items-center gap-2 disabled:opacity-50"
               >
                 {isProcessing ? (
                   <>

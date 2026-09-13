@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Source_Serif_4, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '../components/AuthProvider';
@@ -26,6 +26,13 @@ export const metadata: Metadata = {
   description: 'Deterministic, verifiable customer resolution platform for enterprise e-commerce.',
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#F5F0E8',
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -33,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${sourceSerif.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-background text-foreground font-serif antialiased selection:bg-black selection:text-white">
+      <body className="min-h-screen min-h-dvh overflow-x-hidden bg-background text-foreground font-serif antialiased selection:bg-black selection:text-white">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

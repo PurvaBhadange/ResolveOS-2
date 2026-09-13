@@ -32,9 +32,15 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   border-color: #000000 !important;
 }
 
-/* Instant / Binary Transitions */
+/* Instant / Binary Transitions & Mobile Touch Ergonomics */
 button, a, input, select, textarea {
   transition: background-color 0.1s linear, color 0.1s linear, border-color 0.1s linear;
+  touch-action: manipulation;
+}
+
+/* Touch-friendly momentum scrolling for all scroll containers */
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* High-Contrast Architectural Scrollbar */
@@ -212,6 +218,25 @@ button, a, input, select, textarea {
 .float-3d:hover {
   transform: perspective(600px) translateZ(10px) translateY(-3px);
   box-shadow: 0 12px 32px -6px rgba(0,0,0,0.2);
+}
+
+/* ─── Mobile Touch Safe Overrides ────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .tilt-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .row-3d:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .float-3d:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .press-3d:hover {
+    transform: none !important;
+  }
 }
 
 

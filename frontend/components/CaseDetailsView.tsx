@@ -75,9 +75,41 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
         </div>
       </div>
 
+      {/* Mobile Quick Case Selector (lg:hidden) */}
+      <div className="lg:hidden border-2 border-black p-3 bg-white rounded-2xl space-y-2">
+        <div className="flex items-center justify-between text-xs font-mono">
+          <span className="font-bold uppercase tracking-wider text-black">Active Case</span>
+          <span className="text-neutral-500">{cases.length} Logged</span>
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1 pt-0.5">
+          {cases.map((c) => {
+            const isSelected = activeCase?.id === c.id;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => onSelectCase(c.id)}
+                className={`flex-shrink-0 px-3 py-2 border-2 text-xs font-mono rounded-xl transition-colors duration-100 ${
+                  isSelected
+                    ? 'bg-black text-white border-black font-bold'
+                    : 'bg-white text-black border-black/30 hover:border-black'
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span>{c.case_number}</span>
+                  <span className={`text-[9px] uppercase px-1 py-0.2 border rounded ${isSelected ? 'border-white bg-white text-black' : 'border-black bg-neutral-100'}`}>
+                    {c.case_status}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Case List Sidebar (4 cols) */}
-        <div className="lg:col-span-4 border-2 border-black p-5 bg-white space-y-4 h-fit rounded-2xl">
+        {/* Case List Sidebar (Desktop only: hidden lg:block 4 cols) */}
+        <div className="hidden lg:block lg:col-span-4 border-2 border-black p-5 bg-white space-y-4 h-fit rounded-2xl">
           <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
             <span className="font-display font-bold uppercase text-xs tracking-wider text-black">
               Logged Cases
@@ -132,18 +164,18 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
           )}
         </div>
 
-        {/* Active Case Timeline Detail (8 cols) */}
+        {/* Active Case Timeline Detail (8 cols on lg, full width on mobile) */}
         <div className="lg:col-span-8 space-y-6">
           {activeCase ? (
-            <div className="border-2 border-black p-6 sm:p-8 bg-white space-y-6 rounded-2xl">
+            <div className="border-2 border-black p-4 sm:p-8 bg-white space-y-6 rounded-2xl">
               {/* Case Header Card */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b-2 border-black pb-4">
                 <div>
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="font-mono text-xs px-2 py-0.5 bg-black text-white font-bold border border-black rounded-md">
                       {activeCase.case_number}
                     </span>
-                    <h2 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-black">
+                    <h2 className="font-display text-base sm:text-xl font-bold uppercase tracking-tight text-black">
                       {activeCase.title}
                     </h2>
                   </div>
@@ -153,7 +185,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                 <button
                   onClick={() => handleRunWorkflow(activeCase.id)}
                   disabled={runningWorkflow}
-                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-black bg-black text-white font-mono text-xs tracking-wider uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 rounded-lg"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-black bg-black text-white font-mono text-xs tracking-wider uppercase font-bold hover:bg-white hover:text-black transition-colors duration-100 disabled:opacity-50 rounded-lg shrink-0"
                 >
                   <Play size={12} fill="currentColor" />
                   <span>{runningWorkflow ? 'Executing...' : 'Re-Run Pipeline'}</span>
