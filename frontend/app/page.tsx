@@ -22,7 +22,7 @@ export default function Home() {
   const isStaff = ['operations', 'admin', 'support_agent'].includes(userRole);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-black texture-lines">
+    <div className="min-h-screen flex flex-col bg-white text-black">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
