@@ -7,16 +7,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        white: '#F9F6F1',
-        background: '#F9F6F1',
+        white: '#F5F0E8',
+        background: '#F5F0E8',
         foreground: '#000000',
         muted: '#F0EDE6',
         mutedForeground: '#525252',
         accent: '#000000',
-        accentForeground: '#F9F6F1',
+        accentForeground: '#F5F0E8',
         border: '#000000',
-        borderLight: '#DDD9D2',
-        card: '#F9F6F1',
+        borderLight: '#D4CEC5',
+        card: '#F5F0E8',
         cardForeground: '#000000',
         ring: '#000000',
       },

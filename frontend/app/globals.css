@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --background: #F9F6F1;
+  --background: #F5F0E8;
   --foreground: #000000;
-  --muted: #F0EDE6;
+  --muted: #EDE7DC;
   --muted-foreground: #525252;
   --border: #000000;
   --border-light: #DDD9D2;
@@ -44,8 +44,8 @@ button, a, input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: #F9F6F1;
-  border-left: 1px solid #DDD9D2;
+  background: #F5F0E8;
+  border-left: 1px solid #D4CEC5;
 }
 
 ::-webkit-scrollbar-thumb {
