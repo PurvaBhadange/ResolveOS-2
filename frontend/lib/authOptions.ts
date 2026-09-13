@@ -1,23 +1,42 @@
-﻿import { NextAuthOptions } from 'next-auth';
+import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const googleClientId = process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID;
-const googleClientSecret = process.env.AUTH_GOOGLE_SECRET || process.env.GOOGLE_CLIENT_SECRET;
+// Resolve Google OAuth credentials with multiple standard environment variable fallbacks
+const googleClientId =
+  process.env.AUTH_GOOGLE_ID ||
+  process.env.GOOGLE_CLIENT_ID ||
+  process.env.GOOGLE_ID ||
+  process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID ||
+  '';
+
+const googleClientSecret =
+  process.env.AUTH_GOOGLE_SECRET ||
+  process.env.GOOGLE_CLIENT_SECRET ||
+  process.env.GOOGLE_SECRET ||
+  '';
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // Google OAuth Provider (Active if credentials are present in env)
+    // Google OAuth 2.0 Provider
     ...(googleClientId && googleClientSecret
       ? [
           GoogleProvider({
             clientId: googleClientId,
             clientSecret: googleClientSecret,
+            allowDangerousEmailAccountLinking: true,
+            authorization: {
+              params: {
+                prompt: 'select_account',
+                access_type: 'offline',
+                response_type: 'code',
+              },
+            },
           }),
         ]
       : []),
 
-    // Staff & Customer Credentials / Registration Provider
+    // Staff & Customer Credentials / Instant Role Provider
     CredentialsProvider({
       name: 'ResolveOS Account',
       credentials: {
@@ -60,22 +79,50 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, account, profile }: any) {
+      // First-time sign in
       if (user) {
-        token.role = user.role || 'customer';
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.role =
+          user.role ||
+          (user.email?.toLowerCase().includes('admin')
+            ? 'admin'
+            : user.email?.toLowerCase().includes('ops')
+            ? 'operations'
+            : user.email?.toLowerCase().includes('agent')
+            ? 'support_agent'
+            : 'customer');
       }
+
+      if (account?.provider === 'google') {
+        token.provider = 'google';
+        if (profile?.picture) {
+          token.picture = profile.picture;
+        }
+      }
+
       return token;
     },
     async session({ session, token }: any) {
       if (session.user) {
-        (session.user as any).role = token.role;
+        (session.user as any).id = token.id || token.sub;
+        (session.user as any).role = token.role || 'customer';
+        (session.user as any).provider = token.provider || 'credentials';
+        if (token.picture) {
+          (session.user as any).image = token.picture;
+        }
       }
       return session;
     },
   },
   pages: {
     signIn: '/',
+    error: '/',
   },
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'resolveos_dev_secret_key_32_characters_minimum_len',
+  secret:
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    'resolveos_secure_production_secret_32_characters_key_hash',
 };
-

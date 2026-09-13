@@ -75,13 +75,25 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               <div className="ml-2 border-l border-slate-200 pl-2">
                 {session ? (
                   <div className="flex items-center gap-2">
+                    {session.user?.image ? (
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        referrerPolicy="no-referrer"
+                        className="w-8 h-8 rounded-full border border-slate-200 object-cover shadow-sm"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-tealbrand-100 text-tealbrand-800 font-bold text-xs flex items-center justify-center border border-tealbrand-200">
+                        {(session.user?.name || 'U').charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     <div className="hidden sm:flex flex-col text-right">
                       <span className="text-xs font-bold text-slate-900 leading-none">{session.user?.name || 'Logged User'}</span>
-                      <span className="text-[10px] text-tealbrand-600 font-semibold uppercase">{session.user?.email || 'Operations'}</span>
+                      <span className="text-[10px] text-tealbrand-600 font-semibold uppercase">{session.user?.email || 'Customer'}</span>
                     </div>
                     <button
                       onClick={() => signOut()}
-                      title="Sign Out to switch back to Customer View"
+                      title="Sign Out"
                       className="p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
                     >
                       <LogOut className="w-4 h-4" />

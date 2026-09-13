@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
+import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles, Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 
 interface SignInModalProps {
@@ -61,17 +61,22 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
     }
   };
 
-  const handleGoogleSignIn = () => {
-    // Check if Google OAuth ID environment variable is provided
-    const hasGoogleEnv = Boolean(process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID || process.env.AUTH_GOOGLE_ID);
-    if (!hasGoogleEnv) {
-      setGoogleNotice(
-        "Google OAuth keys (AUTH_GOOGLE_ID) are not configured in frontend/.env.local. You can paste your Google Client ID into .env.local, or use 'Create Account' below to sign in instantly!"
-      );
-      return;
-    }
+  const [googleLoading, setGoogleLoading] = useState(false);
 
-    signIn('google');
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    setGoogleNotice(null);
+    try {
+      await signIn('google', {
+        callbackUrl: window.location.origin,
+      });
+    } catch (err: any) {
+      console.error('Google Sign In error:', err);
+      setGoogleNotice(
+        "Could not initiate Google Sign-In. If you are testing locally without Google credentials, use the Quick Login or Create Account options below."
+      );
+      setGoogleLoading(false);
+    }
   };
 
   return (
@@ -118,7 +123,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs leading-relaxed space-y-1">
             <div className="flex items-center gap-1.5 font-bold">
               <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>Google OAuth Setup Notice</span>
+              <span>Google OAuth Notice</span>
             </div>
             <p className="text-[11px] text-amber-700">{googleNotice}</p>
           </div>
@@ -129,15 +134,25 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             {/* Google OAuth Button */}
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-all shadow-sm"
+              disabled={googleLoading || loading}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-all shadow-sm disabled:opacity-60"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
-                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.25 21.36 7.34 24 12 24z" />
-                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
-                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
-              </svg>
-              Continue with Google
+              {googleLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin text-tealbrand-600" />
+                  <span>Connecting to Google...</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.25 21.36 7.34 24 12 24z" />
+                    <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+                  </svg>
+                  <span>Continue with Google</span>
+                </>
+              )}
             </button>
 
             <div className="relative flex items-center justify-center my-2">
