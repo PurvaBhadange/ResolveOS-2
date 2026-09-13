@@ -3,8 +3,8 @@ import './globals.css';
 import { AuthProvider } from '../components/AuthProvider';
 
 export const metadata: Metadata = {
-  title: 'ResolveOS | Autonomous Customer Resolution Platform',
-  description: 'Verifiable, safe, and adaptive AI customer resolution platform.',
+  title: 'ResolveOS | Enterprise Customer Resolution Platform',
+  description: 'Deterministic, verifiable customer resolution platform for enterprise e-commerce.',
 };
 
 export default function RootLayout({

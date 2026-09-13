@@ -38,7 +38,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
 
   const graphSteps = [
     { key: 'GOAL', label: '1. UNDERSTAND', desc: 'Parse Intent & Goal' },
-    { key: 'EVIDENCE', label: '2. EVIDENCE', desc: 'RAG & Enterprise DB' },
+    { key: 'EVIDENCE', label: '2. EVIDENCE', desc: 'Policy & Enterprise DB' },
     { key: 'DECISION', label: '3. DECIDE', desc: 'Scored Plan Candidates' },
     { key: 'ACTION', label: '4. ACT', desc: 'Enterprise State Action' },
     { key: 'VERIFICATION', label: '5. VERIFY', desc: 'Independent DB Re-query' },
@@ -52,9 +52,9 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         <div>
           <div className="flex items-center gap-2">
             <Cpu className="w-6 h-6 text-tealbrand-600" />
-            <h1 className="text-2xl font-bold text-slate-900">Agent Trace Inspector</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Execution Trace Inspector</h1>
           </div>
-          <p className="text-slate-500 text-sm">Visual step-by-step audit of the LangGraph agentic loop for Case #{selectedCaseId || '1'}.</p>
+          <p className="text-slate-500 text-sm">Visual step-by-step audit of the resolution execution workflow for Case #{selectedCaseId || '1'}.</p>
         </div>
 
         {activeCase && (
@@ -65,7 +65,7 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
         )}
       </div>
 
-      {/* Visual LangGraph State Machine Horizontal Pipeline */}
+      {/* Visual State Machine Horizontal Pipeline */}
       <div className="bg-white text-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm overflow-x-auto">
         <div className="flex items-center justify-between min-w-[700px] gap-2">
           {graphSteps.map((step, idx) => {
@@ -97,9 +97,9 @@ export const AgentTraceInspector: React.FC<AgentTraceProps> = ({ selectedCaseId 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Event List */}
         <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-2 h-fit">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 py-1">Agent Event Stream</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 py-1">Execution Event Stream</h3>
           {events.length === 0 ? (
-            <div className="p-4 text-xs text-slate-400">No agent events logged.</div>
+            <div className="p-4 text-xs text-slate-400">No execution events logged.</div>
           ) : (
             events.map((ev) => (
               <div

@@ -20,7 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
     { id: 'orders', label: 'My Orders', icon: ShoppingBag, roles: ['customer', 'admin'] },
     { id: 'cases', label: 'Case Tracker', icon: Activity, roles: ['customer', 'operations', 'admin', 'support_agent'] },
     { id: 'ops', label: 'Operations Dashboard', icon: Layers, badge: 'Judge Console', roles: ['operations', 'admin'] },
-    { id: 'trace', label: 'Agent Trace Inspector', icon: Cpu, badge: 'Live Graph', roles: ['operations', 'admin', 'support_agent'] },
+    { id: 'trace', label: 'Execution Trace Inspector', icon: Cpu, badge: 'Live Audit', roles: ['operations', 'admin', 'support_agent'] },
   ];
 
   // Filter tabs based on active user role
@@ -28,21 +28,21 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      {/* Top Hackathon Banner */}
+      {/* Top Enterprise System Status Bar */}
       <div className="bg-slate-50 text-slate-600 text-xs font-medium py-1.5 px-4 border-b border-slate-200">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded-md bg-tealbrand-50 text-tealbrand-700 font-bold border border-tealbrand-200 text-[10px] uppercase tracking-wider">
-              Agentic AI Hackathon
+              Enterprise Edition
             </span>
-            <span className="text-slate-600 hidden sm:inline">Track 3: Smart Automation &middot; IIT Bhubaneswar (Tech Zephyr 4.0)</span>
+            <span className="text-slate-600 hidden sm:inline">ResolveOS Logistics &amp; Fulfillment Resolution Suite</span>
           </div>
           <div className="flex items-center gap-3 text-[11px] text-slate-500">
             <span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" /> Live API Online
+              <span className="w-2 h-2 rounded-full bg-emerald-500" /> Systems Operational
             </span>
             <span className="hidden md:inline text-slate-300">•</span>
-            <span className="hidden md:inline text-slate-600 font-mono">FastAPI + LangGraph Engine</span>
+            <span className="hidden md:inline text-slate-600 font-mono">Real-Time Sync Active</span>
           </div>
         </div>
       </div>

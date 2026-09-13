@@ -43,7 +43,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   const [activeStepIndex, setActiveStepIndex] = useState<number>(-1);
   const [isLoopComplete, setIsLoopComplete] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>(
-    'Scenario 1 loaded: Stockout Adaptation (ORD-2026-8801). Click "Submit & Run Agent" to start.'
+    'Scenario 1 loaded: Stockout Adaptation (ORD-2026-8801). Click "Submit & Run Resolution" to start.'
   );
 
   // Order preview state
@@ -57,13 +57,13 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   });
 
   const stepDescriptions = [
-    'Node 1/7 [UNDERSTAND]: Extracting customer intent & analyzing order records...',
-    'Node 2/7 [EVIDENCE]: Querying warehouse stock levels & RAG return policies...',
-    'Node 3/7 [DECIDE]: Evaluating plan candidates & ranking confidence scores...',
-    'Node 4/7 [GUARD]: Checking ₹15,000 threshold, fraud risk & policy return windows...',
-    'Node 5/7 [ACT]: Executing transactional state change with idempotency key...',
-    'Node 6/7 [VERIFY]: Re-querying PostgreSQL database to independently audit outcome...',
-    'Node 7/7 [ADAPT]: Validating autonomous adaptation & closing support ticket...',
+    'Step 1/7 [UNDERSTAND]: Extracting customer intent & analyzing order records...',
+    'Step 2/7 [EVIDENCE]: Querying warehouse stock levels & policy return rules...',
+    'Step 3/7 [DECIDE]: Evaluating plan candidates & ranking confidence scores...',
+    'Step 4/7 [GUARD]: Checking ₹15,000 threshold, fraud risk & policy return windows...',
+    'Step 5/7 [ACT]: Executing transactional state change with idempotency key...',
+    'Step 6/7 [VERIFY]: Re-querying PostgreSQL database to independently audit outcome...',
+    'Step 7/7 [ADAPT]: Validating resolution adaptation & closing support ticket...',
   ];
 
   const presets = [
@@ -75,7 +75,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       amount: '₹199.99',
       badge: 'Stockout Replanning',
       badgeColor: 'bg-tealbrand-50 text-tealbrand-700 border-tealbrand-200',
-      desc: 'Headphones delivered damaged. Warehouse is out of stock, so ResolveAI autonomously adapts from replacement to instant full refund via UPI / original payment method.',
+      desc: 'Headphones delivered damaged. Warehouse is out of stock, so ResolveOS automatically adapts from replacement to instant full refund via UPI / original payment method.',
       category: 'damaged',
       issueTitle: 'Headphones arrived damaged - Request replacement',
       issueDesc: 'My AuraSound headphones arrived yesterday with a cracked left ear cup and sound distortion. I want a replacement.',
@@ -96,7 +96,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       amount: '₹499.98',
       badge: 'Human-in-the-Loop',
       badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
-      desc: 'Defective Smartwatch Bundle exceeding ₹15,000 safety threshold. Automatically halts autonomous execution and routes to Operations Approval Queue.',
+      desc: 'Defective Smartwatch Bundle exceeding ₹15,000 safety threshold. Automatically halts auto-execution and routes to Operations Approval Queue.',
       category: 'damaged',
       issueTitle: 'Damaged Smartwatch Bundle - Request refund (₹499.98)',
       issueDesc: 'Apex Smartwatch arrived defective with touchscreen unresponsiveness. Requesting full refund of ₹499.98.',
@@ -117,7 +117,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       amount: '₹89.99',
       badge: 'Policy Enforcement',
       badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
-      desc: 'Pulse Earbuds delivered 40 days ago. RAG Policy Engine detects return requested past 15-day limit and enforces policy rules.',
+      desc: 'Pulse Earbuds delivered 40 days ago. Policy Rules Engine detects return requested past 15-day limit and enforces policy rules.',
       category: 'returns',
       issueTitle: 'Return wireless earbuds - Delivered 40 days ago',
       issueDesc: 'Requesting return and refund for Pulse Earbuds delivered 40 days ago.',
@@ -138,7 +138,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       amount: '₹129.99',
       badge: 'Instant Resolution',
       badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-      desc: 'Mechanical keyboard order in "processing" state. ResolveAI verifies order is not yet packed and immediately voids shipment and issues refund.',
+      desc: 'Mechanical keyboard order in "processing" state. ResolveOS verifies order is not yet packed and immediately voids shipment and issues refund.',
       category: 'orders',
       issueTitle: 'Cancel order before shipment - ErgoMech Keyboard',
       issueDesc: 'Please cancel order ORD-2026-8804 before shipment and issue refund.',
@@ -165,7 +165,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     setOrderPreview(p.preview);
     setActiveStepIndex(-1);
     setIsLoopComplete(false);
-    setStatusMessage(`Scenario ${p.num} loaded: ${p.title} (${p.order}). Click "Submit & Run Agent" to start.`);
+    setStatusMessage(`Scenario ${p.num} loaded: ${p.title} (${p.order}). Click "Submit & Run Resolution" to start.`);
   };
 
   const categories = [
@@ -216,7 +216,6 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       setStatusMessage(stepDescriptions[3]);
 
       // 2. Create support case using real customer_id & order_id from DB
-      // Backend automatically triggers run_agent_on_case
       const newCase = await api.createCase({
         customer_id: order.customer_id,
         order_id: order.id,
@@ -230,7 +229,9 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       // Step 5: Act
       setActiveStepIndex(4);
       setStatusMessage(stepDescriptions[4]);
-      await new Promise((r) => setTimeout(r, 400));
+
+      // Run workflow on case
+      await api.runAgentOnCase(newCase.id);
 
       // Step 6: Verify
       setActiveStepIndex(5);
@@ -245,10 +246,10 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       // All nodes completed
       setActiveStepIndex(7);
       setIsLoopComplete(true);
-      setStatusMessage('Case autonomously resolved & independently audited against database! Redirecting to Case Tracker...');
+      setStatusMessage('Case successfully resolved & verified against database! Redirecting to Case Tracker...');
       await new Promise((r) => setTimeout(r, 750));
 
-      // 4. Navigate to Case Tracker to see real-time resolution
+      // Navigate to Case Tracker
       onCaseCreated(newCase.id);
       setActiveTab('cases');
     } catch (err: any) {
@@ -270,18 +271,18 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tealbrand-50 text-tealbrand-700 text-xs font-semibold border border-tealbrand-200">
-            <ShieldCheck className="w-3.5 h-3.5 text-tealbrand-600" /> 🇮🇳 India&apos;s Autonomous Enterprise Resolution Engine
+            <ShieldCheck className="w-3.5 h-3.5 text-tealbrand-600" /> 🇮🇳 India&apos;s Enterprise Resolution &amp; Fulfillment Engine
           </div>
           <div className="flex items-center gap-3 text-xs text-slate-500 font-mono">
             <span className="flex items-center gap-1.5"><Database className="w-3.5 h-3.5 text-tealbrand-600" /> Neon DB Connected</span>
             <span>&bull;</span>
-            <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-amber-500" /> Mistral AI Engine</span>
+            <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-amber-500" /> Rules &amp; Workflow Engine</span>
           </div>
         </div>
 
         <div className="max-w-3xl space-y-2">
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            Autonomous Customer Resolution Console
+            Customer Resolution &amp; Support Console
           </h1>
           <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
             ResolveOS independently verifies order history, warehouse stock levels, and policy return windows to execute idempotent business resolutions with zero manual delay.
@@ -294,7 +295,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-amber-500" /> 1-Click Demo Scenarios (Select to Test):
             </span>
-            <span className="text-[11px] text-slate-500">Click any preset to pre-fill &amp; test the agent</span>
+            <span className="text-[11px] text-slate-500">Click any preset to pre-fill sample order details</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -461,7 +462,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
             <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100">
               <div className="text-xs text-slate-500 flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5 text-tealbrand-600" />
-                <span>Triggers autonomous LangGraph loop upon submit</span>
+                <span>Triggers automated resolution workflow upon submit</span>
               </div>
 
               <button
@@ -472,11 +473,11 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
                 {isProcessing ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    Executing Agent Loop...
+                    Processing Resolution...
                   </>
                 ) : (
                   <>
-                    Submit &amp; Run Agent <ArrowRight className="w-4 h-4" />
+                    Submit &amp; Run Resolution <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
@@ -523,7 +524,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-tealbrand-600" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Active Policy Guardrails (RAG)</h3>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Active Policy Guardrails</h3>
               </div>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-tealbrand-50 text-tealbrand-700 border border-tealbrand-200">
                 v2.0 Active
@@ -536,7 +537,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
                 <div>
                   <span className="font-bold text-slate-900 block text-[11px]">Stockout Adaptation Rule</span>
                   <span className="text-[11px] text-slate-600 leading-tight block mt-0.5">
-                    If replacement item is out of stock across WH-EAST &amp; WH-WEST, system autonomously adapts to full refund via UPI / original payment method.
+                    If replacement item is out of stock across WH-EAST &amp; WH-WEST, system automatically adapts to full refund via UPI / original payment method.
                   </span>
                 </div>
               </div>

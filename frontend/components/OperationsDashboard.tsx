@@ -73,7 +73,7 @@ export const OperationsDashboard: React.FC = () => {
           <p className="text-2xl font-black text-tealbrand-600">{successRate}%</p>
         </div>
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Autonomous Rate</span>
+          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Auto-Resolution Rate</span>
           <p className="text-2xl font-black text-slate-900">92%</p>
         </div>
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
@@ -100,7 +100,7 @@ export const OperationsDashboard: React.FC = () => {
           </div>
 
           {approvals.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-sm">No pending approval requests. System operating autonomously.</div>
+            <div className="p-8 text-center text-slate-400 text-sm">No pending approval requests. All cases resolved within standard policy.</div>
           ) : (
             <div className="space-y-4">
               {approvals.map((appr) => (
@@ -180,12 +180,12 @@ export const OperationsDashboard: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-slate-600">
-              Primary warehouse <strong>WH-EAST</strong> and secondary warehouse <strong>WH-WEST</strong> both show 0 stock. When customer requests replacement for this item, the resolution guard flags this inventory constraint, forcing the agent to adapt to a <strong>Full Refund</strong>.
+              Primary warehouse <strong>WH-EAST</strong> and secondary warehouse <strong>WH-WEST</strong> both show 0 stock. When customer requests replacement for this item, the resolution guard flags this inventory constraint, adapting to a <strong>Full Refund</strong>.
             </p>
           </div>
         </div>
 
-        {/* Policy RAG Version Inspector */}
+        {/* Policy Version Inspector */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
             <FileText className="w-5 h-5 text-sky-600" />

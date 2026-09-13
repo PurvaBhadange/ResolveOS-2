@@ -59,7 +59,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Support Case Resolution Tracker</h1>
-          <p className="text-slate-500 text-sm">Track real-time autonomous agent progress and decision timelines.</p>
+          <p className="text-slate-500 text-sm">Track real-time resolution progress and audit timelines.</p>
         </div>
       </div>
 
@@ -120,7 +120,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-sm disabled:opacity-50"
                 >
                   <Play className="w-3.5 h-3.5" />
-                  {runningAgent ? 'Running Agent...' : 'Trigger Agent Execution'}
+                  {runningAgent ? 'Executing Workflow...' : 'Execute Resolution Workflow'}
                 </button>
               </div>
 
@@ -130,7 +130,7 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
 
                 {events.length === 0 ? (
                   <div className="p-8 bg-slate-50 rounded-2xl text-center text-slate-500 text-sm border border-slate-200">
-                    No resolution events recorded yet. Click <strong>Trigger Agent Execution</strong> to run the LangGraph state machine.
+                    No resolution events recorded yet. Click <strong>Execute Resolution Workflow</strong> to run the resolution pipeline.
                   </div>
                 ) : (
                   <div className="space-y-6 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200">

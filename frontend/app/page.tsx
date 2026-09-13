@@ -78,9 +78,9 @@ export default function Home() {
               <div className="w-12 h-12 rounded-2xl bg-tealbrand-50 text-tealbrand-600 flex items-center justify-center mx-auto">
                 <ShieldAlert className="w-6 h-6" />
               </div>
-              <h2 className="text-xl font-bold text-slate-900">Agent Inspector Restricted</h2>
+              <h2 className="text-xl font-bold text-slate-900">Execution Trace Restricted</h2>
               <p className="text-slate-500 text-sm leading-relaxed">
-                The Agent Trace Graph contains internal decision payloads and enterprise policy audit logs. Staff sign-in is required.
+                The Execution Trace Log contains internal workflow payloads and enterprise policy audit records. Staff sign-in is required.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
@@ -97,7 +97,7 @@ export default function Home() {
 
       <footer className="bg-white border-t border-slate-200 py-6 mt-12">
         <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-medium">
-          ResolveOS Autonomous Agent Platform &mdash; Powered by LangGraph, Mistral AI, FastAPI &amp; Neon PostgreSQL
+          ResolveOS Enterprise Resolution Platform &mdash; High-Reliability Fulfillment &amp; Customer Support Infrastructure
         </div>
       </footer>
     </div>
