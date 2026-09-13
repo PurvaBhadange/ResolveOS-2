@@ -35,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <span className="px-2 py-0.5 rounded-md bg-tealbrand-500/20 text-tealbrand-300 font-bold border border-tealbrand-500/30 text-[10px] uppercase tracking-wider">
               Agentic AI Hackathon
             </span>
-            <span className="text-slate-300 hidden sm:inline">Track 3: Smart Automation • IIT Bhubaneswar (Tech Zephyr 4.0)</span>
+            <span className="text-slate-300 hidden sm:inline">Track 3: Smart Automation &middot; IIT Bhubaneswar (Tech Zephyr 4.0)</span>
           </div>
           <div className="flex items-center gap-3 text-[11px] text-slate-300">
             <span className="inline-flex items-center gap-1 text-emerald-400">

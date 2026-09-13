@@ -45,6 +45,8 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
     try {
       await api.runAgentOnCase(caseId);
       await loadCases();
+      // Navigate to Agent Trace Inspector to see the result
+      setActiveTab('trace');
     } catch (e) {
       console.error(e);
     } finally {
@@ -171,3 +173,4 @@ export const CaseDetailsView: React.FC<CaseDetailsViewProps> = ({ selectedCaseId
     </div>
   );
 };
+

@@ -39,7 +39,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
                 LangGraph State Machine
               </span>
             </div>
-            <p className="text-xs text-slate-400">Observe → Decide → Act → Evaluate → Adapt Execution Graph</p>
+            <p className="text-xs text-slate-400">Observe &rarr; Decide &rarr; Act &rarr; Evaluate &rarr; Adapt Execution Graph</p>
           </div>
         </div>
 
@@ -91,3 +91,4 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
     </div>
   );
 };
+

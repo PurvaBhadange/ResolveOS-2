@@ -24,7 +24,15 @@ class Settings(BaseSettings):
     # Environment & CORS
     ENVIRONMENT: str = "development"
     LOG_LEVEL: str = "INFO"
-    CORS_ORIGINS: Union[str, List[str]] = ["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "http://127.0.0.1:3001"]
+    CORS_ORIGINS: Union[str, List[str]] = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001",
+    ]
+
+    # Production frontend origin (set in Render env vars as your Vercel URL)
+    PRODUCTION_ORIGIN: str = ""
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

@@ -7,18 +7,28 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
+        // Zapier-Inspired Warm Coffee & Saturated Orange Palette
+        primary: {
+          DEFAULT: '#ff4f00',
+          hover: '#e04500',
+          light: '#fff2ec',
         },
+        'on-primary': '#fffefb',
+        ink: {
+          DEFAULT: '#201515',
+          soft: '#2f2a26',
+          mid: '#36342e',
+        },
+        body: {
+          DEFAULT: '#605d52',
+          mid: '#939084',
+        },
+        mute: '#c5c0b1',
+        canvas: {
+          DEFAULT: '#fffefb',
+          soft: '#f8f4f0',
+        },
+        // Legacy tealbrand for backward compat
         tealbrand: {
           50: '#f0fdfa',
           100: '#ccfbf1',
@@ -30,7 +40,16 @@ module.exports = {
           700: '#0f766e',
           800: '#115e59',
           900: '#134e4a',
-        }
+          950: '#0d3331',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      borderRadius: {
+        'sm': '6px',
+        'md': '12px',
+        'pill': '9999px',
       },
     },
   },

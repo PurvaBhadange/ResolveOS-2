@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Package, RefreshCw, Truck, AlertTriangle, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
+import { Package, RefreshCw, Truck, AlertTriangle, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { api } from '../lib/api';
 import { AgentLoopVisualizer } from './AgentLoopVisualizer';
 
@@ -18,24 +18,29 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [agentRunning, setAgentRunning] = useState<boolean>(false);
 
   const loadPreset = (preset: 'stockout' | 'high_value' | 'expired' | 'cancel') => {
     if (preset === 'stockout') {
       setOrderNumber('ORD-2026-8801');
       setIssueTitle('Headphones arrived damaged - Request replacement');
       setIssueDescription('My AuraSound headphones arrived yesterday with a cracked left ear cup and sound distortion. I want a replacement.');
+      setSelectedCategory('damaged');
     } else if (preset === 'high_value') {
       setOrderNumber('ORD-2026-8802');
       setIssueTitle('Damaged Smartwatch Bundle - Request refund ($499.98)');
       setIssueDescription('Apex Smartwatch arrived defective with touchscreen unresponsiveness. Requesting full refund of $499.98.');
+      setSelectedCategory('damaged');
     } else if (preset === 'expired') {
       setOrderNumber('ORD-2026-8803');
       setIssueTitle('Return wireless earbuds - Delivered 40 days ago');
       setIssueDescription('Requesting return and refund for Pulse Earbuds delivered 40 days ago.');
+      setSelectedCategory('returns');
     } else if (preset === 'cancel') {
       setOrderNumber('ORD-2026-8804');
       setIssueTitle('Cancel order before shipment - ErgoMech Keyboard');
       setIssueDescription('Please cancel order ORD-2026-8804 before shipment and issue refund.');
+      setSelectedCategory('orders');
     }
   };
 
@@ -45,27 +50,40 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     setError(null);
 
     try {
-      // 1. Fetch Order details first
+      // 1. Fetch Order details first to get numeric order_id
       const order = await api.getOrderByNumber(orderNumber.trim());
-      if (!order) {
-        throw new Error(`Order number ${orderNumber} not found.`);
+      if (!order || !order.id) {
+        throw new Error(`Order "${orderNumber}" not found. Please check the order number and ensure the backend is running.`);
       }
 
-      // 2. Submit Support Case
+      // 2. Create support case using real customer_id & order_id from DB
       const newCase = await api.createCase({
         customer_id: order.customer_id,
         order_id: order.id,
         title: issueTitle,
         description: issueDescription,
-        category: 'return_refund',
+        category: selectedCategory || 'return_refund',
       });
 
+      // 3. Immediately trigger the autonomous LangGraph agent
+      setAgentRunning(true);
+      try {
+        await api.runAgentOnCase(newCase.id);
+      } catch (agentErr) {
+        // Agent errors are non-fatal - case still created
+        console.warn('Agent run warning:', agentErr);
+      } finally {
+        setAgentRunning(false);
+      }
+
+      // 4. Navigate to Case Tracker to see real-time resolution
       onCaseCreated(newCase.id);
       setActiveTab('cases');
     } catch (err: any) {
-      setError(err.message || 'Failed to submit support issue.');
+      setError(err.message || 'Failed to submit support issue. Make sure the backend is running on port 8001.');
     } finally {
       setLoading(false);
+      setAgentRunning(false);
     }
   };
 
@@ -75,6 +93,8 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
     { id: 'shipping', title: 'Shipping & Delivery', icon: Truck, desc: 'Tracking orders, missing packages & delays' },
     { id: 'orders', title: 'Order Modifications', icon: Package, desc: 'Cancel or update unfulfilled orders' },
   ];
+
+  const isProcessing = loading || agentRunning;
 
   return (
     <div className="space-y-8 pb-12">
@@ -89,39 +109,40 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
             How can we resolve your issue today?
           </h1>
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            ResolveOS independently verifies system records, policy rules, and inventory levels to resolve your issue instantly with zero manual delay.
+            ResolveOS independently verifies order records, policy return windows, and warehouse stock levels to execute transactional business resolutions instantly with zero manual delay.
           </p>
 
           <div className="pt-2 space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-tealbrand-300 block">Select Demo Scenario to Test:</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-tealbrand-300 block">1-Click Demo Scenarios to Test:</span>
             <div className="flex flex-wrap gap-2.5">
               <button
                 type="button"
                 onClick={() => loadPreset('stockout')}
-                className="px-3 py-2 rounded-xl bg-tealbrand-500 hover:bg-tealbrand-600 text-white font-semibold text-xs transition-all shadow-sm"
+                className="px-3 py-2 rounded-xl bg-tealbrand-500 hover:bg-tealbrand-600 text-white font-semibold text-xs transition-all shadow-sm flex items-center gap-1.5"
               >
-                1. Stockout Adaptation (ORD-2026-8801)
+                <Zap className="w-3 h-3" />
+                1. Stockout Adaptation <span className="opacity-70 font-mono">(ORD-2026-8801)</span>
               </button>
               <button
                 type="button"
                 onClick={() => loadPreset('high_value')}
                 className="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all shadow-sm"
               >
-                2. High-Value $200+ Approval (ORD-2026-8802)
+                2. High-Value $200+ Approval <span className="opacity-70 font-mono">(ORD-2026-8802)</span>
               </button>
               <button
                 type="button"
                 onClick={() => loadPreset('expired')}
                 className="px-3 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs transition-all shadow-sm"
               >
-                3. Expired Return Window (ORD-2026-8803)
+                3. Expired Return Window <span className="opacity-70 font-mono">(ORD-2026-8803)</span>
               </button>
               <button
                 type="button"
                 onClick={() => loadPreset('cancel')}
                 className="px-3 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold text-xs transition-all shadow-sm"
               >
-                4. Pre-Shipment Cancellation (ORD-2026-8804)
+                4. Pre-Shipment Cancel <span className="opacity-70 font-mono">(ORD-2026-8804)</span>
               </button>
             </div>
           </div>
@@ -133,7 +154,6 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
 
       {/* Category Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-
         {categories.map((cat) => {
           const Icon = cat.icon;
           const isSelected = selectedCategory === cat.id;
@@ -163,7 +183,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
       <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm">
         <div className="border-b border-slate-100 pb-6 mb-6">
           <h2 className="text-2xl font-bold text-slate-900">Submit Resolution Request</h2>
-          <p className="text-slate-500 text-sm mt-1">Enter your order details and requested outcome to initiate autonomous resolution.</p>
+          <p className="text-slate-500 text-sm mt-1">Enter your order details and the agent will autonomously resolve it end-to-end.</p>
         </div>
 
         {error && (
@@ -215,11 +235,25 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({ onCaseCreated, s
           <div className="flex items-center justify-end gap-4 pt-4">
             <button
               type="submit"
-              disabled={loading}
+              disabled={isProcessing}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all disabled:opacity-50 shadow-md"
             >
-              {loading ? 'Processing Resolution...' : 'Submit Resolution Request'}
-              <ArrowRight className="w-4 h-4" />
+              {agentRunning ? (
+                <>
+                  <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  Agent Running...
+                </>
+              ) : loading ? (
+                <>
+                  <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  Creating Case...
+                </>
+              ) : (
+                <>
+                  Submit &amp; Run Agent
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </div>
         </form>

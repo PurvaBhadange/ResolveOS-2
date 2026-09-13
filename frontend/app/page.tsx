@@ -14,7 +14,7 @@ import { SignInModal } from '../components/SignInModal';
 export default function Home() {
   const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<string>('help');
-  const [selectedCaseId, setSelectedCaseId] = useState<number | null>(1); // Default to Case 1 (Sarah Jenkins Demo)
+  const [selectedCaseId, setSelectedCaseId] = useState<number | null>(1);
   const [selectedOrderNumber, setSelectedOrderNumber] = useState<string>('ORD-2026-8801');
   const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
 
@@ -58,7 +58,7 @@ export default function Home() {
               </div>
               <h2 className="text-xl font-bold text-slate-900">Staff Authentication Required</h2>
               <p className="text-slate-500 text-sm leading-relaxed">
-                The Operations Dashboard & Approval Console is restricted to internal Operations Leads and Admin Supervisors.
+                The Operations Dashboard &amp; Approval Console is restricted to internal Operations Leads and Admin Supervisors.
               </p>
               <button
                 onClick={() => setIsSignInModalOpen(true)}
@@ -97,7 +97,7 @@ export default function Home() {
 
       <footer className="bg-white border-t border-slate-200 py-6 mt-12">
         <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-medium">
-          ResolveOS Autonomous Agent Platform • Powered by LangGraph, Google Gemini, FastAPI & Neon PostgreSQL
+          ResolveOS Autonomous Agent Platform &mdash; Powered by LangGraph, Mistral AI, FastAPI &amp; Neon PostgreSQL
         </div>
       </footer>
     </div>
