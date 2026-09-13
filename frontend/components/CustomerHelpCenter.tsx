@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AlertTriangle,
   RefreshCw,
@@ -148,6 +148,69 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
     }
   ];
 
+  const handleCategoryChange = (catId: string) => {
+    setSelectedCategory(catId);
+
+    // If an active preset matches this category and current order, use its verified dispute statement
+    const currentPreset = presets.find((p) => p.id === activePreset);
+    if (currentPreset && currentPreset.category === catId && currentPreset.order === orderNumber) {
+      setIssueTitle(currentPreset.issueTitle);
+      setIssueDescription(currentPreset.issueDesc);
+      return;
+    }
+
+    // Check if any preset matches current order and this category
+    const orderPreset = presets.find((p) => p.order === orderNumber && p.category === catId);
+    if (orderPreset) {
+      setIssueTitle(orderPreset.issueTitle);
+      setIssueDescription(orderPreset.issueDesc);
+      return;
+    }
+
+    // Contextual title & customer statement based on current item title and order number
+    const itemTitle = orderPreview?.item_title || 'Item';
+    const currentOrder = orderNumber.trim() || 'ORD-2026-8801';
+
+    switch (catId) {
+      case 'damaged':
+        setIssueTitle(`${itemTitle} arrived damaged - Request replacement`);
+        setIssueDescription(
+          `My ${itemTitle} arrived with physical damage, defective casing, or hardware malfunction upon delivery. Requesting an immediate replacement or full refund.`
+        );
+        break;
+      case 'returns':
+        setIssueTitle(`Return and refund request for ${itemTitle}`);
+        setIssueDescription(
+          `I would like to initiate a product return and full refund for ${itemTitle} (Order ${currentOrder}). The product is unused, in original condition and packaging.`
+        );
+        break;
+      case 'shipping':
+        setIssueTitle(`Delivery delay & transit inquiry - Order ${currentOrder}`);
+        setIssueDescription(
+          `The shipment tracking for order ${currentOrder} (${itemTitle}) has not updated or has exceeded the estimated delivery date. Please check courier dispatch and transit status.`
+        );
+        break;
+      case 'orders':
+        setIssueTitle(`Cancel order before shipment - ${currentOrder}`);
+        setIssueDescription(
+          `Please cancel unfulfilled order ${currentOrder} (${itemTitle}) prior to warehouse dispatch and process an immediate refund to the original payment method.`
+        );
+        break;
+      default:
+        setIssueTitle(`Dispute claim for order ${currentOrder}`);
+        setIssueDescription(`Customer dispute claim regarding ${itemTitle} under order ${currentOrder}.`);
+        break;
+    }
+  };
+
+  const handleOrderNumberChange = (newOrderNum: string) => {
+    setOrderNumber(newOrderNum);
+    const matchingPreset = presets.find((p) => p.order.toLowerCase() === newOrderNum.trim().toLowerCase());
+    if (matchingPreset) {
+      setOrderPreview(matchingPreset.preview);
+    }
+  };
+
   const handleSelectPreset = (p: (typeof presets)[0]) => {
     setActivePreset(p.id);
     setOrderNumber(p.order);
@@ -159,6 +222,29 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
     setIsLoopComplete(false);
     setStatusMessage(`Loaded Scenario ${p.num}: ${p.title} (${p.order}). Click "Execute Resolution" to run.`);
   };
+
+  useEffect(() => {
+    if (prefillOrderNumber && prefillOrderNumber !== orderNumber) {
+      setOrderNumber(prefillOrderNumber);
+      const matchingPreset = presets.find((p) => p.order === prefillOrderNumber);
+      if (matchingPreset) {
+        handleSelectPreset(matchingPreset);
+      } else {
+        api.getOrderByNumber(prefillOrderNumber).then((ord) => {
+          if (ord) {
+            setOrderPreview({
+              order_number: ord.order_number,
+              total_amount: ord.total_amount,
+              order_status: ord.order_status,
+              item_title: ord.items?.[0]?.variant?.title || 'Order Item',
+              carrier: ord.shipment?.carrier || 'Blue Dart Express',
+              tracking: ord.shipment?.tracking_number || 'N/A',
+            });
+          }
+        }).catch(() => {});
+      }
+    }
+  }, [prefillOrderNumber]);
 
   const categories = [
     { id: 'damaged', title: 'Damaged Item', icon: AlertTriangle },
@@ -364,7 +450,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                 type="text"
                 required
                 value={orderNumber}
-                onChange={(e) => setOrderNumber(e.target.value)}
+                onChange={(e) => handleOrderNumberChange(e.target.value)}
                 placeholder="e.g. ORD-2026-8801"
                 className="w-full px-4 py-2.5 border-2 border-black bg-white text-black text-sm font-mono focus:border-b-4 placeholder:italic placeholder:text-neutral-400"
               />
@@ -375,9 +461,14 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
 
             {/* Category Selector */}
             <div>
-              <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black mb-1.5">
-                Issue Category Classification *
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block font-mono text-xs tracking-widest uppercase font-bold text-black">
+                  Issue Category Classification *
+                </label>
+                <span className="font-mono text-[10px] tracking-wider uppercase text-neutral-500">
+                  Auto-Adapts Subject &amp; Statement
+                </span>
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {categories.map((c) => {
                   const Icon = c.icon;
@@ -386,7 +477,7 @@ export const CustomerHelpCenter: React.FC<HelpCenterProps> = ({
                     <button
                       key={c.id}
                       type="button"
-                      onClick={() => setSelectedCategory(c.id)}
+                      onClick={() => handleCategoryChange(c.id)}
                       className={`flex items-center justify-center gap-2 p-2.5 border-2 text-xs font-mono tracking-wider uppercase transition-colors duration-100 ${
                         isSelected
                           ? 'bg-black text-white border-black font-bold'
