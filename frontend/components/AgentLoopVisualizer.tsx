@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Check, Loader2, Play, FileText, ArrowRight } from 'lucide-react';
+import { Check, Loader2, Play, ArrowRight } from 'lucide-react';
 
 export interface LoopStep {
   id: string;
@@ -95,47 +95,47 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
   }, [simulating, simStep, steps.length]);
 
   return (
-    <div className="border-2 border-black p-6 sm:p-8 bg-white text-black space-y-6">
+    <div className="rounded-lg border border-neutral-200/90 p-5 sm:p-6 bg-white shadow-subtle text-neutral-900 space-y-5">
       {/* Header & Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-black">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b border-neutral-100">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h3 className="font-display font-bold uppercase tracking-wider text-base text-black">
-              Deterministic Pipeline
+          <div className="flex items-center gap-2">
+            <h3 className="font-serif font-bold tracking-tight text-sm text-neutral-900">
+              Deterministic Resolution Pipeline
             </h3>
-            <span className="border border-black px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase bg-black text-white">
+            <span className="rounded px-1.5 py-0.5 font-mono text-[10px] tracking-wider uppercase border border-neutral-200 bg-neutral-50 text-neutral-600">
               7-Step Protocol
             </span>
           </div>
-          <p className="font-serif italic text-xs text-neutral-600 mt-0.5">
+          <p className="font-serif italic text-xs text-neutral-500 mt-0.5">
             Finite State Machine: Understand &rarr; Evidence &rarr; Decide &rarr; Guard &rarr; Act &rarr; Audit &rarr; Adapt
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           {showSimulateButton && !effectiveIsRunning && (
             <button
               type="button"
               onClick={runSimulation}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-black font-mono text-xs tracking-wider uppercase hover:bg-black hover:text-white transition-colors duration-100"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-neutral-300 bg-white text-neutral-700 font-mono text-xs tracking-wide uppercase hover:bg-neutral-50 hover:border-neutral-400 transition-all shadow-subtle"
             >
-              <Play size={12} fill="currentColor" />
+              <Play size={11} fill="currentColor" />
               <span>Replay Pipeline</span>
             </button>
           )}
 
-          <span className="border border-black px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase bg-neutral-100 text-black">
-            Idempotency Guard Active
+          <span className="rounded px-2 py-0.5 font-mono text-[10px] tracking-wider uppercase border border-neutral-200 bg-neutral-50 text-neutral-600">
+            Idempotency Guard
           </span>
-          <span className="border border-black px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase bg-neutral-100 text-black">
+          <span className="rounded px-2 py-0.5 font-mono text-[10px] tracking-wider uppercase border border-neutral-200 bg-neutral-50 text-neutral-600">
             Policy v2.0
           </span>
         </div>
       </div>
 
       {/* Horizontal Steps Stepper */}
-      <div className="overflow-x-auto pt-2">
-        <div className="flex items-center justify-between min-w-[720px] gap-2">
+      <div className="overflow-x-auto pt-1">
+        <div className="flex items-center justify-between min-w-[700px] gap-2">
           {steps.map((step, idx) => {
             const isFinished = effectiveIsComplete || (effectiveStepIndex > idx);
             const isActive = effectiveIsRunning && (effectiveStepIndex === idx);
@@ -144,33 +144,33 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
               <React.Fragment key={step.id}>
                 <div className="flex-1 flex flex-col items-center text-center">
                   <div
-                    className={`w-9 h-9 border-2 flex items-center justify-center font-mono text-xs tracking-wider transition-colors duration-100 ${
+                    className={`w-7 h-7 rounded-full flex items-center justify-center font-mono text-xs transition-all ${
                       isFinished
-                        ? 'bg-black text-white border-black font-bold'
+                        ? 'bg-neutral-900 text-white shadow-subtle font-semibold'
                         : isActive
-                        ? 'bg-white text-black border-2 border-black ring-2 ring-black font-bold'
-                        : 'bg-neutral-100 text-neutral-400 border-neutral-300'
+                        ? 'bg-white text-neutral-900 border-2 border-neutral-900 ring-2 ring-neutral-200 font-bold'
+                        : 'bg-neutral-100 text-neutral-400 border border-neutral-200'
                     }`}
                   >
                     {isFinished ? (
-                      <Check size={16} strokeWidth={2.5} />
+                      <Check size={14} strokeWidth={2.5} />
                     ) : isActive ? (
-                      <Loader2 size={16} className="animate-spin" />
+                      <Loader2 size={14} className="animate-spin" />
                     ) : (
                       step.number
                     )}
                   </div>
 
                   <span
-                    className={`mt-2.5 font-mono text-[11px] tracking-widest uppercase font-bold ${
-                      isFinished || isActive ? 'text-black' : 'text-neutral-400'
+                    className={`mt-2 font-mono text-[10px] tracking-wider uppercase font-semibold ${
+                      isFinished || isActive ? 'text-neutral-900' : 'text-neutral-400'
                     }`}
                   >
                     {step.title}
                   </span>
                   <span
-                    className={`font-serif text-[11px] italic mt-0.5 leading-tight ${
-                      isActive ? 'text-black font-semibold' : 'text-neutral-500'
+                    className={`font-serif text-[10px] italic mt-0.5 leading-tight ${
+                      isActive ? 'text-neutral-800 font-medium' : 'text-neutral-400'
                     }`}
                   >
                     {step.desc}
@@ -178,11 +178,11 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
                 </div>
 
                 {idx < steps.length - 1 && (
-                  <div className="w-6 flex items-center justify-center">
+                  <div className="w-5 flex items-center justify-center">
                     <ArrowRight
-                      size={14}
+                      size={13}
                       strokeWidth={1.5}
-                      className={isFinished ? 'text-black' : 'text-neutral-300'}
+                      className={isFinished ? 'text-neutral-700' : 'text-neutral-200'}
                     />
                   </div>
                 )}
@@ -193,14 +193,14 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
       </div>
 
       {/* Live Pipeline Status Ticker */}
-      <div className="pt-4 border-t-2 border-black flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-center gap-3">
-          <span className={`px-2 py-0.5 border border-black uppercase text-[10px] tracking-widest font-bold ${
+      <div className="pt-3 border-t border-neutral-100 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+        <div className="flex items-center gap-2">
+          <span className={`px-2 py-0.5 rounded uppercase text-[10px] tracking-wider font-semibold border ${
             effectiveIsRunning
-              ? 'bg-black text-white'
+              ? 'bg-neutral-900 text-white border-neutral-900'
               : effectiveIsComplete
-              ? 'bg-black text-white'
-              : 'bg-neutral-100 text-neutral-600'
+              ? 'bg-neutral-900 text-white border-neutral-900'
+              : 'bg-neutral-100 text-neutral-600 border-neutral-200'
           }`}>
             {effectiveIsRunning
               ? `STEP ${Math.min(effectiveStepIndex + 1, 7)}/07`
@@ -208,7 +208,7 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
               ? 'COMMITTED'
               : 'STANDBY'}
           </span>
-          <span className="font-serif italic text-neutral-700 text-xs">
+          <span className="font-serif italic text-neutral-600 text-xs">
             {statusMessage ||
               (effectiveIsRunning && steps[effectiveStepIndex]
                 ? steps[effectiveStepIndex].activeDesc
@@ -218,8 +218,8 @@ export const AgentLoopVisualizer: React.FC<AgentLoopVisualizerProps> = ({
           </span>
         </div>
 
-        <div className="text-[11px] uppercase tracking-widest text-neutral-500">
-          State: <span className="font-bold text-black">{effectiveIsRunning ? 'EXECUTING' : effectiveIsComplete ? 'RESOLVED' : 'IDLE'}</span>
+        <div className="text-[10px] uppercase tracking-wider text-neutral-400">
+          State: <span className="font-semibold text-neutral-700">{effectiveIsRunning ? 'EXECUTING' : effectiveIsComplete ? 'RESOLVED' : 'IDLE'}</span>
         </div>
       </div>
     </div>
