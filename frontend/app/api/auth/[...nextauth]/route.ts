@@ -2,19 +2,22 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+const googleClientId = process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.AUTH_GOOGLE_SECRET || process.env.GOOGLE_CLIENT_SECRET;
+
 export const authOptions = {
   providers: [
-    // Google OAuth Provider
-    ...(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET
+    // Google OAuth Provider (Active if credentials are present in env)
+    ...(googleClientId && googleClientSecret
       ? [
           GoogleProvider({
-            clientId: process.env.AUTH_GOOGLE_ID,
-            clientSecret: process.env.AUTH_GOOGLE_SECRET,
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
           }),
         ]
       : []),
 
-    // Local Credentials Provider for Staff & Demo Testing
+    // Staff & Demo Credentials Provider
     CredentialsProvider({
       name: 'ResolveOS Staff Account',
       credentials: {
@@ -22,7 +25,6 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        // Mock authentication check for demo roles
         if (!credentials?.email) return null;
 
         if (credentials.email.includes('ops')) {
@@ -52,7 +54,7 @@ export const authOptions = {
   pages: {
     signIn: '/',
   },
-  secret: process.env.AUTH_SECRET || 'resolveos_dev_secret_key_32_characters_minimum_len',
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'resolveos_dev_secret_key_32_characters_minimum_len',
 };
 
 const handler = NextAuth(authOptions);
