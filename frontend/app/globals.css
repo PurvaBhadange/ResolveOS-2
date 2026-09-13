@@ -1,87 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --canvas: #fffefb;
-  --canvas-soft: #f8f4f0;
-  --ink: #201515;
-  --ink-soft: #2f2a26;
-  --ink-mid: #36342e;
-  --body: #605d52;
-  --body-mid: #939084;
-  --mute: #c5c0b1;
-  --primary: #ff4f00;
-  --on-primary: #fffefb;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 body {
-  background-color: var(--canvas);
-  color: var(--ink);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Base button primitives from DESIGN.md */
-.btn-primary {
-  background-color: #ff4f00;
-  color: #fffefb;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.15s ease-in-out;
-}
-.btn-primary:hover:not(:disabled) {
-  background-color: #e54700;
-  box-shadow: 0 4px 12px -2px rgba(255, 79, 0, 0.25);
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
 
-.btn-secondary {
-  background-color: #201515;
-  color: #fffefb;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.15s ease-in-out;
-}
-.btn-secondary:hover:not(:disabled) {
-  background-color: #36342e;
-}
-
-.btn-tertiary {
-  background-color: #fffefb;
-  color: #201515;
-  border: 1px solid #201515;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.15s ease-in-out;
-}
-.btn-tertiary:hover:not(:disabled) {
-  background-color: #f8f4f0;
-}
-
-/* Card surfaces from DESIGN.md */
-.card-cream {
-  background-color: #f8f4f0;
-  border: 1px solid #e7e2d7;
-  border-radius: 12px;
-}
-
-.card-dark {
-  background-color: #201515;
-  color: #fffefb;
-  border-radius: 12px;
-}
-
-.eyebrow-uppercase {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-/* Step Timeline connection styling */
 .timeline-step {
   position: relative;
   padding-left: 2rem;
@@ -94,7 +33,7 @@ body {
   top: 1.5rem;
   bottom: -1rem;
   width: 2px;
-  background-color: #c5c0b1;
+  background-color: #cbd5e1;
 }
 
 .timeline-step:last-child::before {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles, Zap } from 'lucide-react';
+import { X, ShieldCheck, UserPlus, LogIn, Lock, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 
 interface SignInModalProps {
@@ -12,7 +12,7 @@ interface SignInModalProps {
 export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<'signin' | 'register'>('signin');
   const [googleNotice, setGoogleNotice] = useState<string | null>(null);
-
+  
   // Registration State
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
@@ -62,10 +62,11 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   const handleGoogleSignIn = () => {
+    // Check if Google OAuth ID environment variable is provided
     const hasGoogleEnv = Boolean(process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID || process.env.AUTH_GOOGLE_ID);
     if (!hasGoogleEnv) {
       setGoogleNotice(
-        "Google OAuth credentials (AUTH_GOOGLE_ID) are not configured. You can use 'Quick Account Role' below to sign in instantly without setup!"
+        "Google OAuth keys (AUTH_GOOGLE_ID) are not configured in frontend/.env.local. You can paste your Google Client ID into .env.local, or use 'Create Account' below to sign in instantly!"
       );
       return;
     }
@@ -74,41 +75,39 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/70 backdrop-blur-sm animate-fade-in">
-      {/* Modal Dialog Surface - ex-modal-card in DESIGN.md */}
-      <div className="bg-canvas w-full max-w-md rounded-md p-6 sm:p-8 shadow-modal border border-[#e8e2d8] relative space-y-6 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 relative space-y-6 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 p-2 rounded-md text-body-mid hover:text-ink hover:bg-canvas-soft border border-transparent hover:border-mute/40 transition-all"
+          className="absolute right-5 top-5 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="space-y-2">
-          <div className="w-12 h-12 rounded-md bg-canvas-soft border border-mute/50 flex items-center justify-center mb-2">
-            <ShieldCheck className="w-6 h-6 text-primary" />
+          <div className="w-12 h-12 rounded-2xl bg-tealbrand-50 text-tealbrand-600 flex items-center justify-center mb-2">
+            <ShieldCheck className="w-7 h-7" />
           </div>
-          <span className="eyebrow-uppercase text-body-mid text-[11px]">Authentication</span>
-          <h2 className="text-2xl font-bold text-ink tracking-tight">ResolveOS Portal</h2>
-          <p className="text-body text-xs sm:text-sm leading-relaxed">
-            Sign in to access your customer claims or operations governance console.
+          <h2 className="text-2xl font-bold text-slate-900">ResolveOS Portal</h2>
+          <p className="text-slate-500 text-xs sm:text-sm">
+            Sign in to access your customer orders or staff operation console.
           </p>
         </div>
 
         {/* Modal Header Tabs */}
-        <div className="flex bg-canvas-soft p-1 rounded-md border border-[#e8e2d8]">
+        <div className="flex bg-slate-100 p-1 rounded-xl">
           <button
             onClick={() => { setActiveTab('signin'); setGoogleNotice(null); }}
-            className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${
-              activeTab === 'signin' ? 'bg-ink text-canvas shadow-sm' : 'text-body hover:text-ink'
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'signin' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            Quick Role Sign In
+            Sign In / Quick Login
           </button>
           <button
             onClick={() => { setActiveTab('register'); setGoogleNotice(null); }}
-            className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${
-              activeTab === 'register' ? 'bg-ink text-canvas shadow-sm' : 'text-body hover:text-ink'
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+              activeTab === 'register' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
             }`}
           >
             Create New Account
@@ -116,12 +115,12 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {googleNotice && (
-          <div className="p-3.5 rounded-md bg-accent-amber/10 border border-accent-amber/30 text-ink text-xs leading-relaxed space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-accent-amber">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>Authentication Note</span>
+          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs leading-relaxed space-y-1">
+            <div className="flex items-center gap-1.5 font-bold">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>Google OAuth Setup Notice</span>
             </div>
-            <p className="text-[11px] text-body">{googleNotice}</p>
+            <p className="text-[11px] text-amber-700">{googleNotice}</p>
           </div>
         )}
 
@@ -130,7 +129,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             {/* Google OAuth Button */}
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-md border border-mute hover:border-ink hover:bg-canvas-soft text-ink font-semibold text-sm transition-all shadow-sm"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-all shadow-sm"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
@@ -142,49 +141,47 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             </button>
 
             <div className="relative flex items-center justify-center my-2">
-              <div className="border-t border-[#e8e2d8] w-full" />
-              <span className="bg-canvas px-3 text-[11px] uppercase font-bold text-body-mid shrink-0">
-                Or Quick Staff Login
-              </span>
-              <div className="border-t border-[#e8e2d8] w-full" />
+              <div className="border-t border-slate-200 w-full" />
+              <span className="bg-white px-3 text-[11px] uppercase font-bold text-slate-400 shrink-0">Or Select Quick Account Role</span>
+              <div className="border-t border-slate-200 w-full" />
             </div>
 
-            {/* Quick Role Options */}
-            <div className="space-y-2.5">
+            {/* Quick Staff & Customer Role Selection */}
+            <div className="space-y-2">
+              <button
+                onClick={() => handleStaffLogin('sarah.jenkins@example.com', 'Sarah Jenkins', 'customer')}
+                disabled={loading}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-tealbrand-50 hover:bg-tealbrand-100 border border-tealbrand-200 text-left transition-all group"
+              >
+                <div>
+                  <span className="text-xs font-bold text-slate-900 block">Customer Account (Sarah Jenkins)</span>
+                  <span className="text-[11px] text-slate-500">Customer portal: orders, claims & return status</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-tealbrand-700 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+
               <button
                 onClick={() => handleStaffLogin('ops@resolveos.com', 'Operations Lead', 'operations')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-md bg-canvas-soft hover:bg-[#efe8df] border border-[#e8e2d8] text-left transition-all group shadow-sm"
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-left transition-all group"
               >
                 <div>
-                  <span className="text-xs font-bold text-ink block">Operations Lead (Judge Role)</span>
-                  <span className="text-[11px] text-body">Authorizes $200+ high-value refund approvals</span>
+                  <span className="text-xs font-bold text-slate-900 block">Operations Lead (Judge Role)</span>
+                  <span className="text-[11px] text-slate-500">Authorizes $200+ high-value refund approvals</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-amber-700 group-hover:translate-x-0.5 transition-transform" />
               </button>
 
               <button
                 onClick={() => handleStaffLogin('admin@resolveos.com', 'Admin Supervisor', 'admin')}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-md bg-canvas-soft hover:bg-[#efe8df] border border-[#e8e2d8] text-left transition-all group shadow-sm"
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition-all group"
               >
                 <div>
-                  <span className="text-xs font-bold text-ink block">Admin Supervisor</span>
-                  <span className="text-[11px] text-body">Full system audit & policy management</span>
+                  <span className="text-xs font-bold text-slate-900 block">Admin Supervisor</span>
+                  <span className="text-[11px] text-slate-500">Full system & policy administration</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
-              </button>
-
-              <button
-                onClick={() => handleStaffLogin('sarah.jenkins@example.com', 'Sarah Jenkins', 'customer')}
-                disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 rounded-md bg-canvas-soft hover:bg-[#efe8df] border border-[#e8e2d8] text-left transition-all group shadow-sm"
-              >
-                <div>
-                  <span className="text-xs font-bold text-ink block">Customer Account (Sarah Jenkins)</span>
-                  <span className="text-[11px] text-body">Demo orders, claims & return status</span>
-                </div>
-                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-slate-700 group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
           </div>
@@ -192,35 +189,35 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           /* Create New Account Registration Form */
           <form onSubmit={handleCreateAccount} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-ink mb-1">Full Name</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
               <input
                 type="text"
                 required
                 value={regName}
                 onChange={(e) => setRegName(e.target.value)}
                 placeholder="e.g. Alex Morgan"
-                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-ink mb-1">Email Address</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
               <input
                 type="email"
                 required
                 value={regEmail}
                 onChange={(e) => setRegEmail(e.target.value)}
                 placeholder="e.g. alex.morgan@example.com"
-                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-xs font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-ink mb-1">Account Role / Access Type</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Account Role / Access Type</label>
               <select
                 value={regRole}
                 onChange={(e: any) => setRegRole(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-xs font-medium bg-white"
               >
                 <option value="customer">Customer (End-User Portal)</option>
                 <option value="operations">Operations Lead (Judge Console & Approvals)</option>
@@ -230,21 +227,21 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-ink mb-1">Password</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Password</label>
               <input
                 type="password"
                 required
                 value={regPassword}
                 onChange={(e) => setRegPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 rounded-sm bg-canvas border border-mute focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-ink text-xs font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-tealbrand-600 text-slate-900 text-xs font-medium"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-xs font-semibold shadow-sm disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-tealbrand-600 hover:bg-tealbrand-700 text-white font-semibold text-xs transition-all shadow-md shadow-tealbrand-600/20 disabled:opacity-50"
             >
               <UserPlus className="w-4 h-4" />
               {loading ? 'Creating Account...' : 'Register Account & Sign In'}
